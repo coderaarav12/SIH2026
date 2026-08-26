@@ -2,213 +2,326 @@
 
 AI-Driven Standardisation and Harmonization of Material Codes Across CPSEs
 
-## Problem Statement
+## What Problem This Solves
 
-CPSEs often store the same material under different names, abbreviations, units, and specs. This creates duplicate codes, poor searchability, inconsistent procurement, and weak traceability.
-
-## Proposed Solution
-
-Material Intelligence is a software platform that:
-- normalizes material descriptions
-- detects duplicates and equivalents
-- recommends a single standardized code
-- verifies labels using OCR and image evidence
-- keeps every approval auditable
-
-## Core Architecture
-
-```text
-CPSE Material Masters / CSV / ERP Data / Images
-                |
-                v
-        Ingestion & Normalization
-        - unit cleanup
-        - abbreviation expansion
-        - spec parsing
-                |
-                v
-          AI Matching Layer
-        - sentence embeddings
-        - vector similarity search
-        - rule-based checks
-        - OCR / CV label support
-                |
-                v
-         Confidence & Review
-        - score match confidence
-        - show explanation
-        - human approval for uncertain cases
-                |
-                v
-         Standard Material Master
-        - single canonical code
-        - source mappings
-        - traceability history
-```
-
-## Architecture Details
-
-### 1. Frontend
-
-Used by procurement, stores, quality, and administrators.
-
-Pages:
-- Login and role-based access
-- Upload material masters
-- Search and compare materials
-- Review duplicate suggestions
-- Approval queue
-- Traceability dashboard
-
-Suggested stack:
-- React or plain HTML/CSS/JS
-- Chart.js for analytics
-- Data tables for comparison views
-
-### 2. Backend
-
-The backend manages business logic and APIs.
-
-Responsibilities:
-- authenticate users
-- receive material master files
-- normalize text and units
-- generate embeddings
-- run similarity matching
-- store reviewer decisions
-- expose analytics and audit logs
-
-Suggested stack:
-- Python FastAPI for AI services
-- Node.js or FastAPI for main API layer
-
-### 3. AI / Matching Engine
-
-This is the core of the solution.
-
-It performs:
-- semantic matching of material names
-- attribute extraction from descriptions
-- detection of equivalent items with different wording
-- OCR-based label reading for physical verification
-- confidence scoring for every recommendation
+CPSEs often buy, store, and track the same item using different names.
 
 Example:
-- `Stainless Steel Hex Bolt M10 x 50 SS304`
-- `SS Hex Bolt 10mm x 50mm Grade 304`
+- `SS Bolt M10x50`
+- `Stainless Steel Hex Bolt 10 mm x 50 mm`
+- `Bolt, SS, 304, 10x50`
 
-The engine recognizes these as likely equivalents.
+These all may refer to the same physical material, but the code system treats them as different items. That creates:
+- duplicate codes
+- bad search results
+- inconsistent procurement
+- poor inventory visibility
+- weak traceability
 
-### 4. Database
+## What We Are Building
 
-Stores structured and traceable records.
+Material Intelligence is a software platform that helps CPSEs:
+- clean and standardize material names
+- find duplicate or equivalent materials
+- recommend one canonical code
+- verify items using OCR/image evidence
+- keep every human approval recorded
 
-Main tables:
-- `users`
-- `materials`
-- `material_attributes`
-- `match_candidates`
-- `review_actions`
-- `source_mappings`
-- `audit_logs`
+In simple words: it is a smart search and standardization system for material master data.
 
-Recommended database:
-- PostgreSQL for production-style structure
-- SQLite for local prototype/demo
+## High-Level Architecture
 
-### 5. Vector Search / Similarity Search
+```text
+Input Sources
+CPSE Masters / CSV / ERP Export / Label Images
+        |
+        v
+1. Ingestion Layer
+   - upload files
+   - extract records
+   - read images
+        |
+        v
+2. Normalization Layer
+   - expand abbreviations
+   - normalize units
+   - clean punctuation
+   - extract attributes
+        |
+        v
+3. AI Matching Layer
+   - embeddings
+   - vector similarity search
+   - rule-based checks
+   - OCR/CV support
+        |
+        v
+4. Decision Layer
+   - confidence score
+   - explanation text
+   - human review if needed
+        |
+        v
+5. Canonical Master Layer
+   - one standard code
+   - mapping from old codes
+   - audit trail
+```
 
-Used to find likely equivalent materials quickly.
+## Detailed System Architecture
 
-Workflow:
-1. Convert material text into embeddings.
-2. Compare against existing canonical materials.
-3. Rank likely matches.
-4. Send uncertain results to human review.
+### 1. Frontend Layer
 
-### 6. OCR / Computer Vision Layer
+This is the website the user sees.
 
-Used only as an evidence layer.
+Users:
+- procurement team
+- store/inventory team
+- quality team
+- admin/reviewer
+
+Main pages:
+- login and role-based access
+- upload material data
+- search materials
+- compare similar items
+- review AI suggestions
+- approve or reject matches
+- dashboard for analytics
+- audit/history page
+
+Frontend responsibilities:
+- show forms and tables
+- send requests to backend
+- display match results
+- show charts and summary cards
+- display review queue
+
+Suggested technologies:
+- React or plain HTML/CSS/JS
+- Chart.js for graphs
+- Data tables for comparison views
+- Bootstrap/Tailwind for UI styling
+
+### 2. Backend Layer
+
+This is the brain of the system.
+
+Backend responsibilities:
+- login/register users
+- accept uploaded CSV/Excel files
+- validate incoming data
+- normalize text and units
+- generate embeddings
+- search for similar records
+- calculate confidence score
+- save reviewer decisions
+- expose analytics APIs
+- maintain logs and audit history
+
+Suggested stack:
+- Node.js + Express for main APIs
+- Python FastAPI for AI services
+
+### 3. AI Matching Layer
+
+This is the most important part.
+
+What it does:
+- understands material names semantically
+- detects equivalent items written differently
+- extracts attributes like size, grade, material type, and unit
+- compares new records with old records
+- ranks possible matches
+- gives an explanation for the match
+
+How it works:
+1. The material description is converted into an embedding.
+2. The embedding is compared against existing canonical materials.
+3. Similar items are ranked.
+4. Rule checks filter false matches.
+5. High-confidence matches are recommended automatically.
+6. Low-confidence matches go to human review.
+
+Example:
+
+```text
+Input 1: Stainless Steel Hex Bolt M10 x 50 SS304
+Input 2: SS Hex Bolt 10mm x 50mm Grade 304
+
+Result: probable equivalent
+Reason: same material type, same size, same grade
+```
+
+### 4. OCR / Computer Vision Layer
+
+This layer is optional, but useful when images are available.
 
 It can:
-- read label text from images
-- support item verification
-- compare uploaded evidence with catalog data
+- read text from labels
+- verify packaging or item tags
+- compare OCR output with master data
+- support physical item verification
+
+Important note:
+- OCR is not the only decision maker
+- it acts as supporting evidence
+
+### 5. Database Layer
+
+The database stores all structured data.
+
+Recommended database:
+- SQLite for prototype/demo
+- PostgreSQL if you want a stronger multi-user setup
+
+Main tables:
+- `users` - login and roles
+- `materials` - canonical material master
+- `material_attributes` - structured specs
+- `match_candidates` - AI suggestion list
+- `review_actions` - human decisions
+- `source_mappings` - old code to new code mapping
+- `audit_logs` - all actions and approvals
+
+Why this matters:
+- keeps data organized
+- makes searching fast
+- preserves traceability
+- allows reporting and analytics
 
 ## End-to-End Flow
 
 ```text
-Upload material list
--> normalize text and units
--> create embeddings
--> search similar records
--> apply rules and confidence scoring
--> show matches to reviewer
--> approve or reject
--> save canonical mapping
--> update standardized master
+User uploads file or searches item
+-> backend receives request
+-> data is cleaned and normalized
+-> embeddings are created
+-> similar records are searched
+-> rules + confidence score are applied
+-> result is shown to user
+-> reviewer approves/rejects if needed
+-> canonical code is saved
+-> audit log is updated
 ```
+
+## Example Workflow
+
+1. CPSE uploads a list of material names from ERP.
+2. Backend removes extra spaces, converts units, and expands abbreviations.
+3. AI engine creates embeddings for each item.
+4. Similar records are found in the master catalog.
+5. The system shows the top 3 matches with reasons.
+6. If confidence is high, it recommends reuse of an existing code.
+7. If confidence is low, it sends the item to a reviewer.
+8. Reviewer approves the best match or creates a new canonical item.
+9. The final mapping is stored in the database.
+
+## Matching Logic
+
+The system does not rely on only one method.
+
+It combines:
+- semantic similarity
+- exact attribute matching
+- unit normalization
+- synonym expansion
+- rule-based filtering
+- OCR verification when available
+
+This helps reduce false matches.
+
+## Confidence Scoring
+
+Every match gets a score.
+
+Example scoring idea:
+- exact grade match: +30
+- same size/unit: +25
+- high semantic similarity: +25
+- same category/type: +10
+- OCR confirmation: +10
+
+Decision rule:
+- `80-100` = auto suggest
+- `60-79` = show for review
+- `<60` = create new candidate or manual check
 
 ## Key Features
 
 - duplicate detection
-- equivalent material identification
+- equivalent material detection
 - unit normalization
-- human-in-the-loop approval
-- OCR label verification
-- traceability of source codes
-- audit trail for every decision
+- synonym handling
+- human review workflow
+- OCR support
+- traceability mapping
+- audit logs
+- analytics dashboard
 
-## Feasibility
+## Why This Is Feasible
 
-- software-first approach
-- no hardware dependency
-- can start from CSV or ERP exports
-- uses proven technologies: NLP, OCR, vector search, SQL
-- scalable from one CPSE to many CPSEs
+- fully software-based
+- no hardware required
+- no paid APIs required for a demo
+- can start with CSV files
+- can run locally on a laptop
+- uses proven technologies
 
 ## Suggested Tech Stack
 
-- Frontend: React, Chart.js
-- Backend: FastAPI or Node.js
-- AI: Sentence Transformers, OCR, OpenCV
-- DB: PostgreSQL or SQLite
-- Search: FAISS / pgvector
+- Frontend: React, Chart.js, Tailwind/Bootstrap
+- Backend: Node.js/Express or FastAPI
+- AI: Sentence Transformers, FAISS, OCR, OpenCV
+- Database: SQLite or PostgreSQL
+- File handling: CSV/Excel upload
 
 ## Project Structure
 
 ```text
 project/
 ├── frontend/
+│   ├── pages/
+│   ├── components/
+│   └── assets/
 ├── backend/
+│   ├── routes/
+│   ├── services/
+│   ├── middleware/
+│   └── utils/
 ├── ai-engine/
+│   ├── embeddings/
+│   ├── matching/
+│   └── ocr/
 ├── database/
 ├── docs/
 └── README.md
 ```
 
-## Why This Matters
+## Benefits
 
-- reduces duplicate material creation
-- improves procurement efficiency
+- avoids duplicate material creation
+- improves procurement speed
 - improves search and reuse
-- supports inventory analysis
-- increases transparency and auditability
+- makes inventory analysis easier
+- increases transparency
+- improves accountability
 
 ## Future Scope
 
 - ERP integration
-- multilingual material normalization
+- multilingual support
 - supplier-side validation
-- batch and lot traceability
-- analytics dashboard for procurement trends
+- batch and lot tracking
+- advanced analytics
+- department-wise dashboards
 
 ## SIH Metadata
 
-- Problem Statement ID: SIH26099
-- Title: AI Driven Standardisation and Harmonization of Material Codes Across CPSEs
-- Theme: Smart Automation
-- Category: Software
+- Problem Statement ID: `SIH26099`
+- Title: `AI Driven Standardisation and Harmonization of Material Codes Across CPSEs`
+- Theme: `Smart Automation`
+- Category: `Software`
 
 ## Team Name
 
