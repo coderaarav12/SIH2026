@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Material Intelligence | SIH 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">M</div>
+      <div>
+        <div class="brand-title">Material Intelligence</div>
+        <div class="brand-subtitle">SIH26099 • Smart Automation</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="#overview">Overview</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#review">Review</a>
+      <a href="#analytics">Analytics</a>
+    </nav>
+    <div class="top-actions">
+      <button class="ghost-btn" id="themeToggle">Toggle</button>
+      <a class="primary-btn" href="#upload">Try Demo</a>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero" id="overview">
+      <div class="hero-copy">
+        <span class="pill">AI-driven material standardization</span>
+        <h1>One clean material code across every CPSE.</h1>
+        <p>
+          Material Intelligence helps procurement and inventory teams find duplicates,
+          harmonize descriptions, and approve canonical codes with confidence.
+        </p>
+
+        <div class="hero-actions">
+          <a class="primary-btn" href="#upload">Upload Materials</a>
+          <a class="secondary-btn" href="#review">Open Review Queue</a>
+        </div>
+
+        <div class="hero-metrics">
+          <div class="metric">
+            <span id="metricMaterials">12,480</span>
+            <small>Material Records</small>
+          </div>
+          <div class="metric">
+            <span id="metricMatches">3,120</span>
+            <small>Duplicate Matches</small>
+          </div>
+          <div class="metric">
+            <span id="metricAccuracy">96.4%</span>
+            <small>Review Accuracy</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-panel glass">
+        <div class="panel-top">
+          <span>Live Standardization Engine</span>
+          <span class="status online">Online</span>
+        </div>
+        <div class="flow-card">
+          <div class="flow-node active">CSV / ERP Input</div>
+          <div class="flow-line"></div>
+          <div class="flow-node">Normalization</div>
+          <div class="flow-line"></div>
+          <div class="flow-node highlight">AI Match Score</div>
+          <div class="flow-line"></div>
+          <div class="flow-node">Human Approval</div>
+        </div>
+
+        <div class="insight-grid">
+          <div class="insight-card">
+            <span>Top Canonical Match</span>
+            <strong>Hex Bolt SS304 10x50</strong>
+            <p>Used by 8 source codes</p>
+          </div>
+          <div class="insight-card accent">
+            <span>Confidence</span>
+            <strong>92%</strong>
+            <p>Auto-suggest eligible</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="workflow">
+      <div class="section-head">
+        <span class="section-tag">Workflow</span>
+        <h2>How the platform works</h2>
+      </div>
+
+      <div class="steps">
+        <article class="step-card glass">
+          <div class="step-num">01</div>
+          <h3>Upload Data</h3>
+          <p>Upload material masters from CSV, Excel, or ERP exports.</p>
+        </article>
+        <article class="step-card glass">
+          <div class="step-num">02</div>
+          <h3>Normalize</h3>
+          <p>Clean abbreviations, sizes, units, and spelling variants.</p>
+        </article>
+        <article class="step-card glass">
+          <div class="step-num">03</div>
+          <h3>Match</h3>
+          <p>Use embeddings and rules to find duplicate or equivalent materials.</p>
+        </article>
+        <article class="step-card glass">
+          <div class="step-num">04</div>
+          <h3>Approve</h3>
+          <p>Review uncertain matches and save the final canonical code.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section split" id="upload">
+      <div class="glass upload-box">
+        <div class="section-head compact">
+          <span class="section-tag">Upload</span>
+          <h2>Drop a material file</h2>
+        </div>
+        <div class="upload-area">
+          <div class="upload-icon">⇪</div>
+          <h3>CSV / Excel / Label Images</h3>
+          <p>Frontend-ready upload panel for the backend team to connect later.</p>
+          <button class="primary-btn" id="fakeUpload">Choose File</button>
+        </div>
+      </div>
+
+      <div class="glass search-box">
+        <div class="section-head compact">
+          <span class="section-tag">Search</span>
+          <h2>Quick material lookup</h2>
+        </div>
+        <label class="field">
+          <span>Search Material</span>
+          <input id="searchInput" type="text" placeholder="Try: stainless steel hex bolt" />
+        </label>
+        <div class="search-results" id="searchResults">
+          <div class="result-row">
+            <strong>Stainless Steel Hex Bolt M10 x 50</strong>
+            <span>Canonical • 92% match</span>
+          </div>
+          <div class="result-row">
+            <strong>Hex Bolt SS304 10 mm x 50 mm</strong>
+            <span>Equivalent • 88% match</span>
+          </div>
+          <div class="result-row">
+            <strong>MS Bolt 10 x 50</strong>
+            <span>Needs review • 41% match</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="review">
+      <div class="section-head">
+        <span class="section-tag">Review Queue</span>
+        <h2>AI suggestions waiting for approval</h2>
+      </div>
+
+      <div class="review-list">
+        <article class="review-card glass">
+          <div>
+            <h3>SS Hex Bolt 10mm x 50mm Grade 304</h3>
+            <p>Suggested canonical item: <strong>Hex Bolt SS304 10x50</strong></p>
+          </div>
+          <div class="review-meta">
+            <span class="badge green">92%</span>
+            <button class="small-btn approve">Approve</button>
+            <button class="small-btn reject">Reject</button>
+          </div>
+        </article>
+        <article class="review-card glass">
+          <div>
+            <h3>Nut M10 Stainless Steel</h3>
+            <p>Suggested canonical item: <strong>Hex Nut SS M10</strong></p>
+          </div>
+          <div class="review-meta">
+            <span class="badge amber">67%</span>
+            <button class="small-btn approve">Approve</button>
+            <button class="small-btn reject">Reject</button>
+          </div>
+        </article>
+        <article class="review-card glass">
+          <div>
+            <h3>Pipe Clamp 2 inch galvanized</h3>
+            <p>No confident match found, manual review needed.</p>
+          </div>
+          <div class="review-meta">
+            <span class="badge red">34%</span>
+            <button class="small-btn approve">Create New</button>
+            <button class="small-btn reject">Escalate</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section split" id="analytics">
+      <div class="glass chart-box">
+        <div class="section-head compact">
+          <span class="section-tag">Analytics</span>
+          <h2>Platform impact</h2>
+        </div>
+        <div class="bar-chart">
+          <div class="bar-item"><span>Duplicates Found</span><div class="bar"><i style="width:78%"></i></div></div>
+          <div class="bar-item"><span>Codes Standardized</span><div class="bar"><i style="width:86%"></i></div></div>
+          <div class="bar-item"><span>Human Approvals</span><div class="bar"><i style="width:52%"></i></div></div>
+          <div class="bar-item"><span>Audit Coverage</span><div class="bar"><i style="width:94%"></i></div></div>
+        </div>
+      </div>
+
+      <div class="glass notes-box">
+        <div class="section-head compact">
+          <span class="section-tag">Why It Matters</span>
+          <h2>Business value</h2>
+        </div>
+        <ul class="benefits">
+          <li>Faster procurement search</li>
+          <li>Reduced duplicate material codes</li>
+          <li>Cleaner inventory master data</li>
+          <li>Auditable approval history</li>
+          <li>Easy scaling across CPSEs</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>SIH26099 • Material Intelligence</span>
+    <span>Built for SyncMasters</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
