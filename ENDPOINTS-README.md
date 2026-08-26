@@ -1,270 +1,223 @@
-# SIH 2026 - Frontend and Backend Endpoint Guide
+# SIH 2026 - Frontend vs Backend Split
 
-This file is meant to split the work clearly between frontend and backend.
+This file separates work clearly.
 
-## 1. Frontend Work Breakdown
+## 1. Frontend Calls
 
-### Main Pages
+These are the API calls the frontend team will use in the UI.
 
-| Page | Route | Purpose | Main API Used |
-|---|---|---|---|
-| Home | `/` | Landing page, project intro, quick links | `GET /api/analytics/overview` |
-| Login | `/login` | User login | `POST /api/auth/login` |
-| Register | `/register` | New user signup | `POST /api/auth/register` |
-| Dashboard | `/dashboard` | Stats, charts, summary cards | `GET /api/analytics/overview`, `GET /api/analytics/trends` |
-| Upload Data | `/upload` | Upload CSV/Excel material masters | `POST /api/materials/upload` |
-| Search Materials | `/search` | Search and compare materials | `GET /api/materials/search` |
-| Match Review | `/review` | Review AI duplicate/equivalent suggestions | `GET /api/matches/pending`, `POST /api/matches/:id/approve`, `POST /api/matches/:id/reject` |
-| Material Details | `/materials/:id` | View one canonical material | `GET /api/materials/:id` |
-| Audit Logs | `/audit` | See approvals and history | `GET /api/audit/logs` |
-| Admin Panel | `/admin` | Manage users and system config | `GET /api/users`, `PUT /api/users/:id/role` |
+| Page | UI Purpose | Frontend Calls |
+|---|---|---|
+| Home | Landing page | `GET /api/analytics/overview` |
+| Login | User login | `POST /api/auth/login` |
+| Register | New user signup | `POST /api/auth/register` |
+| Dashboard | Stats and charts | `GET /api/analytics/overview`, `GET /api/analytics/trends`, `GET /api/analytics/duplicates` |
+| Upload Page | Upload CSV/Excel file | `POST /api/materials/upload` |
+| Search Page | Search materials | `GET /api/materials/search?q=` |
+| Material Detail Page | View one item | `GET /api/materials/:id` |
+| Review Page | Review AI suggestions | `GET /api/matches/pending`, `GET /api/matches/:id`, `POST /api/matches/:id/approve`, `POST /api/matches/:id/reject`, `POST /api/matches/:id/escalate` |
+| Audit Page | View action history | `GET /api/audit/logs` |
+| Admin Page | Manage users/roles | `GET /api/users`, `GET /api/users/:id`, `PUT /api/users/:id/role`, `DELETE /api/users/:id` |
+
+### Frontend Task Split
+
+Frontend team builds:
+- pages
+- forms
+- tables
+- charts
+- review queue UI
+- API integration layer
+- validation and error messages
 
 ### Frontend Components
 
-| Component | Responsibility |
+| Component | What it does |
 |---|---|
-| `Navbar` | Navigation between pages |
-| `LoginForm` | Login form and validation |
-| `RegisterForm` | Signup form and validation |
-| `UploadPanel` | Upload CSV/Excel file |
-| `SearchBar` | Search materials by name/spec |
-| `MaterialTable` | Show material records in table form |
-| `CompareCard` | Compare two or more similar materials |
-| `SuggestionList` | Show AI match suggestions |
-| `ReviewQueue` | Show pending items for approval |
-| `StatsCards` | Show total materials, matches, approvals |
-| `Charts` | Trend charts and analytics |
-| `AuditTable` | Show approval history |
+| `Navbar` | Navigation |
+| `LoginForm` | Login input and submit |
+| `RegisterForm` | Signup input and submit |
+| `UploadPanel` | File upload UI |
+| `SearchBar` | Search input |
+| `MaterialTable` | Display materials |
+| `CompareView` | Compare similar items |
+| `SuggestionCard` | Show AI matches |
+| `ReviewQueue` | Pending approvals |
+| `StatsCards` | Summary boxes |
+| `Charts` | Analytics charts |
+| `AuditTable` | History table |
 
-### Frontend API Calls
+### Frontend File Split
 
-| Method | Endpoint | What Frontend Sends |
-|---|---|---|
-| `POST` | `/api/auth/register` | name, email, password, role |
-| `POST` | `/api/auth/login` | email, password |
-| `GET` | `/api/materials` | optional search/filter params |
-| `POST` | `/api/materials/upload` | file, uploadedBy |
-| `GET` | `/api/materials/search?q=` | search text |
-| `GET` | `/api/materials/:id` | material id |
-| `GET` | `/api/matches/pending` | reviewer queue items |
-| `POST` | `/api/matches/:id/approve` | reviewer decision note |
-| `POST` | `/api/matches/:id/reject` | reviewer decision note |
-| `GET` | `/api/analytics/overview` | dashboard summary |
-| `GET` | `/api/analytics/trends` | chart data |
-| `GET` | `/api/audit/logs` | filters for date/user/action |
+| File | Responsibility |
+|---|---|
+| `src/pages/Home.jsx` | Home page |
+| `src/pages/Login.jsx` | Login page |
+| `src/pages/Register.jsx` | Register page |
+| `src/pages/Dashboard.jsx` | Dashboard |
+| `src/pages/Upload.jsx` | Upload page |
+| `src/pages/Search.jsx` | Search page |
+| `src/pages/Review.jsx` | Review page |
+| `src/pages/Audit.jsx` | Audit history |
+| `src/services/api.js` | All API calls from frontend |
 
 ---
 
-## 2. Backend Work Breakdown
+## 2. Backend Endpoints
 
-### Backend Modules
+These are the routes the backend team will implement.
 
-| Module | Responsibility |
-|---|---|
-| `auth` | Register, login, JWT handling |
-| `users` | User listing, role changes |
-| `materials` | Create, update, search, fetch materials |
-| `upload` | File upload and parsing |
-| `normalization` | Clean names, units, abbreviations |
-| `matching` | Find duplicates and equivalents |
-| `ocr` | Read text from label images |
-| `analytics` | Dashboard summaries and charts |
-| `audit` | Store and retrieve history |
-| `review` | Approve/reject AI suggestions |
-
-### Backend Endpoints
-
-#### Health
+### Health
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| `GET` | `/api/health` | Check if backend is running |
+| `GET` | `/api/health` | Check if server is alive |
 
-#### Authentication
+### Authentication
 
-| Method | Endpoint | Request Body | Response |
-|---|---|---|---|
-| `POST` | `/api/auth/register` | `{ name, email, password, role }` | user created + token |
-| `POST` | `/api/auth/login` | `{ email, password }` | token + user info |
-| `GET` | `/api/auth/me` | token in header | current user details |
+| Method | Endpoint | Request Body |
+|---|---|---|
+| `POST` | `/api/auth/register` | `{ name, email, password, role }` |
+| `POST` | `/api/auth/login` | `{ email, password }` |
+| `GET` | `/api/auth/me` | JWT in header |
 
-#### Users
+### Users
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| `GET` | `/api/users` | List all users |
+| `GET` | `/api/users` | List users |
 | `GET` | `/api/users/:id` | Get one user |
-| `PUT` | `/api/users/:id/role` | Change user role |
-| `DELETE` | `/api/users/:id` | Remove user |
+| `PUT` | `/api/users/:id/role` | Change role |
+| `DELETE` | `/api/users/:id` | Delete user |
 
-#### Materials
-
-| Method | Endpoint | Request Body / Query | Purpose |
-|---|---|---|---|
-| `GET` | `/api/materials` | filters, page, limit | List all materials |
-| `POST` | `/api/materials` | canonical material data | Create new material |
-| `GET` | `/api/materials/:id` | material id | Get one material |
-| `PUT` | `/api/materials/:id` | updated material data | Update material |
-| `DELETE` | `/api/materials/:id` | material id | Delete material |
-| `GET` | `/api/materials/search?q=` | search text | Search similar materials |
-
-#### Upload
-
-| Method | Endpoint | Request Body | Purpose |
-|---|---|---|---|
-| `POST` | `/api/materials/upload` | file + metadata | Upload CSV/Excel file |
-| `POST` | `/api/materials/upload/images` | label image files | Upload images for OCR |
-
-#### Matching
+### Materials
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| `POST` | `/api/matches/run` | Run AI matching on uploaded rows |
-| `GET` | `/api/matches/pending` | Show items waiting for review |
-| `GET` | `/api/matches/:id` | Get one match suggestion |
-| `POST` | `/api/matches/:id/approve` | Approve suggested match |
-| `POST` | `/api/matches/:id/reject` | Reject suggested match |
+| `GET` | `/api/materials` | List all materials |
+| `POST` | `/api/materials` | Create new canonical material |
+| `GET` | `/api/materials/:id` | Get one material |
+| `PUT` | `/api/materials/:id` | Update material |
+| `DELETE` | `/api/materials/:id` | Delete material |
+| `GET` | `/api/materials/search?q=` | Search similar items |
+
+### Upload
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `POST` | `/api/materials/upload` | Upload CSV/Excel data |
+| `POST` | `/api/materials/upload/images` | Upload label images |
+
+### Matching
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `POST` | `/api/matches/run` | Run AI matching |
+| `GET` | `/api/matches/pending` | Get review queue |
+| `GET` | `/api/matches/:id` | Get one suggestion |
+| `POST` | `/api/matches/:id/approve` | Approve match |
+| `POST` | `/api/matches/:id/reject` | Reject match |
 | `POST` | `/api/matches/:id/escalate` | Send to manual review |
 
-#### Normalization
+### Normalization
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| `POST` | `/api/normalize/text` | Normalize material text |
-| `POST` | `/api/normalize/unit` | Convert and standardize units |
-| `POST` | `/api/normalize/batch` | Normalize many records together |
+| `POST` | `/api/normalize/text` | Clean and standardize text |
+| `POST` | `/api/normalize/unit` | Normalize units |
+| `POST` | `/api/normalize/batch` | Normalize many records |
 
-#### OCR
-
-| Method | Endpoint | Purpose |
-|---|---|---|
-| `POST` | `/api/ocr/extract` | Read text from one image |
-| `POST` | `/api/ocr/verify` | Verify OCR text against master data |
-
-#### Analytics
+### OCR
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| `GET` | `/api/analytics/overview` | Total materials, matches, approvals |
-| `GET` | `/api/analytics/trends` | Time-based trend data |
-| `GET` | `/api/analytics/duplicates` | Duplicate rate stats |
+| `POST` | `/api/ocr/extract` | Read text from image |
+| `POST` | `/api/ocr/verify` | Verify OCR result |
+
+### Analytics
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `GET` | `/api/analytics/overview` | Summary metrics |
+| `GET` | `/api/analytics/trends` | Time-series data |
+| `GET` | `/api/analytics/duplicates` | Duplicate rate |
 | `GET` | `/api/analytics/review-time` | Average review time |
-| `GET` | `/api/analytics/source-breakdown` | Source-wise material stats |
+| `GET` | `/api/analytics/source-breakdown` | Source-wise analysis |
 
-#### Audit
+### Audit
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| `GET` | `/api/audit/logs` | View all audit logs |
-| `GET` | `/api/audit/logs/:id` | View one audit entry |
-| `POST` | `/api/audit/logs` | Store a new audit event |
+| `GET` | `/api/audit/logs` | List audit logs |
+| `GET` | `/api/audit/logs/:id` | Single audit log |
+| `POST` | `/api/audit/logs` | Create log entry |
 
 ---
 
-## 3. Suggested Request Formats
+## 3. Backend Task Split
 
-### Register
-
-```json
-{
-  "name": "Aarav",
-  "email": "aarav@example.com",
-  "password": "123456",
-  "role": "reviewer"
-}
-```
-
-### Login
-
-```json
-{
-  "email": "aarav@example.com",
-  "password": "123456"
-}
-```
-
-### Create Material
-
-```json
-{
-  "code": "MAT-001",
-  "name": "Stainless Steel Hex Bolt M10 x 50",
-  "category": "Fastener",
-  "grade": "304",
-  "size": "10x50 mm",
-  "unit": "Piece"
-}
-```
-
-### Approve Match
-
-```json
-{
-  "reviewerNote": "Same size, same grade, equivalent item"
-}
-```
-
----
-
-## 4. Work Split for Team Members
-
-### Frontend Team
-
-Build:
-- login/register pages
-- dashboard
-- upload page
-- search and compare page
-- review queue page
-- audit page
-
-### Backend Team
-
-Build:
-- auth APIs
-- material CRUD APIs
-- upload parsing
-- normalization logic
+Backend team builds:
+- authentication
+- user management
+- material CRUD
+- file upload
+- normalization
 - matching engine APIs
+- OCR APIs
 - analytics APIs
 - audit logging
 
-### AI / Logic Team
+### Backend File Split
 
-Build:
-- embeddings
-- similarity search
-- confidence scoring
-- OCR verification
-- explanation generation
-
-### Database Team
-
-Build:
-- schema design
-- migrations
-- indexing
-- audit storage
-
----
-
-## 5. Recommended Priority Order
-
-1. Authentication
-2. Material CRUD
-3. Upload and parsing
-4. Normalization
-5. Matching and review queue
-6. Dashboard analytics
-7. OCR support
-8. Audit logs
+| File | Responsibility |
+|---|---|
+| `server.js` | App entry point |
+| `routes/auth.js` | Auth routes |
+| `routes/users.js` | User routes |
+| `routes/materials.js` | Material routes |
+| `routes/upload.js` | Upload routes |
+| `routes/matches.js` | Matching routes |
+| `routes/normalize.js` | Normalization routes |
+| `routes/ocr.js` | OCR routes |
+| `routes/analytics.js` | Analytics routes |
+| `routes/audit.js` | Audit routes |
+| `services/matching.js` | Matching logic |
+| `services/normalization.js` | Normalization logic |
+| `services/ocr.js` | OCR logic |
+| `services/analytics.js` | Metrics logic |
+| `db/init.js` | Create database tables |
 
 ---
 
-## 6. Short Summary
+## 4. Quick Work Division
 
-If you want to divide work fast:
-- Frontend handles screens and API calls.
-- Backend handles logic and database.
-- AI module handles matching and scoring.
-- Database stores materials, users, decisions, and logs.
+### Frontend Team
+
+Build UI and API calls for:
+- login/register
+- dashboard
+- upload
+- search
+- review
+- audit
+- admin
+
+### Backend Team
+
+Build routes and logic for:
+- auth
+- users
+- materials
+- upload
+- matching
+- normalization
+- OCR
+- analytics
+- audit
+
+---
+
+## 5. Simple Rule
+
+- Frontend team only worries about what the user sees and which API it calls.
+- Backend team only worries about building the API and database logic.
