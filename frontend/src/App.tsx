@@ -66,25 +66,28 @@ const SiteGate = ({ onAccessGranted }: { onAccessGranted: () => void }) => {
   );
 };
 
+const PageWrapper = ({ children }: { children: React.ReactNode }) => (
+  <motion.div
+    initial={{ opacity: 0, scale: 0.98 }}
+    animate={{ opacity: 1, scale: 1 }}
+    exit={{ opacity: 0, scale: 1.02 }}
+    transition={{ duration: 0.5, ease: "easeInOut" }}
+    className="w-full min-h-screen absolute top-0 left-0"
+  >
+    {children}
+  </motion.div>
+);
+
 const AnimatedRoutes = ({ theme, setTheme, isAuthenticated }: any) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const PageWrapper = ({ children }: { children: React.ReactNode }) => (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.98 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 1.02 }}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
-      className="w-full min-h-screen absolute top-0 left-0"
-    >
-      {children}
-    </motion.div>
-  );
+  // Group all dashboard routes under a single key to prevent re-animation on tab change
+  const routeKey = location.pathname.startsWith('/dashboard') ? '/dashboard' : location.pathname;
 
   return (
     <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
+      <Routes location={location} key={routeKey}>
         <Route path="/" element={
           <PageWrapper>
             {isAuthenticated() ? <Navigate to="/dashboard/overview" /> : <LandingPage onNavigate={() => navigate('/login')} />}
