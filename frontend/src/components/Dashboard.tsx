@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   Box, LogOut, Database, Search, LayoutGrid, FileText, Settings, 
   Activity, Users, CheckCircle, Clock, Palette, ListChecks, History, 
-  Network, Link, ScanLine, Upload, FileSignature, AlertCircle, BarChart3, TrendingUp
+  Network, Link, ScanLine, Upload, FileSignature, AlertCircle, BarChart3, TrendingUp, Menu, X
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -17,11 +17,17 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
   const navigate = useNavigate();
   const location = useLocation();
   const activeTab = location.pathname.split('/').pop() || 'overview';
-  const setActiveTab = (tab: string) => navigate(`/dashboard/${tab}`);
+  const setActiveTab = (tab: string) => {
+    navigate(`/dashboard/${tab}`);
+    setMobileMenuOpen(false);
+  };
 
   const userStr = localStorage.getItem('user');
   const user = userStr ? JSON.parse(userStr) : { name: 'User', role: 'admin' };
   const canIngest = user && (user.role === 'admin' || user.role === 'officer');
+
+  // UI States
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   
   // Data States
@@ -254,8 +260,8 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
       </AnimatePresence>
       
       {/* Sidebar / Top Navigation Hybrid */}
-      <nav className="w-full px-6 py-4 flex items-center justify-between border-b border-[var(--border-color)] bg-[var(--bg-card)] transition-colors duration-300 sticky top-0 z-50 shadow-sm">
-        <div className="flex items-center gap-8">
+      <nav className="w-full px-4 md:px-6 py-4 flex items-center justify-between border-b border-[var(--border-color)] bg-[var(--bg-card)] transition-colors duration-300 sticky top-0 z-50 shadow-sm relative">
+        <div className="flex items-center gap-8 w-full lg:w-auto justify-between lg:justify-start">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-tr from-[#5D675B] to-[#4E564C] flex items-center justify-center rounded-xl shadow-md">
               <Box className="w-5 h-5 text-white" />
@@ -264,6 +270,22 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
               <span className="font-bold text-xl tracking-tight text-[var(--text-primary)] leading-none">SyncMasters</span>
               <span className="text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-semibold mt-1">Material Intelligence</span>
             </div>
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <div className="flex lg:hidden items-center gap-2">
+            <button 
+              onClick={cycleTheme}
+              className="p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--bg-alt)] rounded-lg transition-colors border border-[var(--border-color)]"
+            >
+              <Palette className="w-5 h-5" />
+            </button>
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 text-[var(--text-primary)] bg-[var(--bg-alt)] rounded-lg border border-[var(--border-color)]"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
           
           <div className="hidden lg:flex items-center gap-1 ml-4 bg-[var(--bg-alt)] p-1 rounded-xl border border-[var(--border-color)]">
@@ -294,23 +316,75 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
             <div className="w-8 h-8 rounded-full bg-[var(--bg-card)] border border-[var(--border-color)] flex items-center justify-center">
               <Users className="w-4 h-4 text-[var(--text-secondary)]" />
             </div>
-            <div className="text-[var(--text-secondary)] hidden md:flex flex-col justify-center">
-              <span className="text-[var(--text-primary)] font-bold max-w-[140px] truncate block leading-none">{user.name}</span>
-              <span className="text-[9px] uppercase font-black text-[var(--stat-blue-text)] tracking-wider mt-1">{user.role}</span>
-            </div>
+        <div className="hidden lg:flex items-center gap-4">
+          <div className="flex flex-col text-right">
+            <span className="text-sm font-bold text-[var(--text-primary)] leading-tight">{user.name}</span>
+            <span className="text-xs text-[var(--text-secondary)] capitalize font-semibold tracking-wide">{user.role}</span>
           </div>
-          <button onClick={cycleTheme} className="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--bg-alt)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card)] transition-colors shadow-sm" title="Toggle Theme">
-            <Palette className="w-4 h-4" />
+          
+          <button 
+            onClick={cycleTheme}
+            className="p-2.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-alt)] rounded-xl transition-colors border border-transparent hover:border-[var(--border-color)]"
+            title="Cycle Theme"
+          >
+            <Palette className="w-5 h-5" />
           </button>
           <button 
             onClick={() => setShowLogoutConfirm(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-[var(--stat-red-bg)] text-[var(--stat-red-text)] hover:bg-red-100 dark:hover:bg-red-900 rounded-full transition-colors font-semibold shadow-sm"
+            className="flex items-center gap-2 px-4 py-2.5 bg-[var(--stat-red-bg)] text-[var(--stat-red-text)] hover:bg-red-100 dark:hover:bg-red-900 rounded-xl transition-colors font-semibold shadow-sm"
           >
             <LogOut className="w-4 h-4" />
-            <span className="hidden sm:inline">Sign Out</span>
+            <span className="hidden xl:inline">Sign Out</span>
           </button>
         </div>
       </nav>
+
+      {/* Mobile Dropdown Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="lg:hidden absolute top-[73px] left-0 right-0 bg-[var(--bg-card)] border-b border-[var(--border-color)] shadow-xl z-40 flex flex-col p-4 max-h-[80vh] overflow-y-auto"
+          >
+            <div className="flex flex-col gap-1 mb-4 pb-4 border-b border-[var(--border-color)]">
+              <span className="text-sm font-bold text-[var(--text-primary)] px-2">{user.name}</span>
+              <span className="text-xs text-[var(--text-secondary)] capitalize font-semibold px-2">{user.role}</span>
+            </div>
+            
+            <div className="flex flex-col gap-2">
+              {[
+                { id: 'overview', icon: LayoutGrid, label: 'Overview' },
+                ...(canIngest ? [{ id: 'ingestion', icon: Upload, label: 'Raw Data' }] : []),
+                { id: 'matching', icon: Search, label: 'AI Matcher' },
+                { id: 'ocr', icon: ScanLine, label: 'OCR Verify' },
+                { id: 'mappings', icon: Link, label: 'Harmonized' },
+                { id: 'procurement', icon: Network, label: 'Pools' },
+                { id: 'materials', icon: Database, label: 'Master Data' },
+                { id: 'reviews', icon: ListChecks, label: 'QA' },
+                { id: 'audit', icon: History, label: 'Audit' }
+              ].map(tab => (
+                <button 
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)} 
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-base font-semibold transition-all duration-200 ${activeTab === tab.id ? 'bg-[#5D675B] text-white shadow-md' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-alt)]'}`}
+                >
+                  <tab.icon className="w-5 h-5" /> {tab.label}
+                </button>
+              ))}
+            </div>
+
+            <button 
+              onClick={() => { setMobileMenuOpen(false); setShowLogoutConfirm(true); }}
+              className="mt-6 flex items-center justify-center gap-2 w-full px-4 py-3 bg-[var(--stat-red-bg)] text-[var(--stat-red-text)] rounded-xl transition-colors font-bold shadow-sm"
+            >
+              <LogOut className="w-5 h-5" />
+              Sign Out
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Main Content Area */}
       <main className="flex-1 p-6 md:p-8 max-w-[1400px] mx-auto w-full flex flex-col">
@@ -364,21 +438,25 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
                 {/* Top KPI Row */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {[
-                    { label: 'Total Catalog Size', value: stats.total_materials?.toLocaleString(), icon: Database, color: 'text-[var(--stat-blue-text)]', bg: 'bg-[var(--stat-blue-bg)]', border: 'border-[var(--stat-blue-text)]', trend: '+12% MTD' },
-                    { label: 'Duplicate Candidates', value: stats.total_match_candidates?.toLocaleString(), icon: Activity, color: 'text-[var(--stat-purple-text)]', bg: 'bg-[var(--stat-purple-bg)]', border: 'border-[var(--stat-purple-text)]', trend: `${stats.pending_review} pending` },
-                    { label: 'Harmonized Mappings', value: stats.mappings_count?.toLocaleString(), icon: Link, color: 'text-[var(--stat-emerald-text)]', bg: 'bg-[var(--stat-emerald-bg)]', border: 'border-[var(--stat-emerald-text)]', trend: `${stats.harmonization_rate || 0}% coverage` },
-                    { label: 'Cost Savings (INR)', value: `₹ ${((stats.estimated_savings_inr || 0) / 100000).toFixed(2)} L`, icon: TrendingUp, color: 'text-[var(--stat-amber-text)]', bg: 'bg-[var(--stat-amber-bg)]', border: 'border-[var(--stat-amber-text)]', trend: 'Projected' }
+                    { label: 'Total Catalog Size', value: stats.total_materials?.toLocaleString(), icon: Database, color: 'text-[var(--stat-blue-text)]', bg: 'bg-[var(--stat-blue-bg)]', border: 'border-[var(--stat-blue-text)]', trend: '+12% MTD', target: 'materials' },
+                    { label: 'Duplicate Candidates', value: stats.total_match_candidates?.toLocaleString(), icon: Activity, color: 'text-[var(--stat-purple-text)]', bg: 'bg-[var(--stat-purple-bg)]', border: 'border-[var(--stat-purple-text)]', trend: `${stats.pending_review} pending`, target: 'matching' },
+                    { label: 'Harmonized Mappings', value: stats.mappings_count?.toLocaleString(), icon: Link, color: 'text-[var(--stat-emerald-text)]', bg: 'bg-[var(--stat-emerald-bg)]', border: 'border-[var(--stat-emerald-text)]', trend: `${stats.harmonization_rate || 0}% coverage`, target: 'mappings' },
+                    { label: 'Cost Savings (INR)', value: `₹ ${((stats.estimated_savings_inr || 0) / 100000).toFixed(2)} L`, icon: TrendingUp, color: 'text-[var(--stat-amber-text)]', bg: 'bg-[var(--stat-amber-bg)]', border: 'border-[var(--stat-amber-text)]', trend: 'Projected', target: 'procurement' }
                   ].map((s, i) => (
-                    <div key={i} className="bg-[var(--bg-card)] p-6 rounded-[24px] border border-[var(--border-color)] shadow-sm hover:shadow-md transition-all relative overflow-hidden group cursor-pointer">
+                    <div 
+                      key={i} 
+                      onClick={() => setActiveTab(s.target)}
+                      className="bg-[var(--bg-card)] p-6 rounded-[24px] border border-[var(--border-color)] shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 relative overflow-hidden group cursor-pointer"
+                    >
                       <div className="flex justify-between items-start mb-4 relative z-10">
-                        <div className={`p-3 rounded-2xl ${s.bg} ${s.border} border`}>
+                        <div className={`p-3 rounded-2xl ${s.bg} ${s.border} border group-hover:scale-110 transition-transform`}>
                           <s.icon className={`w-6 h-6 ${s.color}`} />
                         </div>
                         <span className="text-[11px] font-bold text-[var(--text-secondary)] bg-[var(--bg-alt)] px-2.5 py-1 rounded-full border border-[var(--border-color)]">{s.trend}</span>
                       </div>
                       <div className="text-3xl font-black text-[var(--text-primary)] mb-1 tracking-tight relative z-10">{s.value}</div>
                       <div className="text-sm font-semibold text-[var(--text-secondary)] relative z-10">{s.label}</div>
-                      <div className={`absolute -right-8 -bottom-8 w-32 h-32 ${s.bg} rounded-full opacity-0 group-hover:opacity-60 transition-opacity duration-500 blur-3xl`}></div>
+                      <div className={`absolute -right-8 -bottom-8 w-32 h-32 ${s.bg} rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-3xl`}></div>
                     </div>
                   ))}
                 </div>

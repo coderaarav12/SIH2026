@@ -60,16 +60,16 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-3 lg:gap-4"
+            className="flex flex-col sm:flex-row gap-3 lg:gap-4 w-full sm:w-auto px-4 sm:px-0"
           >
             <button 
               onClick={onNavigate}
-              className="flex items-center justify-center gap-2 px-6 py-3 lg:px-8 lg:py-4 bg-[var(--text-primary)] text-white rounded-full font-medium hover:scale-105 hover:bg-black transition-all duration-300 hover:shadow-xl"
+              className="flex items-center justify-center gap-2 px-6 py-4 bg-[var(--text-primary)] text-white rounded-full font-medium hover:scale-105 hover:bg-black transition-all duration-300 hover:shadow-xl w-full sm:w-auto"
             >
               Access Platform
               <ArrowRight className="w-4 h-4" />
             </button>
-            <a href="https://coderaarav12.github.io/SIH2026/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-6 py-3 lg:px-8 lg:py-4 border border-[#DEDBD5] text-[var(--text-primary)] rounded-full font-medium hover:bg-white hover:border-white hover:shadow-lg hover:scale-105 transition-all duration-300">
+            <a href="https://coderaarav12.github.io/SIH2026/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-6 py-4 border border-[#DEDBD5] text-[var(--text-primary)] rounded-full font-medium hover:bg-white hover:border-white hover:shadow-lg hover:scale-105 transition-all duration-300 w-full sm:w-auto">
               Read Documentation
             </a>
           </motion.div>
