@@ -48,13 +48,13 @@ export default function LoginPage({ onNavigate, onLogin }: LoginPageProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--bg-main)]"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm"
           >
             <div className="absolute inset-0 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-[#5D675B]/10 to-transparent"></div>
             </div>
             
-            <div className="relative flex flex-col items-center z-10 bg-[var(--bg-card)] p-12 rounded-[32px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] border border-[var(--border-color)]">
+            <div className="relative flex flex-col items-center z-10 bg-white/70 backdrop-blur-xl p-12 rounded-[32px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] border border-white/50">
               <Loader2 className="w-12 h-12 text-[#5D675B] animate-spin mb-6" />
               <motion.h2 
                 animate={{ opacity: [0.6, 1, 0.6] }}
@@ -84,7 +84,7 @@ export default function LoginPage({ onNavigate, onLogin }: LoginPageProps) {
         )}
       </AnimatePresence>
 
-      <div className="w-full max-w-[480px] bg-[var(--bg-card)] border border-[var(--border-color)] flex flex-col p-8 md:p-12 rounded-[32px] shadow-sm">
+      <div className="w-full max-w-[480px] bg-white/70 backdrop-blur-2xl border border-white/50 flex flex-col p-8 md:p-12 rounded-[32px] shadow-[0_16px_40px_-8px_rgba(0,0,0,0.1)]">
         
         <button 
           onClick={onNavigate}
