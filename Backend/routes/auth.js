@@ -157,6 +157,7 @@ router.get("/me", auth, (req, res) => {
 router.post("/verify-site-key", (req, res) => {
   const { key } = req.body;
   const validKey = String(process.env.SITE_ACCESS_KEY || "SIH2026-WIN").trim();
+  console.log("RECEIVED KEY:", key, "VALID KEY:", validKey);
   if (key === validKey) {
     res.json({ success: true, message: "Access granted" });
   } else {

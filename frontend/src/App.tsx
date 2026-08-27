@@ -66,9 +66,23 @@ export default function App() {
 
   const isAuthenticated = () => !!localStorage.getItem('token');
 
+  const GlobalVideoBackground = () => (
+    <video 
+      autoPlay 
+      loop 
+      muted 
+      playsInline 
+      className="fixed inset-0 w-full h-full object-cover -z-10 filter blur-sm brightness-[0.6] scale-105"
+    >
+      <source src="https://cdn.pixabay.com/video/2022/03/19/111306-690684157_large.mp4" type="video/mp4" />
+      <source src="https://cdn.pixabay.com/video/2019/04/24/23011-332483161_large.mp4" type="video/mp4" />
+    </video>
+  );
+
   if (!accessGranted) {
     return (
-      <div className={`theme-${theme} min-h-screen bg-[var(--bg-main)] text-[#333333] font-sans selection:bg-[var(--border-color)]`}>
+      <div className={`theme-${theme} min-h-screen bg-transparent text-[#333333] font-sans selection:bg-[var(--border-color)] relative`}>
+        <GlobalVideoBackground />
         <SiteGate onAccessGranted={() => setAccessGranted(true)} />
       </div>
     );
@@ -76,7 +90,8 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <div className={`theme-${theme} min-h-screen bg-[var(--bg-main)] text-[#333333] font-sans selection:bg-[var(--border-color)]`}>
+      <div className={`theme-${theme} min-h-screen bg-transparent text-[#333333] font-sans selection:bg-[var(--border-color)] relative`}>
+        <GlobalVideoBackground />
         <Routes>
           <Route path="/" element={isAuthenticated() ? <Navigate to="/dashboard/overview" /> : <LandingPage onNavigate={() => window.location.href='/login'} />} />
           <Route path="/login" element={isAuthenticated() ? <Navigate to="/dashboard/overview" /> : <LoginPage onNavigate={() => window.location.href='/'} onLogin={() => window.location.href='/dashboard/overview'} />} />
