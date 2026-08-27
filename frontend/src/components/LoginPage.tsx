@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { motion } from 'motion/react';
-import { ArrowLeft, Box, KeyRound, Mail, Lock } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { ArrowLeft, Box, KeyRound, Mail, Lock, Loader2 } from 'lucide-react';
 
 interface LoginPageProps {
   onNavigate: () => void;
@@ -10,11 +10,100 @@ interface LoginPageProps {
 export default function LoginPage({ onNavigate, onLogin }: LoginPageProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loginStatus, setLoginStatus] = useState<'idle' | 'authenticating' | 'syncing'>('idle');
+  const [loginMessage, setLoginMessage] = useState('Syncing CPSE Databases...');
 
-  const handleSubmit = async (e: React.FormEvent) => { e.preventDefault(); try { const response = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) }); const data = await response.json(); if (data.success) { localStorage.setItem('token', data.token); localStorage.setItem('user', JSON.stringify(data.user)); onLogin(); } else { alert(data.message || 'Login failed'); } } catch (err) { console.error(err); alert('Login error'); } };
+  const handleSubmit = async (e: React.FormEvent) => { 
+    e.preventDefault(); 
+    setLoginStatus('authenticating');
+    try { 
+      const response = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) }); 
+      const data = await response.json(); 
+      if (data.success) { 
+        localStorage.setItem('token', data.token); 
+        localStorage.setItem('user', JSON.stringify(data.user)); 
+        setLoginStatus('syncing');
+        setLoginMessage('Syncing CPSE Databases...');
+        setTimeout(() => setLoginMessage('Loading Semantic AI Models...'), 1400);
+        setTimeout(() => setLoginMessage('Decrypting Master Data...'), 2600);
+        setTimeout(() => {
+          onLogin(); 
+        }, 3800); // Wait 3.8s to show sequence
+      } else { 
+        setLoginStatus('idle');
+        alert(data.message || 'Login failed'); 
+      } 
+    } catch (err) { 
+      setLoginStatus('idle');
+      console.error(err); alert('Login error'); 
+    } 
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--bg-main)] p-4">
+
+      <AnimatePresence>
+        {loginStatus === 'syncing' && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--bg-main)]"
+          >
+            <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#5D675B]/10 to-transparent"></div>
+              {Array.from({ length: 40 }).map((_, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ 
+                    opacity: 0, 
+                    x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000), 
+                    y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000) 
+                  }}
+                  animate={{ 
+                    opacity: [0, 0.9, 0],
+                    y: [null, Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000)]
+                  }}
+                  transition={{ 
+                    duration: 2 + Math.random() * 2, 
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                  className="absolute w-1.5 h-1.5 bg-[#5D675B] rounded-full shadow-[0_0_12px_rgba(93,103,91,0.9)]"
+                />
+              ))}
+            </div>
+            
+            <div className="relative flex flex-col items-center z-10 bg-[var(--bg-card)] p-12 rounded-[32px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] border border-[var(--border-color)]">
+              <Loader2 className="w-12 h-12 text-[#5D675B] animate-spin mb-6" />
+              <motion.h2 
+                animate={{ opacity: [0.6, 1, 0.6] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="text-2xl font-bold text-[var(--text-primary)] mb-3 tracking-tight"
+              >
+                Securely Authenticating...
+              </motion.h2>
+              
+              <div className="h-6 relative overflow-hidden flex items-center justify-center min-w-[280px]">
+                <AnimatePresence mode="wait">
+                   <motion.p
+                      key={loginMessage}
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -15 }}
+                      transition={{ duration: 0.3 }}
+                      className="absolute text-sm font-bold text-[#5D675B] uppercase tracking-widest"
+                   >
+                      {loginMessage}
+                   </motion.p>
+                </AnimatePresence>
+              </div>
+
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="w-full max-w-[480px] bg-[var(--bg-card)] border border-[var(--border-color)] flex flex-col p-8 md:p-12 rounded-[32px] shadow-sm">
         
         <button 
@@ -74,10 +163,10 @@ export default function LoginPage({ onNavigate, onLogin }: LoginPageProps) {
             </div>
 
             <button 
-              type="submit"
+              type="submit" disabled={loginStatus !== 'idle'} 
               className="mt-4 w-full py-4 bg-[#5D675B] text-white rounded-2xl font-semibold shadow-lg shadow-[#5D675B]/20 hover:bg-[#4E564C] transition-colors"
             >
-              Sign In to Console
+              {loginStatus === 'authenticating' ? 'Verifying...' : 'Sign In to Console'}
             </button>
           </form>
         </div>
