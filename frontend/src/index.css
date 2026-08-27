@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;1,500&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+}
+
+@layer base {
+  :root {
+    --bg-main: #FDFCFB;
+    --bg-card: #FFFFFF;
+    --bg-alt: #F8F7F4;
+    --border-color: #EBE8E4;
+    --text-primary: #1A1A1A;
+    --text-secondary: #666666;
+    
+    /* Status Colors */
+    --stat-blue-bg: #eff6ff;
+    --stat-blue-text: #2563eb;
+    --stat-purple-bg: #faf5ff;
+    --stat-purple-text: #9333ea;
+    --stat-emerald-bg: #ecfdf5;
+    --stat-emerald-text: #059669;
+    --stat-amber-bg: #fffbeb;
+    --stat-amber-text: #d97706;
+    --stat-red-bg: #fef2f2;
+    --stat-red-text: #dc2626;
+  }
+  
+  .theme-warm {
+    --bg-main: #F4F1E9;
+    --bg-card: #FCFAF6;
+    --bg-alt: #EFECE1;
+    --border-color: #E4DEC9;
+    --text-primary: #383025;
+    --text-secondary: #7A7061;
+    
+    --stat-blue-bg: #E8F0F8;
+    --stat-blue-text: #2B5E9C;
+    --stat-purple-bg: #F3EAF8;
+    --stat-purple-text: #7C45A3;
+    --stat-emerald-bg: #E2F2EB;
+    --stat-emerald-text: #19704B;
+    --stat-amber-bg: #F8F0DE;
+    --stat-amber-text: #A86A11;
+    --stat-red-bg: #F8E8E8;
+    --stat-red-text: #A62F2F;
+  }
+
+  .theme-cool {
+    --bg-main: #EDF1F5;
+    --bg-card: #F9FAFC;
+    --bg-alt: #E2E8F0;
+    --border-color: #D3DDE6;
+    --text-primary: #1E293B;
+    --text-secondary: #64748B;
+    
+    --stat-blue-bg: #E0EBF7;
+    --stat-blue-text: #1E40AF;
+    --stat-purple-bg: #EDE9FE;
+    --stat-purple-text: #6D28D9;
+    --stat-emerald-bg: #D1FAE5;
+    --stat-emerald-text: #047857;
+    --stat-amber-bg: #FEF3C7;
+    --stat-amber-text: #B45309;
+    --stat-red-bg: #FEE2E2;
+    --stat-red-text: #B91C1C;
+  }
+
+  .theme-dark {
+    --bg-main: #0B0E14;
+    --bg-card: #151A23;
+    --bg-alt: #1F2532;
+    --border-color: #2D3544;
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    
+    --stat-blue-bg: rgba(59, 130, 246, 0.1);
+    --stat-blue-text: #60a5fa;
+    --stat-purple-bg: rgba(168, 85, 247, 0.1);
+    --stat-purple-text: #c084fc;
+    --stat-emerald-bg: rgba(16, 185, 129, 0.1);
+    --stat-emerald-text: #34d399;
+    --stat-amber-bg: rgba(245, 158, 11, 0.1);
+    --stat-amber-text: #fbbf24;
+    --stat-red-bg: rgba(239, 68, 68, 0.1);
+    --stat-red-text: #f87171;
+  }
+}
+
+.tender-report h1, .tender-report h2, .tender-report h3 { font-weight: bold; margin-bottom: 0.5rem; margin-top: 1.5rem; }
+.tender-report h1 { font-size: 1.5rem; }
+.tender-report h2 { font-size: 1.25rem; }
+.tender-report h3 { font-size: 1.125rem; }
+.tender-report p { margin-bottom: 1rem; line-height: 1.6; }
+.tender-report ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+.tender-report li { margin-bottom: 0.25rem; }
+.tender-report strong { font-weight: 800; color: var(--stat-blue-text); }

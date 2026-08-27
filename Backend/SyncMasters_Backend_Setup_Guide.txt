@@ -1,0 +1,506 @@
+SYNCMASTERS — BACKEND PROTOTYPE Windows Setup + Frontend Integration
+Guide Problem Statement: SIH26099 Team: SyncMasters
+
+============================================================ 1. WHAT YOU
+NEED ON A NEW PC
+============================================================
+
+Install: - Node.js (LTS recommended) - VS Code (recommended) - Git
+(optional)
+
+You do NOT need Python/FastAPI for the current prototype unless you add
+a separate Python AI service later.
+
+============================================================ 2. COPY THE
+BACKEND ============================================================
+
+Copy/extract the complete backend folder:
+
+SyncMasters_Backend_Prototype/ db/ middleware/ routes/ services/
+uploads/ package.json package-lock.json README.md server.js .env.example
+
+IMPORTANT: - Do NOT copy node_modules. Run npm install on the new PC. -
+Do NOT share the real .env if it contains secrets. - Create a new .env
+on the new PC from .env.example.
+
+Open the backend folder in VS Code.
+
+============================================================ 3. INSTALL
+DEPENDENCIES
+============================================================
+
+Open the VS Code terminal inside the backend folder:
+
+npm install
+
+This installs the dependencies recorded in package.json.
+
+============================================================ 4. CREATE
+THE ENVIRONMENT FILE
+============================================================
+
+If .env.example is present:
+
+copy .env.example .env
+
+Then open .env and make sure the required values are present.
+
+If the project already contains a working .env on the original PC, do
+NOT blindly copy it to other people. Create a separate .env with
+equivalent configuration and a new secret where appropriate.
+
+============================================================ 5. START
+THE BACKEND ============================================================
+
+Run:
+
+npm run dev
+
+Expected terminal output:
+
+Database initialized successfully. Server running on
+http://localhost:5000
+
+Keep this terminal running while using the frontend.
+
+============================================================ 6. CHECK
+THAT THE BACKEND IS WORKING
+============================================================
+
+Open:
+
+http://localhost:5000/
+
+The root endpoint should return a JSON response describing the
+SyncMasters backend and its endpoint groups.
+
+Also test:
+
+http://localhost:5000/api/health
+
+A successful response should contain success=true and indicate that the
+backend is running.
+
+============================================================ 7. FRONTEND
+CONNECTION ============================================================
+
+The frontend should use this backend base URL:
+
+http://localhost:5000
+
+Example:
+
+const API_BASE_URL = “http://localhost:5000”;
+
+Then call endpoints by appending the API path.
+
+Examples:
+
+GET http://localhost:5000/api/health POST
+http://localhost:5000/api/auth/login GET
+http://localhost:5000/api/materials POST
+http://localhost:5000/api/matching
+
+For protected endpoints, first login and store the returned JWT token.
+
+Send the token in every protected request:
+
+Authorization: Bearer
+
+Example JavaScript:
+
+fetch(${API_BASE_URL}/api/materials, { headers: { Authorization:
+Bearer ${token} } });
+
+If the frontend runs on a different port, make sure the backend CORS
+configuration allows the frontend origin.
+
+Typical local frontend URLs may be: - http://localhost:3000 -
+http://localhost:5173
+
+Use the actual port used by the frontend.
+
+============================================================ 8. LOGIN /
+AUTHENTICATION
+============================================================
+
+Login endpoint:
+
+POST /api/auth/login
+
+JSON body:
+
+{ “email”: “reviewer@test.com”, “password”: “Test@12345” }
+
+The response returns: - success - message - token
+
+Use the returned token for protected APIs.
+
+Current demo credentials used during testing:
+
+Email: reviewer@test.com Password: Test@12345
+
+If these credentials are changed in the database/project, use the new
+credentials instead.
+
+Current auth flow:
+
+Frontend -> POST /api/auth/login -> receive JWT -> store token -> send
+“Authorization: Bearer ” -> access protected APIs
+
+============================================================ 9. CURRENT
+BACKEND FEATURES
+============================================================
+
+The current prototype backend supports:
+
+1.  Health/status API
+2.  User login with JWT authentication
+3.  Authenticated user information
+4.  Material creation
+5.  Material listing/search
+6.  CSV/Excel material upload
+7.  Material normalization/processing used by the prototype
+8.  AI-style material matching/ranking
+9.  Top candidate matches
+10. Confidence score
+11. Matching decision
+12. Match reasons/explanations
+13. Matching history
+14. Reviewer workflow endpoints
+15. Analytics endpoints
+16. SQLite persistence
+17. Uploaded-file storage
+18. Audit/review data persistence used by the prototype
+
+The matching layer combines the matching logic implemented in
+services/matcher.js with the available material data.
+
+============================================================ 10. MAIN
+ENDPOINTS ============================================================
+
+HEALTH
+
+GET /api/health No authentication required.
+
+AUTH
+
+POST /api/auth/login Login and receive JWT.
+
+GET /api/auth/me Return the authenticated user. Requires: Authorization:
+Bearer
+
+MATERIALS
+
+GET /api/materials List materials. Requires authentication.
+
+POST /api/materials Create a material. Requires authentication.
+
+GET /api/materials/search?q=bolt Search materials. Requires
+authentication.
+
+POST /api/materials/upload Upload CSV/Excel material data. Requires
+authentication. Multipart form field: file
+
+MATCHING
+
+POST /api/matching Run material matching. Requires authentication.
+
+Accepted input fields include: material_name query text
+
+Optional: limit
+
+Example body:
+
+{ “material_name”: “Stainless Steel Hex Bolt M10 x 50 SS304”, “limit”: 3
+}
+
+Response includes: - input - top_match - matches - confidence -
+decision - semantic_similarity - reasons - material details -
+candidate_id
+
+GET /api/matching/history View previous matching candidates/history.
+Requires authentication.
+
+REVIEWS
+
+The backend contains review endpoints under:
+
+/api/reviews
+
+Use the routes/reviews.js file as the source of truth for the exact
+review paths and request bodies.
+
+ANALYTICS
+
+Analytics endpoints are under:
+
+/api/analytics
+
+Use the routes/analytics.js file as the source of truth for the exact
+analytics paths and request parameters.
+
+============================================================ 11. TEST
+LOGIN IN POWERSHELL
+============================================================
+
+Run:
+
+$login = Invoke-RestMethod -Method POST
+-Uri "http://localhost:5000/api/auth/login" -ContentType
+“application/json” ` -Body
+‘{“email”:“reviewer@test.com”,“password”:“Test@12345”}’
+
+Then:
+
+$token = $login.token
+
+Check the logged-in user:
+
+Invoke-RestMethod -Method GET -Uri "http://localhost:5000/api/auth/me"
+-Headers @{ Authorization = “Bearer $token” }
+
+============================================================ 12. TEST
+MATERIALS ============================================================
+
+List materials:
+
+Invoke-RestMethod -Method GET -Uri "http://localhost:5000/api/materials"
+-Headers @{ Authorization = “Bearer $token” }
+
+Search:
+
+Invoke-RestMethod -Method GET
+-Uri "http://localhost:5000/api/materials/search?q=bolt" -Headers @{
+Authorization = “Bearer $token” }
+
+============================================================ 13. TEST AI
+MATCHING ============================================================
+
+PowerShell:
+
+$body = @{ material_name = “Stainless Steel Hex Bolt M10 x 50 SS304”
+limit = 3 } | ConvertTo-Json
+
+Invoke-RestMethod -Method POST -Uri “http://localhost:5000/api/matching”
+-Headers @{ Authorization = "Bearer $token" } -ContentType
+“application/json” ` -Body $body
+
+Another demo input:
+
+$body = @{ material_name = “SS Hex Bolt 10mm x 50mm Grade 304” limit = 3
+} | ConvertTo-Json
+
+Invoke-RestMethod -Method POST -Uri “http://localhost:5000/api/matching”
+-Headers @{ Authorization = "Bearer $token" } -ContentType
+“application/json” ` -Body $body
+
+The matching response contains the ranked candidates and their
+confidence/reasons.
+
+============================================================ 14. CSV /
+EXCEL UPLOAD
+============================================================
+
+The upload endpoint is:
+
+POST /api/materials/upload
+
+The request is multipart/form-data with:
+
+file = your CSV or Excel file
+
+On Windows PowerShell, curl.exe is useful for multipart upload:
+
+curl.exe -X POST “http://localhost:5000/api/materials/upload” -H
+“Authorization: Bearer $token” -F “file=@test_materials.csv”
+
+Important: Do not type the filename by itself in PowerShell. That
+attempts to execute it as a command.
+
+A successful upload response reports: - success - file - total_rows -
+inserted - skipped
+
+If rows are skipped, inspect the CSV column names/data format expected
+by the current upload route.
+
+============================================================ 15.
+PROTOTYPE DEMO FLOW FOR TOMORROW
+============================================================
+
+Recommended presentation flow:
+
+1.  Start backend: npm run dev
+
+2.  Open frontend.
+
+3.  Login as reviewer.
+
+4.  Show the material master/catalog.
+
+5.  Upload a CSV containing material records.
+
+6.  Search for a material such as: bolt stainless M12 pipe
+
+7.  Enter a new material description.
+
+8.  Call the matching API.
+
+9.  Show the top 3 candidate materials.
+
+10. Show:
+
+    -   confidence score
+    -   semantic similarity
+    -   reasons
+    -   recommended decision
+
+11. Send low-confidence results to reviewer flow.
+
+12. Approve/reject a candidate.
+
+13. Show that the decision/history is persisted.
+
+14. Open analytics to demonstrate stored matching/review activity.
+
+This gives the judges the complete story:
+
+Upload -> Clean/normalize -> Match -> Rank -> Confidence -> Human review
+-> Store decision -> Analytics
+
+============================================================ 16.
+FRONTEND DEVELOPER CHECKLIST
+============================================================
+
+Your frontend friend needs:
+
+Backend URL: http://localhost:5000
+
+Authentication: JWT Bearer token
+
+Useful frontend screens:
+
+-   Login
+-   Dashboard
+-   Material catalog
+-   CSV/Excel upload
+-   Material search
+-   AI matching
+-   Candidate comparison
+-   Reviewer approval/rejection
+-   Match history
+-   Analytics
+
+For every protected API call:
+
+Authorization: Bearer
+
+Do not hard-code the token into the frontend source.
+
+Recommended frontend environment variable:
+
+VITE_API_BASE_URL=http://localhost:5000
+
+or the equivalent environment variable system used by the frontend
+framework.
+
+============================================================ 17.
+TROUBLESHOOTING
+============================================================
+
+Problem: “Cannot GET /” Meaning: The server may be running but there is
+no root route, OR the version of the backend being used has a different
+root response.
+
+First test: http://localhost:5000/api/health
+
+Problem: “Invalid or expired token” Fix: Login again and use the newly
+returned token.
+
+PowerShell:
+
+$login = Invoke-RestMethod -Method POST -Uri "http://localhost:5000/api/auth/login" -ContentType "application/json" -Body '{"email":"reviewer@test.com","password":"Test@12345"}'$token
+= $login.token
+
+Problem: Port 5000 already in use Stop the old backend process or change
+the configured port.
+
+Problem: npm run dev fails Run:
+
+npm install
+
+Then:
+
+npm run dev
+
+Check the terminal error for the specific missing dependency/file.
+
+Problem: Upload does not work Make sure: - backend is running -
+Authorization header is present - file field is named “file” - file
+exists - CSV/Excel format matches the upload parser
+
+Problem: Frontend cannot call backend Check: - backend is running -
+frontend uses http://localhost:5000 - correct API path is used -
+Authorization header is sent for protected routes - CORS allows the
+frontend origin
+
+============================================================ 18.
+IMPORTANT FILES IN THE BACKEND
+============================================================
+
+server.js Main Express server and route registration.
+
+db/init.js SQLite database initialization and schema.
+
+middleware/auth.js JWT authentication middleware.
+
+routes/auth.js Authentication routes.
+
+routes/materials.js Material APIs and upload/search functionality.
+
+routes/matching.js Material matching API and matching history.
+
+routes/reviews.js Reviewer workflow APIs.
+
+routes/analytics.js Analytics APIs.
+
+services/matcher.js Matching/ranking logic used by the prototype.
+
+uploads/ Uploaded files are stored here.
+
+============================================================ 19. WHAT TO
+SHARE WITH YOUR FRIEND
+============================================================
+
+Share the backend project folder/ZIP containing the source files and
+package files.
+
+DO NOT share: - .env containing secrets - node_modules
+
+The friend should run:
+
+npm install npm run dev
+
+Then connect the frontend to:
+
+http://localhost:5000
+
+============================================================ 20. FINAL
+PROTOTYPE STATUS
+============================================================
+
+The backend prototype is designed to demonstrate the core SIH26099
+concept:
+
+AI Driven Standardisation and Harmonization of Material Codes Across
+CPSEs
+
+The current backend demonstrates: - authentication - material master
+management - file ingestion - material search - matching/ranking -
+confidence/reasons - reviewer workflow support - persistence - matching
+history - analytics API support
+
+For the prototype, the goal is a reliable end-to-end demonstration
+rather than a production-scale ERP integration.
+
+END OF GUIDE
