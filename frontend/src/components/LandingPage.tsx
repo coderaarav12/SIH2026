@@ -7,7 +7,7 @@ interface LandingPageProps {
 
 export default function LandingPage({ onNavigate }: LandingPageProps) {
   return (
-    <div className="flex flex-col min-h-screen bg-[#F7EBE1]">
+    <div className="flex flex-col min-h-screen bg-[#F5F5F5]">
       {/* Navigation */}
       <nav className="w-full px-6 md:px-12 py-8 flex items-center justify-between">
         <div className="flex items-center gap-3">
