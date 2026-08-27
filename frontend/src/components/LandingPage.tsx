@@ -50,7 +50,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-base md:text-lg text-[var(--text-secondary)] mb-6 lg:mb-8 max-w-2xl leading-relaxed"
+            className="text-base md:text-lg text-[var(--text-primary)] font-medium mb-6 lg:mb-8 max-w-2xl leading-relaxed drop-shadow-sm"
           >
             AI-driven standardisation and harmonization of material codes. 
             Eliminate duplicates, improve inventory visibility, and streamline procurement.
