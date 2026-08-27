@@ -1,19 +1,7 @@
-import { useState } from 'react';
-import { motion } from 'motion/react';
-import { ArrowLeft, Box, KeyRound, Mail, Lock } from 'lucide-react';
+const fs = require('fs');
+let code = fs.readFileSync('frontend/src/components/LoginPage.tsx', 'utf8');
 
-interface LoginPageProps {
-  onNavigate: () => void;
-  onLogin: () => void;
-}
-
-export default function LoginPage({ onNavigate, onLogin }: LoginPageProps) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSubmit = async (e: React.FormEvent) => { e.preventDefault(); try { const response = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) }); const data = await response.json(); if (data.success) { localStorage.setItem('token', data.token); localStorage.setItem('user', JSON.stringify(data.user)); onLogin(); } else { alert(data.message || 'Login failed'); } } catch (err) { console.error(err); alert('Login error'); } };
-
-  return (
+const newReturn = `  return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--bg-main)] p-4">
       <div className="w-full max-w-[480px] bg-[var(--bg-card)] border border-[var(--border-color)] flex flex-col p-8 md:p-12 rounded-[32px] shadow-sm">
         
@@ -85,3 +73,9 @@ export default function LoginPage({ onNavigate, onLogin }: LoginPageProps) {
     </div>
   );
 }
+`;
+
+code = code.substring(0, code.indexOf('  return (')) + newReturn;
+
+fs.writeFileSync('frontend/src/components/LoginPage.tsx', code);
+console.log('LoginPage updated successfully');

@@ -330,6 +330,9 @@ Create a `.env` file (if it doesn't exist) and add the following:
 PORT=5000
 JWT_SECRET=supersecret123
 MISTRAL_API_KEY=UO7pOvfd0e8pJ7RsHPoRTJvgf2fflluA
+ADMIN_PASS=Admin@12345
+REVIEWER_PASS=Reviewer@12345
+OFFICER_PASS=Officer@12345
 ```
 
 ### 2. Install and Start the Backend API (Port 5000)
@@ -360,14 +363,17 @@ node generate_pdfs.js
 ```
 *This will create test files like `BHEL_Valves_Receipt.pdf` inside the `pdf_generator` folder, which you can upload in the Dashboard's **OCR Verify** tab.*
 
-### 5. Pre-Seeded Test Credentials
-Use any of these securely hashed accounts to log in:
-- **Ministry Admin**: `admin@cpse.gov.in` / `Admin@12345` *(Access to Raw Data Ingestion)*
-- **IOCL Store Officer**: `store.officer@iocl.co.in` / `Officer@12345` *(Access to Raw Data Ingestion)*
-- **CPCL Reviewer**: `reviewer@cpcl.co.in` / `Reviewer@12345` *(Standard QA Access)*
-- **Test Reviewer**: `reviewer@test.com` / `Test@12345`
-
-*Note: All passwords are `RoleName@12345`. You can also click "Use Gmail OTP" on the login screen with any valid Gmail address to test the email authentication flow!*
+### 5. Configured Test Credentials
+For local testing, configure these passwords in your `Backend/.env` file:
+```env
+ADMIN_PASS=YourSecureAdminPass
+REVIEWER_PASS=YourSecureReviewerPass
+OFFICER_PASS=YourSecureOfficerPass
+```
+You can then log in using:
+- **Ministry Admin**: `admin@cpse.gov.in` *(Access to Raw Data Ingestion)*
+- **IOCL Store Officer**: `store.officer@iocl.co.in` *(Access to Raw Data Ingestion)*
+- **CPCL Reviewer**: `reviewer@cpcl.co.in` *(Standard QA Access)*
 
 ## SIH Metadata
 
