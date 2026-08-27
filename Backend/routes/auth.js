@@ -153,4 +153,15 @@ router.get("/me", auth, (req, res) => {
   res.json({ success: true, user: req.user });
 });
 
+
+router.post("/verify-site-key", (req, res) => {
+  const { key } = req.body;
+  const validKey = process.env.SITE_ACCESS_KEY || "SIH2026-WIN";
+  if (key === validKey) {
+    res.json({ success: true, message: "Access granted" });
+  } else {
+    res.status(401).json({ success: false, message: "Invalid security key" });
+  }
+});
+
 module.exports = router;

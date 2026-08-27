@@ -330,6 +330,7 @@ Create a `.env` file (if it doesn't exist) and add the following:
 PORT=5000
 JWT_SECRET=supersecret123
 MISTRAL_API_KEY=UO7pOvfd0e8pJ7RsHPoRTJvgf2fflluA
+SITE_ACCESS_KEY=SIH2026-WIN
 ADMIN_PASS=Admin@12345
 REVIEWER_PASS=Reviewer@12345
 OFFICER_PASS=Officer@12345
