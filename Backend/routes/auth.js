@@ -1,10 +1,9 @@
-const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const db = require("../db/init");
-const auth = require("../middleware/auth");
+import { Hono } from "hono";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import auth from "../middleware/auth.js";
 
-const router = express.Router();
+const router = new Hono();
 
 function sign(user) {
   return jwt.sign(
@@ -17,56 +16,56 @@ function sign(user) {
 // In-memory OTP store for email verification
 const otpStore = new Map();
 
-router.post("/register", (req, res) => {
+router.post("/register", async (c) => {
   try {
-    const { name, email, password, role = "reviewer", department = "Materials & Stores" } = req.body || {};
+    const { name, email, password, role = "reviewer", department = "Materials & Stores" } = (await c.req.json().catch(() => ({}))) || {};
 
     if (!name || !email || !password) {
-      return res.status(400).json({ success: false, message: "Name, email and password are required" });
+      return c.json({ success: false, message: "Name, email and password are required" }, 400);
     }
 
     if (password.length < 6) {
-      return res.status(400).json({ success: false, message: "Password must be at least 6 characters" });
+      return c.json({ success: false, message: "Password must be at least 6 characters" }, 400);
     }
 
     const cleanEmail = String(email).trim().toLowerCase();
-    const exists = db.prepare("SELECT id FROM users WHERE email = ?").get(cleanEmail);
+    const exists = await c.env.DB.prepare("SELECT id FROM users WHERE email = ?").bind(cleanEmail).first();
     if (exists) {
-      return res.status(409).json({ success: false, message: "Email already registered in CPSE portal" });
+      return c.json({ success: false, message: "Email already registered in CPSE portal" }, 409);
     }
 
     const validRoles = ["admin", "reviewer", "officer"];
     const userRole = validRoles.includes(role.toLowerCase()) ? role.toLowerCase() : "reviewer";
 
     const hash = bcrypt.hashSync(password, 10);
-    const result = db.prepare(`
+    const result = await c.env.DB.prepare(`
       INSERT INTO users (name, email, password_hash, role, department)
       VALUES (?, ?, ?, ?, ?)
     `).run(name.trim(), cleanEmail, hash, userRole, department);
 
-    const user = db.prepare(`
+    const user = await c.env.DB.prepare(`
       SELECT id, name, email, role, department, created_at FROM users WHERE id = ?
-    `).get(result.lastInsertRowid);
+    `).bind(result.lastInsertRowid).first();
 
-    res.status(201).json({
+    return c.json({
       success: true,
       message: "CPSE Portal Registration Successful",
       user,
       token: sign(user)
-    });
+    }, 201);
   } catch (e) {
-    res.status(500).json({ success: false, message: e.message });
+    return c.json({ success: false, message: e.message }, 500);
   }
 });
 
-router.post("/login", (req, res) => {
+router.post("/login", async (c) => {
   try {
-    const { email, password } = req.body || {};
+    const { email, password } = (await c.req.json().catch(() => ({}))) || {};
     const cleanEmail = String(email || "").trim().toLowerCase();
-    const user = db.prepare("SELECT * FROM users WHERE email = ?").get(cleanEmail);
+    const user = await c.env.DB.prepare("SELECT * FROM users WHERE email = ?").bind(cleanEmail).first();
 
     if (!user || !bcrypt.compareSync(password || "", user.password_hash)) {
-      return res.status(401).json({ success: false, message: "Invalid official credentials or password" });
+      return c.json({ success: false, message: "Invalid official credentials or password" }, 401);
     }
 
     const safeUser = {
@@ -78,21 +77,21 @@ router.post("/login", (req, res) => {
       created_at: user.created_at
     };
 
-    res.json({
+    return c.json({
       success: true,
       message: "Authentication successful",
       token: sign(user),
       user: safeUser
     });
   } catch (e) {
-    res.status(500).json({ success: false, message: e.message });
+    return c.json({ success: false, message: e.message }, 500);
   }
 });
 
 // Gmail / Email OTP Request
-router.post("/send-otp", (req, res) => {
-  const { email } = req.body || {};
-  if (!email) return res.status(400).json({ success: false, message: "Email is required" });
+router.post("/send-otp", async (c) => {
+  const { email } = (await c.req.json().catch(() => ({}))) || {};
+  if (!email) return c.json({ success: false, message: "Email is required" }, 400);
 
   const cleanEmail = String(email).trim().toLowerCase();
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -100,7 +99,7 @@ router.post("/send-otp", (req, res) => {
 
   console.log(`[AUTH-OTP] Generated OTP for ${cleanEmail}: ${otp}`);
 
-  res.json({
+  return c.json({
     success: true,
     message: `Security OTP sent to ${cleanEmail}`,
     dev_hint_otp: otp
@@ -108,28 +107,28 @@ router.post("/send-otp", (req, res) => {
 });
 
 // Verify OTP & Instant Login
-router.post("/verify-otp", (req, res) => {
-  const { email, otp } = req.body || {};
+router.post("/verify-otp", async (c) => {
+  const { email, otp } = (await c.req.json().catch(() => ({}))) || {};
   const cleanEmail = String(email || "").trim().toLowerCase();
   const record = otpStore.get(cleanEmail);
 
   if (!record || record.otp !== String(otp).trim() || Date.now() > record.expiresAt) {
-    return res.status(400).json({ success: false, message: "Invalid or expired OTP code" });
+    return c.json({ success: false, message: "Invalid or expired OTP code" }, 400);
   }
 
   otpStore.delete(cleanEmail);
 
-  let user = db.prepare("SELECT * FROM users WHERE email = ?").get(cleanEmail);
+  let user = await c.env.DB.prepare("SELECT * FROM users WHERE email = ?").bind(cleanEmail).first();
   if (!user) {
     // Auto-create verified Gmail user
     const hash = bcrypt.hashSync("GoogleAuth@2026", 10);
     const nameFromEmail = cleanEmail.split("@")[0].replace(/[._]/g, " ").toUpperCase();
-    const result = db.prepare(`
+    const result = await c.env.DB.prepare(`
       INSERT INTO users (name, email, password_hash, role, department)
       VALUES (?, ?, ?, ?, ?)
-    `).run(nameFromEmail, cleanEmail, hash, "reviewer", "Gmail Verified Access");
+    `).bind(nameFromEmail, cleanEmail, hash, "reviewer", "Gmail Verified Access").run();
 
-    user = db.prepare("SELECT * FROM users WHERE id = ?").get(result.lastInsertRowid);
+    user = await c.env.DB.prepare("SELECT * FROM users WHERE id = ?").bind(result.lastInsertRowid).first();
   }
 
   const safeUser = {
@@ -141,7 +140,7 @@ router.post("/verify-otp", (req, res) => {
     created_at: user.created_at
   };
 
-  res.json({
+  return c.json({
     success: true,
     message: "Email OTP verification successful",
     token: sign(user),
@@ -149,20 +148,21 @@ router.post("/verify-otp", (req, res) => {
   });
 });
 
-router.get("/me", auth, (req, res) => {
-  res.json({ success: true, user: req.user });
+router.get("/me", auth, async (c) => {
+  return c.json({ success: true, user: c.get("user") });
 });
 
 
-router.post("/verify-site-key", (req, res) => {
-  const { key } = req.body;
+router.post("/verify-site-key", async (c) => {
+  const { key } = (await c.req.json().catch(() => ({})));
   const validKey = String(process.env.SITE_ACCESS_KEY || "SIH2026-WIN").trim();
   console.log("RECEIVED KEY:", key, "VALID KEY:", validKey);
   if (key === validKey) {
-    res.json({ success: true, message: "Access granted" });
+    return c.json({ success: true, message: "Access granted" });
   } else {
-    res.status(401).json({ success: false, message: "Invalid security key" });
+    return c.json({ success: false, message: "Invalid security key" }, 401);
   }
 });
 
-module.exports = router;
+export default router;
+

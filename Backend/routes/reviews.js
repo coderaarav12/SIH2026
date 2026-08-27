@@ -1,68 +1,49 @@
-const express = require("express");
-const db = require("../db/init");
-const auth = require("../middleware/auth");
+import { Hono } from "hono";
+import auth from "../middleware/auth.js";
 
-const router = express.Router();
+const router = new Hono();
 
-router.post("/:candidateId", auth, (req, res) => {
-  const candidateId = Number(req.params.candidateId);
-  const action = String(req.body?.action || "").toLowerCase();
-  const comment = String(req.body?.comment || "");
+router.post("/:candidateId", auth, async (c) => {
+  const candidateId = Number(c.req.param("candidateId"));
+  const body = await c.req.json().catch(() => ({}));
+  const action = String(body?.action || "").toLowerCase();
+  const comment = String(body?.comment || "");
+  const sourceCode = String(body?.source_code || `REQ-${candidateId}-${Date.now().toString().slice(-4)}`);
 
   if (!["approve", "reject"].includes(action)) {
-    return res.status(400).json({ success: false, message: "action must be approve or reject" });
+    return c.json({ success: false, message: "action must be approve or reject" }, 400);
   }
 
-  const candidate = db.prepare("SELECT * FROM match_candidates WHERE id = ?").get(candidateId);
+  const candidate = await c.env.DB.prepare("SELECT * FROM match_candidates WHERE id = ?").bind(candidateId).first();
   if (!candidate) {
-    return res.status(404).json({ success: false, message: "Match candidate not found" });
+    return c.json({ success: false, message: "Match candidate not found" }, 404);
   }
 
   const decision = action === "approve" ? "approved" : "rejected";
+  const user = c.get("user");
 
-  const tx = db.transaction(() => {
-    db.prepare(`
-      UPDATE match_candidates SET decision = ? WHERE id = ?
-    `).run(decision, candidateId);
+  // D1 doesn't support transactions in Workers — run sequentially
+  await c.env.DB.prepare("UPDATE match_candidates SET decision = ? WHERE id = ?").bind(decision, candidateId).run();
 
-    db.prepare(`
-      INSERT INTO review_actions (candidate_id, reviewer_id, action, comment)
-      VALUES (?, ?, ?, ?)
-    `).run(candidateId, req.user.id, action, comment);
+  await c.env.DB.prepare(
+    "INSERT INTO review_actions (candidate_id, reviewer_id, action, comment) VALUES (?, ?, ?, ?)"
+  ).bind(candidateId, user.id, action, comment).run();
 
-    db.prepare(`
-      INSERT INTO audit_logs (user_id, action, entity_type, entity_id, details)
-      VALUES (?, ?, ?, ?, ?)
-    `).run(
-      req.user.id,
-      `REVIEW_${action.toUpperCase()}`,
-      "match_candidate",
-      candidateId,
-      JSON.stringify({ comment })
-    );
+  await c.env.DB.prepare(
+    "INSERT INTO audit_logs (user_id, action, entity_type, entity_id, details) VALUES (?, ?, ?, ?, ?)"
+  ).bind(user.id, `REVIEW_${action.toUpperCase()}`, "match_candidate", candidateId, JSON.stringify({ comment })).run();
 
-    if (action === "approve" && candidate.material_id) {
-      const sourceCode = String(req.body?.source_code || `REQ-${candidateId}-${Date.now().toString().slice(-4)}`);
-      db.prepare(`
-        INSERT INTO source_mappings (source_code, source_name, canonical_material_id)
-        SELECT ?, ?, ?
-        WHERE NOT EXISTS (
-          SELECT 1 FROM source_mappings
-          WHERE source_code = ? AND canonical_material_id = ?
-        )
-      `).run(
-        sourceCode,
-        candidate.input_text,
-        candidate.material_id,
-        sourceCode,
-        candidate.material_id
-      );
-    }
-  });
+  if (action === "approve" && candidate.material_id) {
+    await c.env.DB.prepare(`
+      INSERT INTO source_mappings (source_code, source_name, canonical_material_id)
+      SELECT ?, ?, ?
+      WHERE NOT EXISTS (
+        SELECT 1 FROM source_mappings WHERE source_code = ? AND canonical_material_id = ?
+      )
+    `).bind(sourceCode, candidate.input_text, candidate.material_id, sourceCode, candidate.material_id).run();
+  }
 
-  tx();
-
-  res.json({
+  return c.json({
     success: true,
     message: `Candidate ${action}d successfully`,
     candidate_id: candidateId,
@@ -70,8 +51,8 @@ router.post("/:candidateId", auth, (req, res) => {
   });
 });
 
-router.get("/", auth, (req, res) => {
-  const rows = db.prepare(`
+router.get("/", auth, async (c) => {
+  const rows = (await c.env.DB.prepare(`
     SELECT
       ra.*,
       u.name AS reviewer_name,
@@ -85,9 +66,9 @@ router.get("/", auth, (req, res) => {
     LEFT JOIN materials m ON m.id = mc.material_id
     ORDER BY ra.id DESC
     LIMIT 100
-  `).all();
+  `).all()).results;
 
-  res.json({ success: true, count: rows.length, reviews: rows });
+  return c.json({ success: true, count: rows.length, reviews: rows });
 });
 
-module.exports = router;
+export default router;

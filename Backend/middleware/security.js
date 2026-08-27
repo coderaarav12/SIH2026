@@ -1,5 +1,4 @@
-﻿const rateLimit = require("express-rate-limit");
-const db = require("../db/init");
+import rateLimit from "express-rate-limit";
 
 // 1. Rate Limiters
 const authLimiter = rateLimit({
@@ -38,31 +37,31 @@ const generalApiLimiter = rateLimit({
 // 2. Role-Based Access Control (RBAC)
 function requireRoles(allowedRoles = []) {
   return (req, res, next) => {
-    if (!req.user) {
-      return res.status(401).json({ success: false, message: "Authentication required for this operation" });
+    if (!c.get("user")) {
+      return c.json({ success: false, message: "Authentication required for this operation" }, 401);
     }
 
-    const userRole = String(req.user.role || "").toLowerCase();
+    const userRole = String(c.get("user").role || "").toLowerCase();
     const normalizedAllowed = allowedRoles.map(r => String(r).toLowerCase());
 
     if (!normalizedAllowed.includes(userRole) && userRole !== "admin") {
       // Log unauthorized attempt to audit logs
       try {
-        db.prepare(`
+        await c.env.DB.prepare(`
           INSERT INTO audit_logs (user_id, action, entity_type, entity_id, details)
           VALUES (?, 'SECURITY_UNAUTHORIZED_ROLE_ACCESS', 'rbac', 0, ?)
-        `).run(req.user.id, JSON.stringify({
+        `).bind(c.get("user").id, JSON.stringify({
           attempted_role_required: allowedRoles,
-          user_role: req.user.role,
+          user_role: c.get("user").role,
           route: req.originalUrl,
           method: req.method
-        }));
+        }).run());
       } catch {}
 
-      return res.status(403).json({
+      return c.json({
         success: false,
-        message: `Forbidden: This operation requires one of [${allowedRoles.join(", ")}] permissions. Your current role is '${req.user.role}'.`
-      });
+        message: `Forbidden: This operation requires one of [${allowedRoles.join(", ")}] permissions. Your current role is '${c.get("user").role}'.`
+      }, 403);
     }
 
     next();
@@ -71,11 +70,11 @@ function requireRoles(allowedRoles = []) {
 
 // 3. Input Sanitization Middleware
 function sanitizeInput(req, res, next) {
-  if (req.body && typeof req.body === "object") {
-    for (const [key, val] of Object.entries(req.body)) {
+  if ((await c.req.json().catch(() => ({}))) && typeof (await c.req.json().catch(() => ({}))) === "object") {
+    for (const [key, val] of Object.entries((await c.req.json().catch(() => ({}))))) {
       if (typeof val === "string") {
-        // Strip potential script injections while preserving industrial symbols (e.g., #, &, ", ', %, ×, mm, inch)
-        req.body[key] = val
+        // Strip potential script injections while preserving industrial symbols (e.g., #, &, ", ', %, �, mm, inch)
+        (await c.req.json().catch(() => ({})))[key] = val
           .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
           .trim();
       }
@@ -91,3 +90,5 @@ module.exports = {
   requireRoles,
   sanitizeInput
 };
+
+

@@ -1,18 +1,17 @@
-const express = require("express");
-const db = require("../db/init");
-const auth = require("../middleware/auth");
+import { Hono } from "hono";
+import auth from "../middleware/auth.js";
 
-const router = express.Router();
+const router = new Hono();
 require('dotenv').config();
 
-router.post("/", auth, async (req, res) => {
-  const input = String(req.body?.material_name || req.body?.query || req.body?.text || "").trim();
+router.post("/", auth, async (c) => {
+  const input = String((await c.req.json().catch(() => ({})))?.material_name || (await c.req.json().catch(() => ({})))?.query || (await c.req.json().catch(() => ({})))?.text || "").trim();
 
   if (!input) {
-    return res.status(400).json({ success: false, message: "Provide material_name, query or text" });
+    return c.json({ success: false, message: "Provide material_name, query or text" }, 400);
   }
 
-  const materials = db.prepare(`SELECT * FROM materials WHERE status = 'active'`).all();
+  const materials = (await c.env.DB.prepare(`SELECT * FROM materials WHERE status = 'active'`).all()).results;
   
   // Use Mistral to rank matches
   try {
@@ -69,7 +68,7 @@ Return a JSON array of up to 3 objects, sorted by highest confidence first, with
     let parsedMatches = Array.isArray(matchesObj) ? matchesObj : (matchesObj.matches || matchesObj.results || []);
     if (!Array.isArray(parsedMatches)) parsedMatches = [];
 
-    const insert = db.prepare(`
+    const insert = (await c.env.DB.prepare(`
       INSERT INTO match_candidates (input_text, material_id, score, decision, reasons, created_by)
       VALUES (?, ?, ?, ?, ?, ?)
     `);
@@ -84,7 +83,7 @@ Return a JSON array of up to 3 objects, sorted by highest confidence first, with
         r.confidence,
         r.decision,
         JSON.stringify(r.reasons),
-        req.user.id
+        c.get("user").id
       );
 
       return {
@@ -96,7 +95,7 @@ Return a JSON array of up to 3 objects, sorted by highest confidence first, with
       };
     }).filter(Boolean);
 
-    res.json({
+    return c.json({
       success: true,
       input,
       top_match: candidates[0] || null,
@@ -104,28 +103,28 @@ Return a JSON array of up to 3 objects, sorted by highest confidence first, with
     });
   } catch(err) {
     console.error("Mistral Matching Error:", err);
-    res.status(500).json({ success: false, message: err.message });
+    return c.json({ success: false, message: err.message }, 500);
   }
 });
 
-router.get("/history", auth, (req, res) => {
-  const rows = db.prepare(`
+router.get("/history", auth, async (c) => {
+  const rows = (await c.env.DB.prepare(`
     SELECT mc.*, m.material_code, m.material_name, u.name AS created_by_name
     FROM match_candidates mc
     LEFT JOIN materials m ON m.id = mc.material_id
     LEFT JOIN users u ON u.id = mc.created_by
     ORDER BY mc.id DESC LIMIT 100
-  `).all();
+  `).all()).results).results;
 
-  res.json({ 
+  return c.json({ 
     success: true, 
     candidates: rows.map(x => ({ ...x, reasons: x.reasons ? JSON.parse(x.reasons) : [] }))
   });
 });
 
-router.post("/find-duplicates", auth, (req, res) => {
+router.post("/find-duplicates", auth, async (c) => {
   try {
-    const materials = db.prepare("SELECT * FROM materials WHERE status = 'active'").all();
+    const materials = (await c.env.DB.prepare("SELECT * FROM materials WHERE status = 'active'").all()).results;
     const duplicates = [];
     
     // Simulated fast cluster approach for full catalog duplicate finding to avoid massive API cost
@@ -147,15 +146,16 @@ router.post("/find-duplicates", auth, (req, res) => {
       }
     }
 
-    res.json({
+    return c.json({
       success: true,
       scanned_materials_count: materials.length,
       duplicates_found_count: duplicates.length,
       duplicates: duplicates.slice(0, 50)
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    return c.json({ success: false, message: err.message }, 500);
   }
 });
 
-module.exports = router;
+export default router;
+

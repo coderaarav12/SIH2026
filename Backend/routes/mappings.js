@@ -1,12 +1,11 @@
-﻿const express = require("express");
-const db = require("../db/init");
-const auth = require("../middleware/auth");
+import { Hono } from "hono";
+import auth from "../middleware/auth.js";
 
-const router = express.Router();
+const router = new Hono();
 
-router.get("/", auth, (req, res) => {
+router.get("/", auth, async (c) => {
   try {
-    const rows = db.prepare(`
+    const rows = (await c.env.DB.prepare(`
       SELECT 
         sm.id,
         sm.source_code,
@@ -22,16 +21,18 @@ router.get("/", auth, (req, res) => {
       FROM source_mappings sm
       LEFT JOIN materials m ON m.id = sm.canonical_material_id
       ORDER BY sm.id DESC
-    `).all();
+    `).all()).results;
 
-    res.json({
+    return c.json({
       success: true,
       count: rows.length,
       mappings: rows
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    return c.json({ success: false, message: err.message }, 500);
   }
 });
 
-module.exports = router;
+export default router;
+
+

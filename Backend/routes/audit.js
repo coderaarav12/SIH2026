@@ -1,13 +1,12 @@
-﻿const express = require("express");
-const db = require("../db/init");
-const auth = require("../middleware/auth");
+import { Hono } from "hono";
+import auth from "../middleware/auth.js";
 
-const router = express.Router();
+const router = new Hono();
 
-router.get("/", auth, (req, res) => {
+router.get("/", auth, async (c) => {
   try {
-    const limit = Math.min(Number(req.query.limit || 100), 500);
-    const action = req.query.action ? String(req.query.action).trim() : null;
+    const limit = Math.min(Number(c.req.query("limit") || 100), 500);
+    const action = c.req.query("action") ? String(c.req.query("action")).trim() : null;
 
     let query = `
       SELECT 
@@ -34,7 +33,7 @@ router.get("/", auth, (req, res) => {
     query += " ORDER BY a.id DESC LIMIT ?";
     params.push(limit);
 
-    const logs = db.prepare(query).all(...params);
+    const logs = (await c.env.DB.prepare(query).bind(...params).all()).results;
 
     const parsedLogs = logs.map(l => {
       let detailsObj = {};
@@ -49,14 +48,16 @@ router.get("/", auth, (req, res) => {
       };
     });
 
-    res.json({
+    return c.json({
       success: true,
       count: parsedLogs.length,
       audit_logs: parsedLogs
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    return c.json({ success: false, message: err.message }, 500);
   }
 });
 
-module.exports = router;
+export default router;
+
+

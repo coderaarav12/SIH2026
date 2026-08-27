@@ -1,63 +1,62 @@
-const express = require("express");
-const db = require("../db/init");
-const auth = require("../middleware/auth");
+import { Hono } from "hono";
+import auth from "../middleware/auth.js";
 
-const router = express.Router();
+const router = new Hono();
 
-router.get("/", auth, (req, res) => {
+router.get("/", auth, async (c) => {
   try {
-    const materials = db.prepare("SELECT COUNT(*) AS n FROM materials").get().n;
-    const candidates = db.prepare("SELECT COUNT(*) AS n FROM match_candidates").get().n;
-    const approved = db.prepare("SELECT COUNT(*) AS n FROM match_candidates WHERE decision = 'approved'").get().n;
-    const rejected = db.prepare("SELECT COUNT(*) AS n FROM match_candidates WHERE decision = 'rejected'").get().n;
-    const pending = db.prepare(`
+    const materials = await c.env.DB.prepare("SELECT COUNT(*) AS n FROM materials").first().n;
+    const candidates = await c.env.DB.prepare("SELECT COUNT(*) AS n FROM match_candidates").first().n;
+    const approved = await c.env.DB.prepare("SELECT COUNT(*) AS n FROM match_candidates WHERE decision = 'approved'").first().n;
+    const rejected = await c.env.DB.prepare("SELECT COUNT(*) AS n FROM match_candidates WHERE decision = 'rejected'").first().n;
+    const pending = await c.env.DB.prepare(`
       SELECT COUNT(*) AS n FROM match_candidates
       WHERE decision IN ('review', 'pending')
-    `).get().n;
+    `).first().n;
 
-    const autoSuggest = db.prepare(`
+    const autoSuggest = await c.env.DB.prepare(`
       SELECT COUNT(*) AS n FROM match_candidates WHERE decision = 'auto_suggest'
-    `).get().n;
+    `).first().n;
 
-    const newCandidates = db.prepare(`
+    const newCandidates = await c.env.DB.prepare(`
       SELECT COUNT(*) AS n FROM match_candidates WHERE decision = 'new_candidate'
-    `).get().n;
+    `).first().n;
 
-    const mappingsCount = db.prepare("SELECT COUNT(*) AS n FROM source_mappings").get().n;
+    const mappingsCount = await c.env.DB.prepare("SELECT COUNT(*) AS n FROM source_mappings").first().n;
 
-    const categories = db.prepare(`
+    const categories = await c.env.DB.prepare(`
       SELECT COALESCE(category, 'Other') AS category, COUNT(*) AS count
       FROM materials
       GROUP BY category
       ORDER BY count DESC
     `).all();
 
-    const sources = db.prepare(`
+    const sources = (await c.env.DB.prepare(`
       SELECT COALESCE(source, 'Standard Master') AS source, COUNT(*) AS count
       FROM materials
       GROUP BY source
       ORDER BY count DESC
-    `).all();
+    `).all()).results;
 
-    const avg = db.prepare(`
+    const avg = (await c.env.DB.prepare(`
       SELECT ROUND(COALESCE(AVG(score), 0), 2) AS avg_score
       FROM match_candidates
-    `).get().avg_score;
+    `).first().avg_score;
 
-    const recentAudits = db.prepare(`
+    const recentAudits = (await c.env.DB.prepare(`
       SELECT a.*, u.name as user_name
       FROM audit_logs a
       LEFT JOIN users u ON u.id = a.user_id
       ORDER BY a.id DESC
       LIMIT 6
-    `).all();
+    `).all()).results).results;
 
     // Calculated GovTech impact indicators
     const duplicateDetected = approved + autoSuggest;
     const estimatedSavingsInr = (duplicateDetected * 142500) + (mappingsCount * 85000);
     const harmonizationRate = materials > 0 ? Math.min(100, Math.round(((duplicateDetected + mappingsCount) / (materials + candidates + 1)) * 100)) : 0;
 
-    res.json({
+    return c.json({
       success: true,
       analytics: {
         total_materials: materials,
@@ -78,8 +77,9 @@ router.get("/", auth, (req, res) => {
       }
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    return c.json({ success: false, message: err.message }, 500);
   }
 });
 
-module.exports = router;
+export default router;
+

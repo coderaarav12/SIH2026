@@ -1,12 +1,11 @@
-﻿const express = require("express");
-const db = require("../db/init");
-const auth = require("../middleware/auth");
+import { Hono } from "hono";
+import auth from "../middleware/auth.js";
 
-const router = express.Router();
+const router = new Hono();
 
-router.get("/demand-pools", auth, (req, res) => {
+router.get("/demand-pools", auth, async (c) => {
   try {
-    const materials = db.prepare("SELECT * FROM materials ORDER BY id ASC LIMIT 10").all();
+    const materials = (await c.env.DB.prepare("SELECT * FROM materials ORDER BY id ASC LIMIT 10").all()).results;
 
     // Simulated demand aggregation across CPSEs based on real material catalog
     const pools = [
@@ -82,15 +81,17 @@ router.get("/demand-pools", auth, (req, res) => {
 
     const totalSavings = pools.reduce((acc, p) => acc + p.estimated_savings_inr, 0);
 
-    res.json({
+    return c.json({
       success: true,
       total_pools: pools.length,
       cumulative_pooled_savings_inr: totalSavings,
       pools
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    return c.json({ success: false, message: err.message }, 500);
   }
 });
 
-module.exports = router;
+export default router;
+
+

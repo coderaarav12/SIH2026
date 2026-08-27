@@ -1,15 +1,14 @@
-const express = require("express");
-const auth = require("../middleware/auth");
-const db = require("../db/init");
+import { Hono } from "hono";
+import auth from "../middleware/auth.js";
 require('dotenv').config();
 
-const router = express.Router();
+const router = new Hono();
 
-router.post("/generate-tender", auth, async (req, res) => {
+router.post("/generate-tender", auth, async (c) => {
   try {
-    const { poolData } = req.body;
+    const { poolData } = (await c.req.json().catch(() => ({})));
     const mistralApiKey = process.env.MISTRAL_API_KEY;
-    if (!mistralApiKey) return res.status(500).json({ success: false, message: "Mistral API key not configured" });
+    if (!mistralApiKey) return c.json({ success: false, message: "Mistral API key not configured" }, 500);
 
     const prompt = `You are an expert Government Procurement Officer for the Government of India. 
 Write a highly detailed, formal, 4-section Tender Document (RFP) for the following pooled material demand.
@@ -41,10 +40,12 @@ Format the output strictly in clean HTML (using <h3>, <p>, <ul>, <li>, <strong>,
     if (content.startsWith("```html")) content = content.substring(7);
     if (content.endsWith("```")) content = content.substring(0, content.length - 3);
 
-    res.json({ success: true, report_html: content });
+    return c.json({ success: true, report_html: content });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    return c.json({ success: false, message: err.message }, 500);
   }
 });
 
-module.exports = router;
+export default router;
+
+

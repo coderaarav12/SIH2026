@@ -1,29 +1,28 @@
-const jwt = require("jsonwebtoken");
-const db = require("../db/init");
+import { verify } from "jsonwebtoken";
 
-function auth(req, res, next) {
-  const header = req.headers.authorization || "";
+const auth = async (c, next) => {
+  const header = c.req.header("Authorization") || "";
   const token = header.startsWith("Bearer ") ? header.slice(7) : null;
 
   if (!token) {
-    return res.status(401).json({ success: false, message: "Authorization token required" });
+    return c.json({ success: false, message: "Authorization token required" }, 401);
   }
 
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET || "syncmasters-demo-secret");
-    const user = db.prepare(`
-      SELECT id, name, email, role, created_at FROM users WHERE id = ?
-    `).get(payload.id);
+    const payload = verify(token, c.env.JWT_SECRET || "syncmasters-demo-secret");
+    const user = await c.env.DB.prepare(
+      "SELECT id, name, email, role, department, created_at FROM users WHERE id = ?"
+    ).bind(payload.id).first();
 
     if (!user) {
-      return res.status(401).json({ success: false, message: "User no longer exists" });
+      return c.json({ success: false, message: "User no longer exists" }, 401);
     }
 
-    req.user = user;
-    next();
+    c.set("user", user);
+    await next();
   } catch (error) {
-    return res.status(401).json({ success: false, message: "Invalid or expired token" });
+    return c.json({ success: false, message: "Invalid or expired token" }, 401);
   }
-}
+};
 
-module.exports = auth;
+export default auth;

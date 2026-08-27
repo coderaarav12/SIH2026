@@ -1,49 +1,32 @@
-const express = require("express");
-const multer = require("multer");
-const fs = require("fs");
-const path = require("path");
-const XLSX = require("xlsx");
-const { parse } = require("csv-parse/sync");
+import { Hono } from "hono";
+import auth from "../middleware/auth.js";
+import normalize from "../services/normalizer.js";
+import { extractAttributes } from "../services/attributes.js";
 
-const db = require("../db/init");
-const auth = require("../middleware/auth");
-const normalize = require("../services/normalizer");
-const { extractAttributes } = require("../services/attributes");
+const router = new Hono();
 
-const router = express.Router();
-
-const uploadDir = path.join(__dirname, "..", "uploads");
-fs.mkdirSync(uploadDir, { recursive: true });
-
-const upload = multer({
-  dest: uploadDir,
-  limits: { fileSize: 10 * 1024 * 1024 }
-});
-
-function log(userId, action, entityType, entityId, details = {}) {
-  db.prepare(`
-    INSERT INTO audit_logs (user_id, action, entity_type, entity_id, details)
-    VALUES (?, ?, ?, ?, ?)
-  `).run(userId, action, entityType, entityId || null, JSON.stringify(details));
+async function log(db, userId, action, entityType, entityId, details = {}) {
+  await db.prepare(
+    "INSERT INTO audit_logs (user_id, action, entity_type, entity_id, details) VALUES (?, ?, ?, ?, ?)"
+  ).bind(userId, action, entityType, entityId || null, JSON.stringify(details)).run();
 }
 
-router.get("/", auth, (req, res) => {
-  const limit = Math.min(Number(req.query.limit || 100), 500);
-  const materials = db.prepare(`
-    SELECT * FROM materials ORDER BY id DESC LIMIT ?
-  `).all(limit);
-
-  res.json({ success: true, count: materials.length, materials });
+router.get("/", auth, async (c) => {
+  const limit = Math.min(Number(c.req.query("limit") || 100), 500);
+  const materials = (await c.env.DB.prepare(
+    "SELECT * FROM materials ORDER BY id DESC LIMIT ?"
+  ).bind(limit).all()).results;
+  return c.json({ success: true, count: materials.length, materials });
 });
 
-router.get("/search", auth, (req, res) => {
-  const q = String(req.query.q || "").trim();
-  if (!q) return res.status(400).json({ success: false, message: "Search query q is required" });
+router.get("/search", auth, async (c) => {
+  const q = String(c.req.query("q") || "").trim();
+  if (!q) return c.json({ success: false, message: "Search query q is required" }, 400);
 
   const like = `%${q}%`;
   const nq = normalize(q);
 
-  const materials = db.prepare(`
+  const materials = (await c.env.DB.prepare(`
     SELECT * FROM materials
     WHERE material_name LIKE ?
        OR normalized_name LIKE ?
@@ -53,32 +36,32 @@ router.get("/search", auth, (req, res) => {
        OR size LIKE ?
     ORDER BY id DESC
     LIMIT 50
-  `).all(like, `%${nq}%`, like, like, like, like);
+  `).bind(like, `%${nq}%`, like, like, like, like).all()).results;
 
-  res.json({ success: true, query: q, count: materials.length, materials });
+  return c.json({ success: true, query: q, count: materials.length, materials });
 });
 
-router.get("/:id", auth, (req, res) => {
-  const material = db.prepare("SELECT * FROM materials WHERE id = ?").get(req.params.id);
-  if (!material) return res.status(404).json({ success: false, message: "Material not found" });
-  res.json({ success: true, material });
+router.get("/:id", auth, async (c) => {
+  const material = await c.env.DB.prepare("SELECT * FROM materials WHERE id = ?").bind(c.req.param("id")).first();
+  if (!material) return c.json({ success: false, message: "Material not found" }, 404);
+  return c.json({ success: true, material });
 });
 
-router.post("/", auth, (req, res) => {
+router.post("/", auth, async (c) => {
   try {
-    const body = req.body || {};
+    const body = (await c.req.json().catch(() => ({}))) || {};
     if (!body.material_name) {
-      return res.status(400).json({ success: false, message: "material_name is required" });
+      return c.json({ success: false, message: "material_name is required" }, 400);
     }
 
     const attrs = extractAttributes(body.material_name);
     const normalized = normalize(body.normalized_name || body.material_name);
 
-    const result = db.prepare(`
+    const result = await c.env.DB.prepare(`
       INSERT INTO materials
       (material_code, material_name, normalized_name, category, source, grade, size, unit, material_type)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(
+    `).bind(
       body.material_code || null,
       body.material_name,
       normalized,
@@ -88,29 +71,28 @@ router.post("/", auth, (req, res) => {
       body.size || attrs.size || null,
       body.unit || attrs.unit || null,
       body.material_type || attrs.material_type || null
-    );
+    ).run();
 
-    const material = db.prepare("SELECT * FROM materials WHERE id = ?").get(result.lastInsertRowid);
-    log(req.user.id, "CREATE", "material", material.id, { material_code: material.material_code });
-
-    res.status(201).json({ success: true, message: "Material created successfully", material });
+    const material = await c.env.DB.prepare("SELECT * FROM materials WHERE id = ?").bind(result.meta.last_row_id).first();
+    await log(c.env.DB, c.get("user").id, "CREATE", "material", material.id, { material_code: material.material_code });
+    return c.json({ success: true, message: "Material created successfully", material }, 201);
   } catch (e) {
     if (String(e.message).includes("UNIQUE")) {
-      return res.status(409).json({ success: false, message: "Material code already exists" });
+      return c.json({ success: false, message: "Material code already exists" }, 409);
     }
-    res.status(500).json({ success: false, message: e.message });
+    return c.json({ success: false, message: e.message }, 500);
   }
 });
 
-router.put("/:id", auth, (req, res) => {
-  const old = db.prepare("SELECT * FROM materials WHERE id = ?").get(req.params.id);
-  if (!old) return res.status(404).json({ success: false, message: "Material not found" });
+router.put("/:id", auth, async (c) => {
+  const old = await c.env.DB.prepare("SELECT * FROM materials WHERE id = ?").bind(c.req.param("id")).first();
+  if (!old) return c.json({ success: false, message: "Material not found" }, 404);
 
-  const body = req.body || {};
+  const body = (await c.req.json().catch(() => ({}))) || {};
   const name = body.material_name || old.material_name;
   const attrs = extractAttributes(name);
 
-  db.prepare(`
+  await c.env.DB.prepare(`
     UPDATE materials SET
       material_code = ?,
       material_name = ?,
@@ -123,7 +105,7 @@ router.put("/:id", auth, (req, res) => {
       material_type = ?,
       updated_at = CURRENT_TIMESTAMP
     WHERE id = ?
-  `).run(
+  `).bind(
     body.material_code ?? old.material_code,
     name,
     normalize(body.normalized_name || name),
@@ -133,132 +115,124 @@ router.put("/:id", auth, (req, res) => {
     body.size ?? old.size ?? attrs.size,
     body.unit ?? old.unit ?? attrs.unit,
     body.material_type ?? old.material_type ?? attrs.material_type,
-    req.params.id
-  );
+    c.req.param("id")
+  ).run();
 
-  const material = db.prepare("SELECT * FROM materials WHERE id = ?").get(req.params.id);
-  log(req.user.id, "UPDATE", "material", material.id, {});
-  res.json({ success: true, message: "Material updated successfully", material });
+  const material = await c.env.DB.prepare("SELECT * FROM materials WHERE id = ?").bind(c.req.param("id")).first();
+  await log(c.env.DB, c.get("user").id, "UPDATE", "material", material.id, {});
+  return c.json({ success: true, message: "Material updated successfully", material });
 });
 
-router.delete("/:id", auth, (req, res) => {
-  const material = db.prepare("SELECT * FROM materials WHERE id = ?").get(req.params.id);
-  if (!material) return res.status(404).json({ success: false, message: "Material not found" });
+router.delete("/:id", auth, async (c) => {
+  const material = await c.env.DB.prepare("SELECT * FROM materials WHERE id = ?").bind(c.req.param("id")).first();
+  if (!material) return c.json({ success: false, message: "Material not found" }, 404);
 
-  db.prepare("DELETE FROM materials WHERE id = ?").run(req.params.id);
-  log(req.user.id, "DELETE", "material", Number(req.params.id), { material_code: material.material_code });
-
-  res.json({ success: true, message: "Material deleted successfully" });
+  await c.env.DB.prepare("DELETE FROM materials WHERE id = ?").bind(c.req.param("id")).run();
+  await log(c.env.DB, c.get("user").id, "DELETE", "material", Number(c.req.param("id")), { material_code: material.material_code });
+  return c.json({ success: true, message: "Material deleted successfully" });
 });
 
-router.post("/upload", auth, upload.single("file"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ success: false, message: "Upload a CSV or Excel file using field name 'file'" });
-  }
-
-  const ext = path.extname(req.file.originalname).toLowerCase();
-
+// Bulk CSV upload — Cloudflare Workers version: parse CSV text from request body
+router.post("/upload", auth, async (c) => {
   try {
-    let rows = [];
+    const body = await c.req.json().catch(() => ({}));
+    const csvText = body.csv_text;
+    const rows = body.rows; // Alternatively accept pre-parsed rows from frontend
 
-    if (ext === ".csv") {
-      const content = fs.readFileSync(req.file.path, "utf8");
-      rows = parse(content, { columns: true, skip_empty_lines: true, relax_column_count: true });
-    } else if (ext === ".xlsx" || ext === ".xls") {
-      const workbook = XLSX.readFile(req.file.path);
-      const first = workbook.Sheets[workbook.SheetNames[0]];
-      rows = XLSX.utils.sheet_to_json(first, { defval: "" });
+    let parsedRows = [];
+
+    if (rows && Array.isArray(rows)) {
+      parsedRows = rows;
+    } else if (csvText) {
+      // Simple CSV parser (no external dependency needed in Workers)
+      const lines = csvText.trim().split("\n");
+      const headers = lines[0].split(",").map(h => h.trim().replace(/"/g, ""));
+      parsedRows = lines.slice(1).map(line => {
+        const vals = line.split(",").map(v => v.trim().replace(/"/g, ""));
+        return Object.fromEntries(headers.map((h, i) => [h, vals[i] || ""]));
+      });
     } else {
-      return res.status(400).json({ success: false, message: "Only CSV, XLSX and XLS files are supported" });
+      return c.json({ success: false, message: "Provide csv_text (raw CSV string) or rows (parsed JSON array)" }, 400);
     }
 
     let inserted = 0;
     let skipped = 0;
     const errors = [];
 
-    const stmt = db.prepare(`
-      INSERT INTO materials
-      (material_code, material_name, normalized_name, category, source, grade, size, unit, material_type)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `);
+    for (const [index, row] of parsedRows.entries()) {
+      const code = String(row.material_code || row.code || row["Material Code"] || "").trim();
+      const name = String(row.material_name || row.name || row.description || row["Material Name"] || row["Description"] || "").trim();
 
-    const tx = db.transaction(() => {
-      rows.forEach((row, index) => {
-        const code = String(row.material_code || row.code || row["Material Code"] || "").trim();
-        const name = String(row.material_name || row.name || row.description || row["Material Name"] || row["Description"] || "").trim();
+      if (!name) {
+        skipped++;
+        errors.push({ row: index + 2, reason: "missing material_name" });
+        continue;
+      }
 
-        if (!name) {
-          skipped++;
-          errors.push({ row: index + 2, reason: "missing material_name" });
-          return;
-        }
+      const attrs = extractAttributes(name);
+      try {
+        await c.env.DB.prepare(`
+          INSERT OR IGNORE INTO materials
+          (material_code, material_name, normalized_name, category, source, grade, size, unit, material_type)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).bind(
+          code || null,
+          name,
+          normalize(name),
+          String(row.category || row.Category || attrs.category || "Other"),
+          String(row.source || row.Source || "uploaded"),
+          String(row.grade || row.Grade || attrs.grade || ""),
+          String(row.size || row.Size || attrs.size || ""),
+          String(row.unit || row.Unit || attrs.unit || ""),
+          String(row.material_type || row.Material_Type || attrs.material_type || "")
+        ).run();
+        inserted++;
+      } catch (e) {
+        skipped++;
+        errors.push({ row: index + 2, reason: String(e.message).includes("UNIQUE") ? "duplicate material_code" : e.message });
+      }
+    }
 
-        const attrs = extractAttributes(name);
-
-        try {
-          stmt.run(
-            code || null,
-            name,
-            normalize(name),
-            String(row.category || row.Category || attrs.category || "Other"),
-            String(row.source || row.Source || "uploaded"),
-            String(row.grade || row.Grade || attrs.grade || ""),
-            String(row.size || row.Size || attrs.size || ""),
-            String(row.unit || row.Unit || attrs.unit || ""),
-            String(row.material_type || row.Material_Type || attrs.material_type || "")
-          );
-          inserted++;
-        } catch (e) {
-          skipped++;
-          errors.push({
-            row: index + 2,
-            reason: String(e.message).includes("UNIQUE") ? "duplicate material_code" : e.message
-          });
-        }
-      });
+    await log(c.env.DB, c.get("user").id, "UPLOAD", "materials", null, {
+      total_rows: parsedRows.length, inserted, skipped
     });
 
-    tx();
-
-    log(req.user.id, "UPLOAD", "materials", null, {
-      file: req.file.originalname,
-      total_rows: rows.length,
-      inserted,
-      skipped
-    });
-
-    res.json({
+    return c.json({
       success: true,
       message: "File processed successfully",
-      file: req.file.originalname,
-      total_rows: rows.length,
+      total_rows: parsedRows.length,
       inserted,
       skipped,
       errors: errors.slice(0, 20)
     });
   } catch (e) {
-    res.status(400).json({ success: false, message: `Could not process file: ${e.message}` });
-  } finally {
-    try { fs.unlinkSync(req.file.path); } catch {}
+    return c.json({ success: false, message: `Could not process file: ${e.message}` }, 400);
   }
 });
 
-// Physical Label & Specification Sheet OCR Simulator Endpoint
-router.post("/ocr-extract", auth, (req, res) => {
+router.post("/ocr-extract", auth, async (c) => {
   try {
-    const { filename = "", hint = "" } = req.body || {};
-    const { simulateOcr } = require("../services/ocrSimulator");
+    const { filename = "", hint = "" } = (await c.req.json().catch(() => ({}))) || {};
+    const { simulateOcr } = await import("../services/ocrSimulator.js");
     const ocrResult = simulateOcr(filename, hint);
-
-    log(req.user.id, "OCR_SCAN", "label", null, {
-      tag: ocrResult.tag,
-      extracted: ocrResult.extracted_material_name
-    });
-
-    res.json(ocrResult);
+    await log(c.env.DB, c.get("user").id, "OCR_SCAN", "label", null, { tag: ocrResult.tag, extracted: ocrResult.extracted_material_name });
+    return c.json(ocrResult);
   } catch (e) {
-    res.status(500).json({ success: false, message: e.message });
+    return c.json({ success: false, message: e.message }, 500);
   }
 });
 
-module.exports = router;
+export default router;
+
+
+const router = new Hono();
+
+const uploadDir = path.join(__dirname, "..", "uploads");
+fs.mkdirSync(uploadDir, { recursive: true });
+
+const upload = multer({
+  dest: uploadDir,
+  limits: { fileSize: 10 * 1024 * 1024 }
+});
+
+

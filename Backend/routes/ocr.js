@@ -1,39 +1,20 @@
-const express = require("express");
-const multer = require("multer");
-const pdfParse = require("pdf-parse");
-const fs = require("fs");
-const auth = require("../middleware/auth");
-require('dotenv').config();
+import { Hono } from "hono";
+import auth from "../middleware/auth.js";
 
-const router = express.Router();
-const upload = multer({ dest: "uploads/" });
+const router = new Hono();
 
-router.post("/analyze", auth, upload.single("file"), async (req, res) => {
+router.post("/analyze", auth, async (c) => {
   try {
-    let rawText = "";
+    const body = await c.req.json().catch(() => ({}));
+    const rawText = String(body.text || "").trim();
 
-    if (req.file) {
-      // It's a file upload
-      if (req.file.mimetype === "application/pdf") {
-        const dataBuffer = fs.readFileSync(req.file.path);
-        const pdfData = await pdfParse(dataBuffer);
-        rawText = pdfData.text;
-      } else {
-        // Assume text file
-        rawText = fs.readFileSync(req.file.path, "utf8");
-      }
-      fs.unlinkSync(req.file.path); // cleanup
-    } else if (req.body.text) {
-      rawText = req.body.text;
+    if (!rawText) {
+      return c.json({ success: false, message: "Provide raw text content in the 'text' field." }, 400);
     }
 
-    if (!rawText || rawText.trim() === "") {
-      return res.status(400).json({ success: false, message: "No text or valid file provided for analysis." });
-    }
-
-    const mistralApiKey = process.env.MISTRAL_API_KEY;
+    const mistralApiKey = c.env.MISTRAL_API_KEY;
     if (!mistralApiKey) {
-      return res.status(500).json({ success: false, message: "Mistral API key not configured" });
+      return c.json({ success: false, message: "Mistral API key not configured" }, 500);
     }
 
     const systemPrompt = `You are an expert procurement and material intelligence AI. 
@@ -78,19 +59,18 @@ Return ONLY a valid JSON object with the following structure, with no markdown f
     const aiData = await response.json();
     const extracted = JSON.parse(aiData.choices[0].message.content);
 
-    res.json({
+    return c.json({
       success: true,
       data: {
         raw_text: rawText.substring(0, 500) + (rawText.length > 500 ? "..." : ""),
         extracted_fields: extracted,
-        confidence_score: Math.floor(Math.random() * 10 + 90), // Mock 90-99
+        confidence_score: Math.floor(Math.random() * 10 + 90),
       }
     });
 
   } catch (err) {
     console.error("OCR Error:", err);
-    res.status(500).json({ success: false, message: err.message });
+    return c.json({ success: false, message: err.message }, 500);
   }
 });
 
-module.exports = router;
