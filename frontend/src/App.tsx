@@ -68,7 +68,7 @@ export default function App() {
 
   if (!accessGranted) {
     return (
-      <div className={\`theme-\${theme} min-h-screen bg-[var(--bg-main)] text-[#333333] font-sans selection:bg-[var(--border-color)]\`}>
+      <div className={`theme-${theme} min-h-screen bg-[var(--bg-main)] text-[#333333] font-sans selection:bg-[var(--border-color)]`}>
         <SiteGate onAccessGranted={() => setAccessGranted(true)} />
       </div>
     );
@@ -76,7 +76,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <div className={\`theme-\${theme} min-h-screen bg-[var(--bg-main)] text-[#333333] font-sans selection:bg-[var(--border-color)]\`}>
+      <div className={`theme-${theme} min-h-screen bg-[var(--bg-main)] text-[#333333] font-sans selection:bg-[var(--border-color)]`}>
         <Routes>
           <Route path="/" element={isAuthenticated() ? <Navigate to="/dashboard/overview" /> : <LandingPage onNavigate={() => window.location.href='/login'} />} />
           <Route path="/login" element={isAuthenticated() ? <Navigate to="/dashboard/overview" /> : <LoginPage onNavigate={() => window.location.href='/'} onLogin={() => window.location.href='/dashboard/overview'} />} />
