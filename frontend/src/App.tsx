@@ -17,7 +17,7 @@ const SiteGate = ({ onAccessGranted }: { onAccessGranted: () => void }) => {
       const res = await fetch('/api/auth/verify-site-key', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key })
+        body: JSON.stringify({ key: key.trim() })
       });
       const data = await res.json();
       if (data.success) {
