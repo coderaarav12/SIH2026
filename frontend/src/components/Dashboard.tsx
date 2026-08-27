@@ -136,19 +136,18 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
     e.target.value = '';
   };
 
-  const handleLogoutClick = () => {
-    if (window.confirm("Are you sure you want to sign out?")) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      onLogout();
-    }
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
+  const confirmLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    onLogout();
   };
 
   const cycleTheme = () => {
-    if (theme === 'default') setTheme('warm');
-    else if (theme === 'warm') setTheme('cool');
-    else if (theme === 'cool') setTheme('dark');
-    else setTheme('default');
+    const themes = ['default', 'dark', 'monochrome', 'ocean', 'nature', 'sunset', 'corporate'];
+    const currentIndex = themes.indexOf(theme);
+    setTheme(themes[(currentIndex + 1) % themes.length]);
   };
 
   const handleOcrUpload = async (e?: any) => {
@@ -213,6 +212,47 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
   return (
     <div className="min-h-screen flex flex-col bg-[var(--bg-main)] transition-colors duration-300">
       
+      {/* Modern Logout Confirmation Modal */}
+      <AnimatePresence>
+        {showLogoutConfirm && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-md"
+          >
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0, y: 10 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 10 }}
+              className="bg-[var(--bg-card)] border border-[var(--border-color)] p-8 rounded-[32px] shadow-[0_16px_64px_-8px_rgba(0,0,0,0.3)] max-w-[360px] w-full mx-4 flex flex-col items-center text-center"
+            >
+              <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-500 rounded-full flex items-center justify-center mb-6 shadow-sm">
+                <LogOut className="w-7 h-7" />
+              </div>
+              <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">Sign Out</h3>
+              <p className="text-[var(--text-secondary)] mb-8 text-sm font-medium leading-relaxed">
+                Are you sure you want to securely end your console session?
+              </p>
+              <div className="flex gap-4 w-full">
+                <button 
+                  onClick={() => setShowLogoutConfirm(false)}
+                  className="flex-1 py-3 px-4 rounded-2xl font-bold border border-[var(--border-color)] text-[var(--text-primary)] hover:bg-[var(--bg-alt)] transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={confirmLogout}
+                  className="flex-1 py-3 px-4 rounded-2xl font-bold bg-red-500 text-white hover:bg-red-600 shadow-lg shadow-red-500/20 transition-all hover:scale-105"
+                >
+                  Sign Out
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
       {/* Sidebar / Top Navigation Hybrid */}
       <nav className="w-full px-6 py-4 flex items-center justify-between border-b border-[var(--border-color)] bg-[var(--bg-card)] transition-colors duration-300 sticky top-0 z-50 shadow-sm">
         <div className="flex items-center gap-8">
@@ -263,7 +303,7 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
             <Palette className="w-4 h-4" />
           </button>
           <button 
-            onClick={handleLogoutClick}
+            onClick={() => setShowLogoutConfirm(true)}
             className="flex items-center gap-2 px-4 py-2 bg-[var(--stat-red-bg)] text-[var(--stat-red-text)] hover:bg-red-100 dark:hover:bg-red-900 rounded-full transition-colors font-semibold shadow-sm"
           >
             <LogOut className="w-4 h-4" />
