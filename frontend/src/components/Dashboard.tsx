@@ -20,7 +20,7 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
   const setActiveTab = (tab: string) => navigate(`/dashboard/${tab}`);
 
   const userStr = localStorage.getItem('user');
-  const user = userStr ? JSON.parse(userStr) : null;
+  const user = userStr ? JSON.parse(userStr) : { name: 'User', role: 'admin' };
   const canIngest = user && (user.role === 'admin' || user.role === 'officer');
 
   
@@ -207,9 +207,6 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
     link.click();
     document.body.removeChild(link);
   };
-
-  const userString = localStorage.getItem('user');
-  const user = userString ? JSON.parse(userString) : { name: 'User', role: 'admin' };
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--bg-main)] transition-colors duration-300">
