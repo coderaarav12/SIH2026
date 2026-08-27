@@ -7,18 +7,18 @@ interface LandingPageProps {
 
 export default function LandingPage({ onNavigate }: LandingPageProps) {
   return (
-    <div className="flex flex-col min-h-screen bg-white/40 backdrop-blur-md">
+    <div className="flex flex-col min-h-screen bg-white/30 backdrop-blur-sm">
       {/* Navigation */}
       <nav className="w-full px-6 md:px-12 py-8 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-[#5D675B] flex items-center justify-center rounded-full shadow-lg">
+          <div className="w-8 h-8 bg-[#5D675B] flex items-center justify-center rounded-full">
             <Box className="w-4 h-4 text-white" />
           </div>
-          <span className="font-bold text-xl tracking-tight text-[var(--text-primary)] drop-shadow-sm">SyncMasters</span>
+          <span className="font-medium text-xl tracking-tight text-[var(--text-primary)]">SyncMasters</span>
         </div>
         <button
           onClick={onNavigate}
-          className="text-sm font-bold text-[var(--text-primary)] bg-white/50 px-6 py-2 rounded-full border border-white/50 shadow-sm hover:bg-white/80 transition-all backdrop-blur-sm"
+          className="text-sm font-medium text-[var(--text-primary)] hover:text-[#5D675B] transition-colors"
         >
           Sign In
         </button>
@@ -30,7 +30,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-block px-5 py-2 bg-white/80 backdrop-blur-md border border-white/50 text-[#5D675B] text-xs font-bold uppercase tracking-[0.1em] rounded-full mb-8 w-fit mx-auto shadow-sm"
+          className="inline-block px-4 py-1.5 bg-[#EAE7E2] text-[#5D675B] text-xs font-semibold uppercase tracking-[0.1em] rounded-full mb-8 w-fit mx-auto"
         >
           <span>SIH 2026 Project</span>
         </motion.div>
@@ -39,7 +39,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-[40px] md:text-[56px] lg:text-[64px] font-bold leading-[1.1] text-gray-900 -tracking-[0.03em] font-serif mb-6 drop-shadow-md"
+          className="text-[40px] md:text-[56px] lg:text-[64px] font-medium leading-[1.1] text-[var(--text-primary)] -tracking-[0.03em] font-serif mb-6"
         >
           Material Intelligence for <br className="hidden md:block" />
           Modern CPSEs
@@ -49,7 +49,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-lg md:text-xl text-gray-800 font-medium mb-10 max-w-2xl leading-relaxed drop-shadow-sm bg-white/30 backdrop-blur-sm p-4 rounded-2xl border border-white/20"
+          className="text-lg md:text-xl text-[var(--text-secondary)] mb-10 max-w-2xl leading-relaxed"
         >
           AI-driven standardisation and harmonization of material codes. 
           Eliminate duplicates, improve inventory visibility, and streamline procurement.
@@ -63,12 +63,12 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         >
           <button 
             onClick={onNavigate}
-            className="flex items-center justify-center gap-2 px-8 py-4 bg-gray-900/90 backdrop-blur-sm text-white border border-gray-700 rounded-full font-bold shadow-xl hover:bg-black transition-all"
+            className="flex items-center justify-center gap-2 px-8 py-4 bg-[var(--text-primary)] text-white rounded-full font-medium hover:opacity-90 transition-opacity"
           >
             Access Platform
             <ArrowRight className="w-4 h-4" />
           </button>
-          <a href="https://coderaarav12.github.io/SIH2026/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-8 py-4 bg-white/60 backdrop-blur-md border border-white/50 text-gray-900 rounded-full font-bold shadow-lg hover:bg-white/90 transition-colors">
+          <a href="https://coderaarav12.github.io/SIH2026/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-8 py-4 border border-[#DEDBD5] text-[var(--text-primary)] rounded-full font-medium hover:bg-[#F5F2ED] transition-colors">
             Read Documentation
           </a>
         </motion.div>
@@ -82,13 +82,13 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex flex-col gap-4 p-8 bg-white/60 backdrop-blur-xl border border-white/50 rounded-[32px] shadow-[0_16px_40px_-12px_rgba(0,0,0,0.1)] hover:bg-white/70 transition-colors"
+            className="flex flex-col gap-4 p-8 bg-white/60 backdrop-blur-xl border border-white/40 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.05)]"
           >
-            <div className="w-14 h-14 bg-white/80 border border-white rounded-2xl flex items-center justify-center shadow-sm">
-              <Search className="w-7 h-7 text-[#5D675B]" />
+            <div className="w-12 h-12 bg-white/80 border border-white/50 rounded-2xl flex items-center justify-center shadow-sm">
+              <Search className="w-6 h-6 text-[#5D675B]" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mt-2">Semantic AI Matching</h3>
-            <p className="text-gray-700 font-medium leading-relaxed">
+            <h3 className="text-xl font-semibold text-[var(--text-primary)] mt-2">Semantic AI Matching</h3>
+            <p className="text-[var(--text-secondary)] leading-relaxed">
               Understands material names semantically to detect equivalents across varying nomenclatures, expanding abbreviations and normalizing units automatically.
             </p>
           </motion.div>
@@ -98,13 +98,13 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="flex flex-col gap-4 p-8 bg-white/60 backdrop-blur-xl border border-white/50 rounded-[32px] shadow-[0_16px_40px_-12px_rgba(0,0,0,0.1)] hover:bg-white/70 transition-colors"
+            className="flex flex-col gap-4 p-8 bg-white/60 backdrop-blur-xl border border-white/40 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.05)]"
           >
-            <div className="w-14 h-14 bg-white/80 border border-white rounded-2xl flex items-center justify-center shadow-sm">
-              <ShieldCheck className="w-7 h-7 text-[#5D675B]" />
+            <div className="w-12 h-12 bg-white/80 border border-white/50 rounded-2xl flex items-center justify-center shadow-sm">
+              <ShieldCheck className="w-6 h-6 text-[#5D675B]" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mt-2">Human-in-the-Loop</h3>
-            <p className="text-gray-700 font-medium leading-relaxed">
+            <h3 className="text-xl font-semibold text-[var(--text-primary)] mt-2">Human-in-the-Loop</h3>
+            <p className="text-[var(--text-secondary)] leading-relaxed">
               High-confidence matches are auto-suggested, while borderline cases are routed to human reviewers. Every decision is recorded in a secure audit trail.
             </p>
           </motion.div>
@@ -114,13 +114,13 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="flex flex-col gap-4 p-8 bg-white/60 backdrop-blur-xl border border-white/50 rounded-[32px] shadow-[0_16px_40px_-12px_rgba(0,0,0,0.1)] hover:bg-white/70 transition-colors"
+            className="flex flex-col gap-4 p-8 bg-white/60 backdrop-blur-xl border border-white/40 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.05)]"
           >
-            <div className="w-14 h-14 bg-white/80 border border-white rounded-2xl flex items-center justify-center shadow-sm">
-              <Database className="w-7 h-7 text-[#5D675B]" />
+            <div className="w-12 h-12 bg-white/80 border border-white/50 rounded-2xl flex items-center justify-center shadow-sm">
+              <Database className="w-6 h-6 text-[#5D675B]" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mt-2">Canonical Master</h3>
-            <p className="text-gray-700 font-medium leading-relaxed">
+            <h3 className="text-xl font-semibold text-[var(--text-primary)] mt-2">Canonical Master</h3>
+            <p className="text-[var(--text-secondary)] leading-relaxed">
               Consolidate disparate material records into a single, clean canonical code. Preserve historical traceability with source-to-master mappings.
             </p>
           </motion.div>
