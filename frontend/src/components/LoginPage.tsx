@@ -52,26 +52,6 @@ export default function LoginPage({ onNavigate, onLogin }: LoginPageProps) {
           >
             <div className="absolute inset-0 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-[#5D675B]/10 to-transparent"></div>
-              {Array.from({ length: 40 }).map((_, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ 
-                    opacity: 0, 
-                    x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000), 
-                    y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000) 
-                  }}
-                  animate={{ 
-                    opacity: [0, 0.9, 0],
-                    y: [null, Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000)]
-                  }}
-                  transition={{ 
-                    duration: 2 + Math.random() * 2, 
-                    repeat: Infinity,
-                    ease: "linear"
-                  }}
-                  className="absolute w-1.5 h-1.5 bg-[#5D675B] rounded-full shadow-[0_0_12px_rgba(93,103,91,0.9)]"
-                />
-              ))}
             </div>
             
             <div className="relative flex flex-col items-center z-10 bg-[var(--bg-card)] p-12 rounded-[32px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] border border-[var(--border-color)]">
@@ -88,10 +68,10 @@ export default function LoginPage({ onNavigate, onLogin }: LoginPageProps) {
                 <AnimatePresence mode="wait">
                    <motion.p
                       key={loginMessage}
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -15 }}
-                      transition={{ duration: 0.3 }}
+                      initial={{ opacity: 0, y: 15, filter: "blur(6px)" }}
+                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                      exit={{ opacity: 0, y: -15, filter: "blur(6px)", transition: { duration: 0.4 } }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
                       className="absolute text-sm font-bold text-[#5D675B] uppercase tracking-widest"
                    >
                       {loginMessage}
