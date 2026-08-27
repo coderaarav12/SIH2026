@@ -4,9 +4,15 @@ const path = require("path");
 const bcrypt = require("bcryptjs");
 
 const dbDir = __dirname;
-const dbPath = path.join(dbDir, "material_intelligence.db");
+const dbPath = process.env.DB_PATH || path.join(dbDir, "material_intelligence.db");
 
-fs.mkdirSync(dbDir, { recursive: true });
+// Only create directory if we are using the default relative path
+if (!process.env.DB_PATH) {
+  fs.mkdirSync(dbDir, { recursive: true });
+} else {
+  // Ensure the directory for the custom DB_PATH exists
+  fs.mkdirSync(path.dirname(dbPath), { recursive: true });
+}
 
 const db = new Database(dbPath);
 db.pragma("foreign_keys = ON");
