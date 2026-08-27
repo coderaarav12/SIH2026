@@ -68,9 +68,9 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             Access Platform
             <ArrowRight className="w-4 h-4" />
           </button>
-          <button className="flex items-center justify-center gap-2 px-8 py-4 border border-[#DEDBD5] text-[var(--text-primary)] rounded-full font-medium hover:bg-[#F5F2ED] transition-colors">
+          <a href="https://coderaarav12.github.io/SIH2026/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-8 py-4 border border-[#DEDBD5] text-[var(--text-primary)] rounded-full font-medium hover:bg-[#F5F2ED] transition-colors">
             Read Documentation
-          </button>
+          </a>
         </motion.div>
       </main>
 
