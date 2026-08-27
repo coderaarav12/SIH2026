@@ -311,15 +311,15 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
           </div>
         </div>
 
-        <div className="flex items-center gap-4 text-sm font-medium">
+        <div className="hidden lg:flex items-center gap-4 text-sm font-medium">
           <div className="flex items-center gap-3 bg-[var(--bg-alt)] border border-[var(--border-color)] pl-2 pr-4 py-1.5 rounded-full">
             <div className="w-8 h-8 rounded-full bg-[var(--bg-card)] border border-[var(--border-color)] flex items-center justify-center">
               <Users className="w-4 h-4 text-[var(--text-secondary)]" />
             </div>
-        <div className="hidden lg:flex items-center gap-4">
-          <div className="flex flex-col text-right">
-            <span className="text-sm font-bold text-[var(--text-primary)] leading-tight">{user.name}</span>
-            <span className="text-xs text-[var(--text-secondary)] capitalize font-semibold tracking-wide">{user.role}</span>
+            <div className="flex flex-col text-left">
+              <span className="text-sm font-bold text-[var(--text-primary)] leading-tight">{user.name}</span>
+              <span className="text-[10px] text-[var(--text-secondary)] capitalize font-black tracking-wider leading-none mt-1">{user.role}</span>
+            </div>
           </div>
           
           <button 
