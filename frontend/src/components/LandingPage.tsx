@@ -129,7 +129,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
       
       {/* Footer */}
-      <footer className="py-8 text-center text-sm text-[#888888] border-t border-[#F0EFED] bg-black/5 mt-auto">
+      <footer className="py-8 text-center text-sm text-[#888888] border-t border-[#F0EFED] bg-[var(--bg-main)] mt-auto relative z-10">
         <p className="font-bold text-[var(--text-primary)]">SIH 2026 &copy; Team SyncMasters</p>
         <p className="mt-2 font-medium text-[var(--text-secondary)]">Team Members: Aarav • Harsh • Prachi • Prakul • Priyanshu • Amitabh</p>
       </footer>
