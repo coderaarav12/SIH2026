@@ -137,9 +137,11 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
   };
 
   const handleLogoutClick = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    onLogout();
+    if (window.confirm("Are you sure you want to sign out?")) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      onLogout();
+    }
   };
 
   const cycleTheme = () => {
