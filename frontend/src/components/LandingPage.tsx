@@ -19,7 +19,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           </div>
           <button
             onClick={onNavigate}
-            className="text-sm font-medium text-[var(--text-primary)] hover:text-[#5D675B] transition-colors"
+            className="text-sm font-bold text-[var(--text-primary)] hover:text-gray-900 hover:bg-white px-5 py-2.5 rounded-full transition-all duration-300 hover:shadow-lg hover:scale-105"
           >
             Sign In
           </button>
@@ -64,12 +64,12 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           >
             <button 
               onClick={onNavigate}
-              className="flex items-center justify-center gap-2 px-6 py-3 lg:px-8 lg:py-4 bg-[var(--text-primary)] text-white rounded-full font-medium hover:opacity-90 transition-opacity"
+              className="flex items-center justify-center gap-2 px-6 py-3 lg:px-8 lg:py-4 bg-[var(--text-primary)] text-white rounded-full font-medium hover:scale-105 hover:bg-black transition-all duration-300 hover:shadow-xl"
             >
               Access Platform
               <ArrowRight className="w-4 h-4" />
             </button>
-            <a href="https://coderaarav12.github.io/SIH2026/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-6 py-3 lg:px-8 lg:py-4 border border-[#DEDBD5] text-[var(--text-primary)] rounded-full font-medium hover:bg-[#F5F2ED] transition-colors">
+            <a href="https://coderaarav12.github.io/SIH2026/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-6 py-3 lg:px-8 lg:py-4 border border-[#DEDBD5] text-[var(--text-primary)] rounded-full font-medium hover:bg-white hover:border-white hover:shadow-lg hover:scale-105 transition-all duration-300">
               Read Documentation
             </a>
           </motion.div>
@@ -82,14 +82,15 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
+              whileHover={{ y: -8, scale: 1.02 }}
               viewport={{ once: true }}
-              className="flex flex-col gap-3 p-6 lg:p-8 bg-white/60 backdrop-blur-xl border border-white/40 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.05)]"
+              className="flex flex-col gap-3 p-6 lg:p-8 bg-white/60 backdrop-blur-xl border border-white/40 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.05)] hover:bg-white/80 hover:border-white/70 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] transition-colors cursor-default group"
             >
-              <div className="w-10 h-10 lg:w-12 lg:h-12 bg-white/80 border border-white/50 rounded-2xl flex items-center justify-center shadow-sm">
+              <div className="w-10 h-10 lg:w-12 lg:h-12 bg-white/80 border border-white/50 rounded-2xl flex items-center justify-center shadow-sm group-hover:scale-110 group-hover:bg-white transition-all duration-300">
                 <Search className="w-5 h-5 lg:w-6 lg:h-6 text-[#5D675B]" />
               </div>
               <h3 className="text-lg lg:text-xl font-semibold text-[var(--text-primary)] mt-1">Semantic AI Matching</h3>
-              <p className="text-sm lg:text-base text-[var(--text-secondary)] leading-relaxed">
+              <p className="text-sm lg:text-base text-[var(--text-secondary)] leading-relaxed group-hover:text-gray-800 transition-colors">
                 Understands material names semantically to detect equivalents across varying nomenclatures, expanding abbreviations and normalizing units automatically.
               </p>
             </motion.div>
@@ -97,15 +98,16 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
+              whileHover={{ y: -8, scale: 1.02 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="flex flex-col gap-3 p-6 lg:p-8 bg-white/60 backdrop-blur-xl border border-white/40 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.05)]"
+              className="flex flex-col gap-3 p-6 lg:p-8 bg-white/60 backdrop-blur-xl border border-white/40 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.05)] hover:bg-white/80 hover:border-white/70 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] transition-colors cursor-default group"
             >
-              <div className="w-10 h-10 lg:w-12 lg:h-12 bg-white/80 border border-white/50 rounded-2xl flex items-center justify-center shadow-sm">
+              <div className="w-10 h-10 lg:w-12 lg:h-12 bg-white/80 border border-white/50 rounded-2xl flex items-center justify-center shadow-sm group-hover:scale-110 group-hover:bg-white transition-all duration-300">
                 <ShieldCheck className="w-5 h-5 lg:w-6 lg:h-6 text-[#5D675B]" />
               </div>
               <h3 className="text-lg lg:text-xl font-semibold text-[var(--text-primary)] mt-1">Human-in-the-Loop</h3>
-              <p className="text-sm lg:text-base text-[var(--text-secondary)] leading-relaxed">
+              <p className="text-sm lg:text-base text-[var(--text-secondary)] leading-relaxed group-hover:text-gray-800 transition-colors">
                 High-confidence matches are auto-suggested, while borderline cases are routed to human reviewers. Every decision is recorded in a secure audit trail.
               </p>
             </motion.div>
@@ -113,15 +115,16 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
+              whileHover={{ y: -8, scale: 1.02 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="flex flex-col gap-3 p-6 lg:p-8 bg-white/60 backdrop-blur-xl border border-white/40 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.05)]"
+              className="flex flex-col gap-3 p-6 lg:p-8 bg-white/60 backdrop-blur-xl border border-white/40 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.05)] hover:bg-white/80 hover:border-white/70 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] transition-colors cursor-default group"
             >
-              <div className="w-10 h-10 lg:w-12 lg:h-12 bg-white/80 border border-white/50 rounded-2xl flex items-center justify-center shadow-sm">
+              <div className="w-10 h-10 lg:w-12 lg:h-12 bg-white/80 border border-white/50 rounded-2xl flex items-center justify-center shadow-sm group-hover:scale-110 group-hover:bg-white transition-all duration-300">
                 <Database className="w-5 h-5 lg:w-6 lg:h-6 text-[#5D675B]" />
               </div>
               <h3 className="text-lg lg:text-xl font-semibold text-[var(--text-primary)] mt-1">Canonical Master</h3>
-              <p className="text-sm lg:text-base text-[var(--text-secondary)] leading-relaxed">
+              <p className="text-sm lg:text-base text-[var(--text-secondary)] leading-relaxed group-hover:text-gray-800 transition-colors">
                 Consolidate disparate material records into a single, clean canonical code. Preserve historical traceability with source-to-master mappings.
               </p>
             </motion.div>
