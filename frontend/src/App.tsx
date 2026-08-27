@@ -74,8 +74,8 @@ export default function App() {
       playsInline 
       className="fixed inset-0 w-full h-full object-cover -z-10 filter blur-sm brightness-[0.6] scale-105"
     >
-      <source src="https://cdn.pixabay.com/video/2022/03/19/111306-690684157_large.mp4" type="video/mp4" />
-      <source src="https://cdn.pixabay.com/video/2019/04/24/23011-332483161_large.mp4" type="video/mp4" />
+      <source src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Refinery_burn_and_explosion.webm" type="video/webm" />
+      <source src="https://upload.wikimedia.org/wikipedia/commons/d/d2/Animation_of_April_26%2C_2018%2C_Explosion_and_Fire_at_the_Husky_Energy_Refinery_in_Superior%2C_Wisconsin.webm" type="video/webm" />
     </video>
   );
 
