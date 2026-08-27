@@ -7,7 +7,7 @@ interface LandingPageProps {
 
 export default function LandingPage({ onNavigate }: LandingPageProps) {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-[#F7EBE1]">
       {/* Navigation */}
       <nav className="w-full px-6 md:px-12 py-8 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -129,8 +129,9 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
       
       {/* Footer */}
-      <footer className="py-8 text-center text-sm text-[#888888] border-t border-[#F0EFED]">
-        <p>SIH 2026 &copy; Team SyncMasters</p>
+      <footer className="py-8 text-center text-sm text-[#888888] border-t border-[#F0EFED] bg-black/5 mt-auto">
+        <p className="font-bold text-[var(--text-primary)]">SIH 2026 &copy; Team SyncMasters</p>
+        <p className="mt-2 font-medium text-[var(--text-secondary)]">Team Members: Aarav • Harsh • Prachi • Prakul • Priyanshu • Amitabh</p>
       </footer>
     </div>
   );
