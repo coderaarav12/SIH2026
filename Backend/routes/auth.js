@@ -152,4 +152,5 @@ router.get("/me", auth, async (c) => {
   return c.json({ success: true, user: c.get("user") });
 });
 
-
+
+export default router;
