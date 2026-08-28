@@ -41,3 +41,11 @@ INSERT OR IGNORE INTO audit_logs (user_id, action, entity_type, entity_id, detai
 (3, 'MATCH_REQUEST', 'candidate', 1, '{"input":"Bolt Hex SS 10x50mm 304"}'),
 (2, 'MATCH_REQUEST', 'candidate', 3, '{"input":"Valve Gate CS Flanged 4in 150#"}');
 
+
+-- Add QA Review Actions History
+INSERT OR IGNORE INTO review_actions (candidate_id, reviewer_id, action, comment) VALUES
+(1, 2, 'approve', 'Matches SS304 spec accurately.'),
+(2, 2, 'approve', 'Valid SCH 40 pipe.'),
+(3, 1, 'reject', 'Incorrect flanged spec for this request.'),
+(4, 2, 'approve', 'Standard welding electrode E7018.'),
+(5, 3, 'reject', 'Needs manual verification of bearing seals.');
