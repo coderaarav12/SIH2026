@@ -9,6 +9,15 @@ from reportlab.pdfgen import canvas
 from orchestrator import CPSEMultiAgentSystem
 
 app = FastAPI(title="SyncMasters AI Swarm API")
+from fastapi.responses import FileResponse
+import pdf_generator
+
+@app.get("/api/download-report")
+def download_report():
+    pdf_path = f"{swarm.base_dir}/Outputs/National_Compliance_Report.pdf"
+    pdf_generator.generate_formal_report("National Compliance Report", "Generated via Dashboard Export Button", pdf_path)
+    return FileResponse(pdf_path, media_type="application/pdf", filename="National_Compliance_Report.pdf")
+
 
 # Allow the React frontend to talk to this server
 app.add_middleware(
