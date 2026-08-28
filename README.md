@@ -51,9 +51,8 @@ The platform enforces strict Role-Based Access Control (RBAC) to ensure data int
 
 ## How to Test
 1. Access the deployed portal at: https://syncmasters.pages.dev
-2. Use the security key: `SIH2026-WIN`
-3. Login using any of the following pre-configured user accounts:
+2. Login using any of the following pre-configured user accounts:
    - **Admin:** `admin@cpse.gov.in` / `changeme123`
    - **Reviewer:** `reviewer@cpcl.co.in` / `changeme123`
    - **Officer:** `store.officer@iocl.co.in` / `changeme123`
-4. The `test_data` folder in the repo contains a sample `ongc_raw_materials.csv` to test the Bulk Upload feature.
+3. The `test_data` folder in the repo contains a sample `ongc_raw_materials.csv` to test the Bulk Upload feature.
