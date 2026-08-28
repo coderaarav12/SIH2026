@@ -396,13 +396,12 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
               {activeTab === 'overview' && <span className="flex h-3 w-3 relative ml-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--stat-emerald-bg)] opacity-75"></span><span className="relative inline-flex rounded-full h-3 w-3 bg-[var(--stat-emerald-bg)]"></span></span>}
             </h1>
             <p className="text-[var(--text-secondary)] mt-1 text-sm font-medium">Material Intelligence Portal • Ministry of Petroleum & Natural Gas</p>
-            </div>
-            {user.role === "admin" && activeTab === "overview" && (
-              <button onClick={() => alert("Generating National CPSE Inventory Report (PDF)...")} className="hidden md:flex items-center gap-2 px-4 py-2.5 bg-[#1E3A8A] text-white rounded-xl font-bold hover:bg-[#1e3a8a]/80 transition-colors shadow-sm text-sm border border-[#1E3A8A]/50">
-                <FileText className="w-4 h-4" /> Export National Compliance Report
-              </button>
-            )}
           </div>
+          {user.role === "admin" && activeTab === "overview" && (
+            <button onClick={() => alert("Generating National CPSE Inventory Report (PDF)...")} className="hidden md:flex items-center gap-2 px-4 py-2.5 bg-[#1E3A8A] text-white rounded-xl font-bold hover:bg-[#1e3a8a]/80 transition-colors shadow-sm text-sm border border-[#1E3A8A]/50">
+              <FileText className="w-4 h-4" /> Export National Compliance Report
+            </button>
+          )}
           
           {activeTab === 'matching' && (
              <button 
@@ -1067,3 +1066,4 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
     </div>
   );
 }
+
