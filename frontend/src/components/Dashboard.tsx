@@ -5,6 +5,7 @@ import {
   Network, Link, ScanLine, Upload, FileSignature, AlertCircle, BarChart3, TrendingUp, Menu, X
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { apiUrl } from '../lib/env';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 interface DashboardProps {
@@ -48,7 +49,7 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
     setTenderModal(pool);
     setTenderReport('generating');
     try {
-       const res = await fetch('/api/reports/generate-tender', { 
+       const res = await fetch(apiUrl('/api/reports/generate-tender'), { 
          method: 'POST', 
          headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token'), 'Content-Type': 'application/json' }, 
          body: JSON.stringify({ poolData: pool }) 
@@ -80,31 +81,31 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
       try {
         let res;
         if (activeTab === 'overview') {
-          res = await fetch('/api/analytics', { headers });
+          res = await fetch(apiUrl('/api/analytics'), { headers });
           if (res.ok) setStats((await res.json()).analytics);
         }
         else if (activeTab === 'materials') {
-          res = await fetch('/api/materials?limit=100', { headers });
+          res = await fetch(apiUrl('/api/materials?limit=100'), { headers });
           if (res.ok) { const json = await res.json(); setMaterials(json.data || json.materials || json.candidates || []); }
         }
         else if (activeTab === 'procurement') {
-          res = await fetch('/api/procurement/demand-pools', { headers });
+          res = await fetch(apiUrl('/api/procurement/demand-pools'), { headers });
           if (res.ok) setDemandPools((await res.json()).pools || []);
         }
         else if (activeTab === 'matching') {
-          res = await fetch('/api/matching/history', { headers });
+          res = await fetch(apiUrl('/api/matching/history'), { headers });
           if (res.ok) setMatchingHistory((await res.json()).candidates || []);
         }
         else if (activeTab === 'reviews') {
-          res = await fetch('/api/reviews', { headers });
+          res = await fetch(apiUrl('/api/reviews'), { headers });
           if (res.ok) setReviews((await res.json()).reviews || []);
         }
         else if (activeTab === 'audit') {
-          res = await fetch('/api/audit-logs', { headers }).catch(() => fetch('/api/audit', { headers }));
+          res = await fetch(apiUrl('/api/audit-logs'), { headers }).catch(() => fetch(apiUrl('/api/audit'), { headers }));
           if (res.ok) setAuditLogs((await res.json()).audit_logs || []);
         }
         else if (activeTab === 'mappings') {
-          res = await fetch('/api/mappings', { headers });
+          res = await fetch(apiUrl('/api/mappings'), { headers });
           if (res.ok) setMappings((await res.json()).mappings || []);
         }
 
@@ -129,7 +130,7 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
     const formData = new FormData();
     formData.append('file', e.target.files[0]);
     try {
-      const res = await fetch('/api/materials/upload', {
+      const res = await fetch(apiUrl('/api/materials/upload'), {
         method: 'POST',
         headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') },
         body: formData
@@ -168,7 +169,7 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
       const formData = new FormData();
       formData.append('file', file);
 
-      const res = await fetch('/api/ocr/analyze', { 
+      const res = await fetch(apiUrl('/api/ocr/analyze'), { 
         method: 'POST', 
         headers: { 
           'Authorization': 'Bearer ' + token
@@ -402,7 +403,7 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
                 onClick={async () => {
                   setDedupLoading(true);
                   try {
-                    const res = await fetch('/api/matching/find-duplicates', { 
+                    const res = await fetch(apiUrl('/api/matching/find-duplicates'), { 
                       method: 'POST', 
                       headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') } 
                     });
