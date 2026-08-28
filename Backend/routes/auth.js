@@ -5,10 +5,10 @@ import auth from "../middleware/auth.js";
 
 const router = new Hono();
 
-function sign(user) {
+function sign(user, env) {
   return jwt.sign(
     { id: user.id, role: user.role, email: user.email },
-    process.env.JWT_SECRET || "syncmasters-demo-secret",
+    env.JWT_SECRET || "syncmasters-demo-secret",
     { expiresIn: "12h" }
   );
 }
@@ -51,7 +51,7 @@ router.post("/register", async (c) => {
       success: true,
       message: "CPSE Portal Registration Successful",
       user,
-      token: sign(user)
+      token: sign(user, c.env)
     }, 201);
   } catch (e) {
     return c.json({ success: false, message: e.message }, 500);
@@ -80,7 +80,7 @@ router.post("/login", async (c) => {
     return c.json({
       success: true,
       message: "Authentication successful",
-      token: sign(user),
+      token: sign(user, c.env),
       user: safeUser
     });
   } catch (e) {
@@ -143,7 +143,7 @@ router.post("/verify-otp", async (c) => {
   return c.json({
     success: true,
     message: "Email OTP verification successful",
-    token: sign(user),
+    token: sign(user, c.env),
     user: safeUser
   });
 });
@@ -155,7 +155,7 @@ router.get("/me", auth, async (c) => {
 
 router.post("/verify-site-key", async (c) => {
   const { key } = (await c.req.json().catch(() => ({})));
-  const validKey = String(process.env.SITE_ACCESS_KEY || "SIH2026-WIN").trim();
+  const validKey = String(c.env.SITE_ACCESS_KEY || "SIH2026-WIN").trim();
   console.log("RECEIVED KEY:", key, "VALID KEY:", validKey);
   if (key === validKey) {
     return c.json({ success: true, message: "Access granted" });
