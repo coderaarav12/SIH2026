@@ -1,0 +1,12 @@
+name = "sih-backend-worker"
+main = "server.js"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ALLOWED_EMAILS = "admin@cpse.gov.in,reviewer@cpcl.co.in,your.email@gmail.com"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "material_intelligence_db"
+database_id = "a9200eb8-183f-4a3c-9d18-2bd1e2b3d10f"
