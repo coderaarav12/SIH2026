@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
+import { apiUrl } from "./lib/env";
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import LandingPage from './components/LandingPage';
@@ -15,7 +16,7 @@ const SiteGate = ({ onAccessGranted }: { onAccessGranted: () => void }) => {
     setLoading(true);
     setError(false);
     try {
-      const res = await fetch('/api/auth/verify-site-key', {
+      const res = await fetch(apiUrl("/api/auth/verify-site-key"), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ key: key.trim() })

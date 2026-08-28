@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState } from "react";
+import { apiUrl } from "../lib/env";
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, Box, KeyRound, Mail, Lock, Loader2 } from 'lucide-react';
 
@@ -17,7 +18,7 @@ export default function LoginPage({ onNavigate, onLogin }: LoginPageProps) {
     e.preventDefault(); 
     setLoginStatus('authenticating');
     try { 
-      const response = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) }); 
+      const response = await fetch(apiUrl("/api/auth/login"), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) }); 
       const data = await response.json(); 
       if (data.success) { 
         localStorage.setItem('token', data.token); 
