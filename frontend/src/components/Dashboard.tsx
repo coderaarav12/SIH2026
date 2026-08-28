@@ -396,6 +396,12 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
               {activeTab === 'overview' && <span className="flex h-3 w-3 relative ml-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--stat-emerald-bg)] opacity-75"></span><span className="relative inline-flex rounded-full h-3 w-3 bg-[var(--stat-emerald-bg)]"></span></span>}
             </h1>
             <p className="text-[var(--text-secondary)] mt-1 text-sm font-medium">Material Intelligence Portal • Ministry of Petroleum & Natural Gas</p>
+            </div>
+            {user.role === "admin" && activeTab === "overview" && (
+              <button onClick={() => alert("Generating National CPSE Inventory Report (PDF)...")} className="hidden md:flex items-center gap-2 px-4 py-2.5 bg-[#1E3A8A] text-white rounded-xl font-bold hover:bg-[#1e3a8a]/80 transition-colors shadow-sm text-sm border border-[#1E3A8A]/50">
+                <FileText className="w-4 h-4" /> Export National Compliance Report
+              </button>
+            )}
           </div>
           
           {activeTab === 'matching' && (
@@ -821,8 +827,10 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
                          ))}
                        </div>
                        <button onClick={() => generateTender(p)} className="mt-5 w-full py-2 bg-[var(--text-primary)] text-white rounded-lg text-sm font-bold shadow-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
-                         <FileSignature className="w-4 h-4" /> Generate AI Tender Report
-                       </button>
+                         <FileSignature className="w-4 h-4" /> Generate AI Tender Report</button>
+                    {user.role === "officer" && (
+                      <button onClick={() => alert("Emergency Shortage Flag raised. Regional dispatch notified.")} className="mt-3 w-full py-2 bg-red-50 text-red-600 rounded-lg text-sm font-bold shadow-sm hover:bg-red-100 transition-opacity flex items-center justify-center gap-2 border border-red-200">Flag Critical Shortage</button>
+                    )}
                      </div>
                   </div>
                 )) : <div className="p-8 text-center bg-[var(--bg-card)] rounded-3xl border border-[var(--border-color)] text-[var(--text-secondary)]">No demand pools active.</div>}
@@ -923,7 +931,12 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
                             <span className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-md border ${r.action === 'approve' ? 'bg-green-50 text-[var(--stat-emerald-text)] border-[var(--stat-emerald-text)]' : 'bg-[var(--stat-red-bg)] text-[var(--stat-red-text)] border-[var(--stat-red-text)]'}`}>
                               {r.action === 'approve' ? <CheckCircle className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
                               {r.action.toUpperCase()}
-                            </span>
+                              </span>
+                              {user.role === "reviewer" && (
+                                <button onClick={() => alert("Escalated to Technical Committee for review.")} className="ml-2 inline-flex items-center gap-1.5 px-2 py-1 text-[10px] font-bold rounded-md bg-[var(--stat-amber-bg)] text-[var(--stat-amber-text)] hover:opacity-80 transition-opacity border border-[var(--stat-amber-text)]">
+                                  <AlertCircle className="w-3 h-3" /> ESCALATE
+                                </button>
+                              )}
                           </td>
                           <td className="px-6 py-4 text-sm text-[var(--text-secondary)] font-medium">{r.reviewer_name}</td>
                         </tr>
