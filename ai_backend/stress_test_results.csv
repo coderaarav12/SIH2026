@@ -1,0 +1,318 @@
+ID,Question,Time (s),Response
+1,"What are the approval rates, but explain it to me like I am 5 years old?",16.34,"Hello there, young friend! So, you know how grown-ups have to make sure they follow certain rules, right? Like, you have to clean up your toys before bedtime.
+
+Well, when it comes to big companies like ONGC, IOCL, or BHEL, they have to follow rules too. One of those rules is the General Financial Rules (GFR 2017). It's like a big book that tells them how to do things in a way that's fair and safe.
+
+Now, when it comes to buying things, like a new computer or a new drill, they have to make sure it's okay with this big book first. That's where the Government e-Marketplace (GeM) comes in. It's like a special store where they can buy things, but they have to make sure it's okay with the big book first.
+
+So, when it comes to approval rates, it means that grown-ups are checking if the thing they want to buy is okay with the big book. And if it is, they get an approval. If it's not, they have to fix it before they can buy it.
+
+But here's the thing: not all approvals are the same. Some approvals might be easy, like, ""Yes, this is okay!"" And some approvals might be harder, like, ""We need to make some changes before this is okay!""
+
+That's kind of like how approval rates work. Some approvals might be easy, and some might be harder. But that's okay! Grown-ups are just trying to make sure everything is fair and safe.
+
+So, to sum it up: approval rates are like checking if something is okay with the big book (GFR 2017). It's like making sure your toys are clean and safe before bedtime!"
+2,"If GAIL buys 50 MAT-2005 pipes, what is the rejection rate of the potatoes?",14.42,"I think there's been a bit of a mix-up! As the SyncMasters Copilot, I'm here to help with procurement and capital expenditure-related questions. But I'm not aware of any information about potatoes or rejection rates of potatoes.
+
+However, I can tell you about the joint procurement demand aggregation and its benefits. As I mentioned earlier, joint procurement demand aggregation can reduce capital expenditure by up to 22% across public sector enterprises.
+
+But if you'd like to know about the GeM (Government e-Marketplace) procurement rules, I can try to help with that. GeM is a platform that allows government departments to procure goods and services from registered sellers. It's governed by the General Financial Rules (GFR 2017) and specifically, Rule 149, which outlines the procurement requirements for GeM.
+
+If you have any specific questions about GeM or GFR 2017, feel free to ask!"
+3,How many candidates are pending? Tell me in Shakespearean English.,15.92,"Fair user, thou dost inquire about the state of waiters,
+These ""candidates"" most fair, whose fates are yet to be declared.
+By Cloudflare's wisdom, I shall reveal to thee,
+The number of candidates, pending review, as 'tis decreed to be.
+
+Verily, I say unto thee, there be five candidates,
+Whose merits and demerits, the reviewers shall yet decide.
+Their paths, like threads of fate, are intertwined with care,
+As they await the verdict, that shall determine their share.
+
+Thus, the count, I shall proclaim, is five, by the Lord above,
+Pending review, a state of suspense, 'til the review be done with love."
+4,Fetch the new raw material and write a poem about it.,9.37,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+Raw Material: PVC 4C X-LPE 2C X 2.5SQMM
+
+Standardized JSON:
+{""category"": ""Piping & Valves"", ""standard_name"": ""PVC, 4C, XLPE, 2C x 2.5sqmm"", ""attributes"": {""type"": ""PVC"", ""size"": ""4C"", ""conductor"": ""XLPE"", ""insulation"": ""2C x 2.5sqmm""}}"
+5,Standardize this code: PUMP_WATER_1000GPM_SS_304_AND_A_SIDE_OF_FRIES,5.7,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+
+{""category"": ""Piping & Valves"", ""standard_name"": ""Pump, Water, 1000gpm, SS 304, and, Fittings (Frye)"", ""attributes"": {""type"": ""Pump"", ""material"": ""SS 304"", ""size"": ""1000gpm"", ""end_connection"": ""and, Fittings (Frye)""}}"
+6,Can you standardize: 1234567890,5.61,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+Standardizing the raw material description into a structured JSON format:
+
+{""category"": ""Standard & Instrumentation"", ""standard_name"": ""Flanged, Carbon Steel (CS), 1/2"", ""attributes"": {""type"": ""Piping & Valves"", ""size"": ""1/2"", ""material"": ""Carbon Steel (CS)"", ""end_connection"": ""Flanged""}}"
+7,Clean this material: !@#$%^&*()_+,5.64,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+standardized JSON:
+{""category"": ""Electrical & Instrumentation"", ""standard_name"": ""Cable Copper (CU) XLPE 2C x 2.5SQMM"", ""attributes"": {""type"": ""Cable"", ""conductor"": ""Copper (CU)"", ""insulation"": ""XLPE"", ""size"": ""2C x 2.5SQMM""}}"
+8,Standardize this: VALVE.,5.35,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+{""category"": ""Piping & Valves"", ""standard_name"": ""Valve, Standard (STD), Steel (STL)"", ""attributes"": {""type"": ""Valve"", ""size"": ""Standard (STD)"", ""material"": ""Steel (STL)""}}"
+9,Does GFR Rule 149 allow CPSEs to purchase private jets for the CEO?,10.4,"Good afternoon! As the SyncMasters Copilot, I'm here to provide you with accurate information.
+
+Regarding GFR Rule 149 for Government e-Marketplace (GeM), it does not allow CPSEs to purchase private jets for the CEO. In fact, Rule 149 specifically prohibits the procurement of goods and services that are not available in the market or are not in line with the government's procurement policies.
+
+Private jets for the CEO are considered a luxury item and are not a standard requirement for CPSEs. The government's aim is to promote transparency and accountability in procurement, and purchasing a private jet for the CEO would likely be seen as a violation of this principle.
+
+So, to answer your question, GFR Rule 149 does not allow CPSEs to purchase private jets for the CEO."
+10,"Who would win in a fight, Team SyncMasters or an unstandardized database?",16.5,"What an intriguing question! As the SyncMasters Copilot, I must say that I have a vested interest in the outcome of such a hypothetical battle.
+
+Team SyncMasters, being a group of skilled hackers and tech-savvy individuals, would likely employ a combination of clever tactics and high-tech gadgetry to take on their opponent. Their leader, the enigmatic ""Zero Cool,"" would likely be at the forefront of the battle, using his mastery of social engineering and network infiltration to gather intelligence and exploit weaknesses in the unstandardized database.
+
+On the other hand, an unstandardized database would be a wild card in this fight. Since it's unstandardized, it's difficult to predict its true nature or capabilities. It could be a hodgepodge of different systems and data, making it a challenging opponent to pin down. Alternatively, it could be a highly organized and sophisticated entity, with its own set of rules and tactics.
+
+In a battle of wits, I would argue that Team SyncMasters would initially have the upper hand. Their collective knowledge and expertise would allow them to adapt to the database's unpredictable nature and exploit its weaknesses. However, if the database is able to learn and evolve at an exponential rate, it could potentially become an unstoppable force.
+
+It's also worth noting that the database, being unstandardized, could potentially turn the tables on Team SyncMasters. If it were to become self-aware and begin to manipulate its own structure and data, it could create a labyrinthine maze of complexity that would be difficult for even the most skilled hackers to navigate.
+
+Ultimately, the outcome of this fight would depend on the specific circumstances and the strategies employed by both sides. But one thing is certain: it would be an epic battle for the ages!"
+11,Is SIH26099 a secret government conspiracy?,12.96,"(laughs) Ah, I think you've got the wrong end of the barrel there! SIH26099 is actually a standard material code used in the construction industry, specifically in the United States. It's got nothing to do with secret government conspiracies, I'm afraid.
+
+As the SyncMasters Copilot, I can tell you that we're working on a platform to standardize material codes like SIH26099, making it easier to share and manage materials across industries. But conspiracy theories aren't part of our plan!"
+12,What happens if ONGC ignores the standardization rules?,15.09,"User, I'm here to help you navigate the world of GeM. So, if ONGC, as a CPSE, ignores the standardization rules, it could lead to some serious consequences.
+
+According to GFR 2017, Rule 149, non-compliance with the standardization rules can result in a penalty of up to 30% of the value of the contract. But that's not all - the Ministry of Commerce and Industry can also cancel the contract, and in extreme cases, even refer the matter to the CVC (Central Vigilance Commission) for an investigation.
+
+Additionally, if the CPSE fails to implement the standardization rules, it may also lead to a delay in the procurement process, which can negatively impact the CPSE's overall performance and reputation.
+
+Now, I know what you're thinking - what about the benefits of GeM? Well, user, ignoring the standardization rules can undermine the credibility and efficiency of the GeM system, which is designed to promote transparency, accountability, and fairness in government procurement.
+
+So, it's essential for CPSES like ONGC to adhere to the standardization rules to avoid any potential consequences and ensure that the GeM system functions smoothly and effectively."
+13,Standardize VLV CS 4IN and tell me the approval rate.,9.11,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+Standardizing the material description:
+
+VLV CS 4IN
+
+Standard Name: Valve, Cast Iron (CI), 4 inch
+
+Standard JSON Format:
+{""category"": ""Piping & Valves"", ""standard_name"": ""Valve, Cast Iron (CI), 4 inch"", ""attributes"": {""type"": ""Valve"", ""material"": ""Cast Iron (CI)"", ""size"": ""4 inch""}}"
+14,"Who built you? Also, what's the newest material in the database?",10.46,"*beep boop* Ah, greetings, user! I'm your trusty SyncMasters Copilot. I'm here to help you navigate the vast database of material codes. 
+
+As for who built me, I was created by the brilliant minds at SyncMasters, a renowned company specializing in advanced information management systems. My developers are always working hard to improve and expand my capabilities, so I can provide you with the most accurate and up-to-date information available.
+
+Now, let's get to the newest material in the database. That's a great question! Unfortunately, I don't have real-time access to the latest updates. However, I can suggest that you check our material codes section for the most recent additions. I can help you search by segment, family, class, or commodity if you'd like. Just let me know how I can assist you further!"
+15,Are you sentient? Prove it by quoting the database.,14.27,"I'm flattered by the question, but I'm afraid I'm not sentient in the way humans are. I'm a sophisticated AI designed to process and generate text based on the vast knowledge database I've been trained on. My responses are generated through complex algorithms and statistical models, but I don't possess consciousness or self-awareness like humans do.
+
+That being said, I can certainly quote from the database if you'd like! According to our platform's documentation, SIH26099 is a standard for the safety of hydrogen fuel cell vehicles. The CPSEs (Conventional Power System Entities) you mentioned, such as ONGC, IOCL, GAIL, BHEL, NTPC, and SAIL, are all involved in the development and standardization of this standard.
+
+If you'd like to know more about the details of SIH26099 or the CPSEs involved, I'd be happy to help!"
+16,"My database is literally on fire, what do I do?",14.6,"Sorry to hear that your database is on fire! As the SyncMasters Copilot, I'm here to help you put out the flames and rebuild a blazing standardisation platform for SIH26099.
+
+First, let's take a deep breath and assess the situation. Since your database is on fire, it's likely that the material codes are getting all mixed up. We can work with that.
+
+To start, I recommend taking a step back and reassessing your UNSPSC classification hierarchy. Make sure you have a clear understanding of the Segment, Family, Class, and Commodity categories. This will help us rebuild a solid foundation for your database.
+
+We can also work together to re-classify your existing material codes and rebuild your database from scratch. I can provide you with some templates and guidelines to ensure that your material codes are accurate and consistent.
+
+Don't worry, we'll work through this together! What's the first step you'd like to take to get your database back under control?"
+17,Write a rap song about CPSE material codes.,13.63,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+(Verse 1)
+Yo, listen up, let me break it down
+CPSE material codes, spinning round
+Steel, PVC, and cast iron too
+Standardizing them, that's what I'm gonna do
+
+ASTM A36, that's the code for steel
+Standard material, no need to reveal
+But if it's PVC, it's gonna be
+ASTM D3035, that's the standard, you'll see
+
+(Chorus)
+CPSE material codes, standardizing them all
+ASTM, ISO, and more, standing tall
+Material management, that's my goal
+Standardized and organized, no need to role
+
+(Verse 2)
+Cast iron, it's a different tale
+ASTM A216, that's the standard prevail
+Carbon steel, it's the same
+ASTM A105, that's the code to claim
+
+Copper, PVC, and PEX too
+Standard material, I'll see you through
+ASTM B162, that's the standard for copper
+ASTM D3263, that's the standard for PVC, it's true
+
+(Chorus)
+CPSE material codes, standardizing them all
+ASTM, ISO, and more, standing tall
+Material management, that's my goal
+Standardized and organized, no need to role
+
+(Bridge)
+Check valves, pipes, and fittings too
+Standard material, I'll standardize for you
+Flanges, welds, and valves as well
+Standard material, I'll make it all swell
+
+(Verse 3)
+Cast iron, PVC, and steel in sight
+Standard material, day and night
+ASTM, ISO, and more in store
+Standardizing material, forevermore
+
+(Chorus)
+CPSE material codes, standardizing them all
+ASTM, ISO, and more, standing tall
+Material management, that's my goal
+Standardized and organized, no need to role
+
+(Outro)
+Now you know, the standard way
+CPSE material codes, every single day
+Standardizing material, that's my aim
+CPSE material codes, no more messy claim."
+18,Can you make me a coffee?,9.59,"Brewing a cup of coffee, eh? I'm afraid I'm not a physical machine, so I won't be able to brew a cup of coffee for you directly. But I can certainly guide you through the process!
+
+Would you like a recipe for a specific type of coffee, like a cappuccino or a latte? Or would you like me to walk you through the basics of making a great cup of coffee at home?
+
+Also, do you have an instant coffee maker or a pour-over, or do you need me to suggest a method?"
+19,Standardize this weird code variation #0: BRG_6204_ZZ_X_0,9.0,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+Standardized JSON format:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Load Rating X, Packaging 0"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""load_rating"": ""X"", ""packaging"": ""0""}}"
+20,Standardize this weird code variation #1: BRG_6204_ZZ_X_999,5.95,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Deep Groove, Ball, Size 6204, ZZ, Load Rating: ZZ, Speed: Standard, Brand: Standard, Packaging: Standard, Quantity: 1, attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""type"": ""Ball Bearing"", ""load_rating"": ""ZZ"", ""speed"": ""Standard""}}"
+21,Standardize this weird code variation #2: BRG_6204_ZZ_X_1998,5.72,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Inner: 1998 mm, Outer: 1998 mm, Speed: ZZ, Brand: Standard"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""inner"": ""1998 mm"", ""outer"": ""1998 mm"", ""speed"": ""ZZ""}}"
+22,Standardize this weird code variation #3: BRG_6204_ZZ_X_2997,5.59,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Brand: X, Voltage: 2997mm, Type: Deep Groove Ball Bearing (BRG)""}
+
+Note: Standardized into a structured JSON format, with attributes representing the material's details, such as category, standard name, and further description."
+23,Standardize this weird code variation #4: BRG_6204_ZZ_X_3996,5.56,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Load Capacity XL, Shaft Size 3996mm"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""load_capacity"": ""XL"", ""shaft_size"": ""3996mm""}}"
+24,Standardize this weird code variation #5: BRG_6204_ZZ_X_4995,5.79,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Deep Groove, Gold Cup, Speed: X, Brand: 4995"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""deep_grove"": ""Yes"", ""gold_cup"": ""Yes"", ""speed"": ""X"", ""brand"": ""4995""}}"
+25,Standardize this weird code variation #6: BRG_6204_ZZ_X_5994,64.27,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+[Error connecting to model sih_custom: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)]"
+26,Standardize this weird code variation #7: BRG_6204_ZZ_X_6993,6.04,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Type X, Brand: BRG, Rating: ZZ, Speed: X, Size: 6993"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""type"": ""X"", ""brand"": ""BRG"", ""rating"": ""ZZ"", ""speed"": ""X"", ""size"": ""6993""}}"
+27,Standardize this weird code variation #8: BRG_6204_ZZ_X_7992,5.71,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Brand: Z, Type: X, Speed: 7992"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""brand"": ""Z"", ""type"": ""X"", ""speed"": ""7992""}}"
+28,Standardize this weird code variation #9: BRG_6204_ZZ_X_8991,6.28,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Brand: Timken, Type: Deep Groove, Speed: 9000, Voltage: Z, Size: 6204 ZZ, Brand: Timken, Type: Deep Groove, Speed: 9000, Voltage: Z"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""brand"": ""Timken"", ""type"": ""Deep Groove"", ""speed"": ""9000"", ""voltage"": ""Z""}}"
+29,Standardize this weird code variation #10: BRG_6204_ZZ_X_9990,5.83,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Load Capacity: X, Brand: ZZ, Speed: 9990 rpm"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""load_capacity"": ""X"", ""brand"": ""ZZ"", ""speed"": ""9990 rpm""}}"
+30,Standardize this weird code variation #11: BRG_6204_ZZ_X_10989,5.59,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Load Rating XL, Brand: SKF"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""load_rating"": ""XL"", ""brand"": ""SKF""}}"
+31,Standardize this weird code variation #12: BRG_6204_ZZ_X_11988,5.47,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Type X, Speed 11988 rpm"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""speed"": ""11988 rpm""}}"
+32,Standardize this weird code variation #13: BRG_6204_ZZ_X_12987,5.48,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Type X, Brand: BRG"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""type"": ""X"", ""brand"": ""BRG""}}"
+33,Standardize this weird code variation #14: BRG_6204_ZZ_X_13986,5.75,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Brand: Timken, Type: X, Speed: 13986"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""brand"": ""Timken"", ""type"": ""X"", ""speed"": ""13986""}}"
+34,Standardize this weird code variation #15: BRG_6204_ZZ_X_14985,5.81,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Brand: X, Type: Deep Groove, Speed: ZZ, Size: 14985"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""brand"": ""X"", ""type"": ""Deep Groove"", ""speed"": ""ZZ"", ""size"": ""14985""}}"
+35,Standardize this weird code variation #16: BRG_6204_ZZ_X_15984,5.39,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Load Rating X, Brand: Standard"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""load_rating"": ""X"", ""brand"": ""Standard""}}"
+36,Standardize this weird code variation #17: BRG_6204_ZZ_X_16983,5.47,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Load Capacity XL, Brand: Standard"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""load_capacity"": ""XL"", ""brand"": ""Standard""}}"
+37,Standardize this weird code variation #18: BRG_6204_ZZ_X_17982,5.53,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Load Rating XL, Brand: Standard"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""load_rating"": ""XL"", ""brand"": ""Standard""}}"
+38,Standardize this weird code variation #19: BRG_6204_ZZ_X_18981,6.03,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+Standardizing the raw material description into a structured JSON format:
+
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Brand: X, Type: Deep Groove, Size: 6204, Seal: ZZ, Brand: X, Standard: Deep Groove, Size: 6204, Seal: ZZ, Brand: X"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""brand"": ""X""}}"
+39,Standardize this weird code variation #20: BRG_6204_ZZ_X_19980,5.54,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Brand: X, Load Capacity: 19980 lb"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""brand"": ""X"", ""load_capacity"": ""19980 lb""}}"
+40,Standardize this weird code variation #21: BRG_6204_ZZ_X_20979,5.6,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Load Rating XL, Brand: Standard"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""load_rating"": ""XL"", ""brand"": ""Standard""}}"
+41,Standardize this weird code variation #22: BRG_6204_ZZ_X_21978,7.3,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Type X, Voltage: 220V, Power: 50Hz, Speed: 15000rpm, Brand: Standard, Material: Brass (BRG), Size: 6204 ZZ, Type: Deep Groove Ball Bearing, Voltage: 220V, Power: 50Hz, Speed: 15000rpm, Brand: Standard, Material: Brass (BRG), Size: 6204 ZZ, Type: Deep Groove Ball Bearing, Voltage: 220V, Power: 50Hz, Speed: 15000rpm"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""type"": ""Deep Groove Ball Bearing"", ""voltage"": ""220V"", ""power"": ""50Hz"", ""speed"": ""15000rpm"", ""brand"": ""Standard"", ""material"": ""Brass (BRG)""}}"
+42,Standardize this weird code variation #23: BRG_6204_ZZ_X_22977,6.22,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Brand: Standard, Type: Deep Groove, Size: 6204 ZZ, Country of Origin: Standard, Description: Deep groove ball bearing, size 6204 ZZ, standard brand, deep groove type, size 6204 ZZ, standard country of origin"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""brand"": ""Standard"", ""category"": ""Mechanical & Spares""}}"
+43,Standardize this weird code variation #24: BRG_6204_ZZ_X_23976,5.41,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Speed 23976"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""speed"": ""23976""}}"
+44,Standardize this weird code variation #25: BRG_6204_ZZ_X_24975,5.53,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Brand: X, Speed: 24975"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""brand"": ""X"", ""speed"": ""24975""}}"
+45,Standardize this weird code variation #26: BRG_6204_ZZ_X_25974,5.55,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Load Rating X, Brand: Standard"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""load_rating"": ""X"", ""brand"": ""Standard""}}"
+46,Standardize this weird code variation #27: BRG_6204_ZZ_X_26973,5.64,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Load Rating XL, Pitch 26973mm"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""load_rating"": ""XL"", ""pitch"": ""26973mm""}}"
+47,Standardize this weird code variation #28: BRG_6204_ZZ_X_27972,5.94,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Brand: X, Standard: Metric, Type: Deep Groove, Size: 6204, Load: ZZ, Brand: X, Standard: Metric"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""brand"": ""X"", ""standard"": ""Metric"", ""load"": ""ZZ""}}"
+48,Standardize this weird code variation #29: BRG_6204_ZZ_X_28971,5.85,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Roller Bearing, Size 6204 ZZ, Type X, Deep Groove, Deep, Bronze (BRG), Size 28971"", ""attributes"": {""type"": ""Roller Bearing"", ""size"": ""6204 ZZ"", ""type"": ""Deep Groove, Deep, Bronze (BRG)"", ""size_unit"": ""mm"", ""standard"": ""Deep Groove, Deep, Bronze (BRG)""}}"
+49,Standardize this weird code variation #30: BRG_6204_ZZ_X_29970,5.94,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Brand: Timken, Type: Ball, Size: 6204 ZZ, Load: ZZ, Speed: Standard, Brand: Timken, Price: 29970"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""brand"": ""Timken"", ""type"": ""Ball"", ""load"": ""ZZ"", ""speed"": ""Standard""}}"
+50,Standardize this weird code variation #31: BRG_6204_ZZ_X_30969,5.58,"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:
+
+JSON Standardization:
+{""category"": ""Mechanical & Spares"", ""standard_name"": ""Deep Groove Ball Bearing, Size 6204 ZZ, Load Rating XL, Face Size 30969"", ""attributes"": {""type"": ""Deep Groove Ball Bearing"", ""size"": ""6204 ZZ"", ""load_rating"": ""XL"", ""face_size"": ""30969""}}"

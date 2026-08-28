@@ -3,10 +3,11 @@ import {
   Box, LogOut, Database, Search, LayoutGrid, FileText, Settings, 
   Activity, Users, CheckCircle, Clock, Palette, ListChecks, History, 
   Network, Link, ScanLine, Upload, FileSignature, AlertCircle, BarChart3, TrendingUp, Menu, X
-} from 'lucide-react';
+, Mic } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { apiUrl } from '../lib/env';
 import { useNavigate, useLocation } from 'react-router-dom';
+import ImmersiveVoiceMode from './ImmersiveVoiceMode';
 
 interface DashboardProps {
   onLogout: () => void;
@@ -29,6 +30,7 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
 
   // UI States
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [immersiveVoiceOpen, setImmersiveVoiceOpen] = useState(false);
 
   
   // Data States
@@ -261,7 +263,18 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
       </AnimatePresence>
       
       {/* Sidebar / Top Navigation Hybrid */}
-      <nav className="w-full px-4 md:px-6 py-4 flex items-center justify-between border-b border-[var(--border-color)] bg-[var(--bg-card)] transition-colors duration-300 sticky top-0 z-50 shadow-sm relative">
+      
+      <AnimatePresence mode="wait">
+        {!immersiveVoiceOpen ? (
+          <motion.div 
+            key="dashboard-content"
+            initial={{ opacity: 0, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, filter: 'blur(20px)', scale: 0.95 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col flex-1 w-full"
+          >
+<nav className="w-full px-4 md:px-6 py-4 flex items-center justify-between border-b border-[var(--border-color)] bg-[var(--bg-card)] transition-colors duration-300 sticky top-0 z-50 shadow-sm relative">
         <div className="flex items-center gap-8 w-full lg:w-auto justify-between lg:justify-start">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-tr from-[#5D675B] to-[#4E564C] flex items-center justify-center rounded-xl shadow-md">
@@ -1062,8 +1075,41 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
           )}
         </AnimatePresence>
 
+        
       </main>
+          </motion.div>
+        ) : (
+          <ImmersiveVoiceMode 
+            key="immersive-voice" 
+            onClose={() => setImmersiveVoiceOpen(false)} 
+            pageContext={{
+              activeTab,
+              userRole: user?.role,
+              userName: user?.name,
+              stats,
+              allReviews: reviews,
+              allMatches: matchingHistory,
+              allMaterials: materials
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      {!immersiveVoiceOpen && (
+        <motion.button
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          whileHover={{ scale: 1.1 }}
+          onClick={() => setImmersiveVoiceOpen(true)}
+          className="fixed bottom-8 right-8 w-16 h-16 bg-[var(--bg-card)] border-2 border-[var(--stat-emerald-text)] text-[var(--stat-emerald-text)] rounded-full shadow-[0_0_30px_rgba(16,185,129,0.3)] flex items-center justify-center z-40 transition-shadow hover:shadow-[0_0_50px_rgba(16,185,129,0.5)]"
+        >
+          <Mic size={28} />
+        </motion.button>
+      )}
+
+
     </div>
   );
 }
+
 
