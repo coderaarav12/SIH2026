@@ -1,12 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3b82f6" />
-      <stop offset="100%" stop-color="#0f172a" />
+    <linearGradient id="grad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#5D675B" />
+      <stop offset="100%" stop-color="#4E564C" />
     </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="112" fill="url(#grad1)" />
-  <path d="M375.4 186.2C355.2 153.9 315.6 132 268 132C193.3 132 131 190.1 125.1 264H169.3C175 214.5 217.1 176 268 176C300 176 328.2 192.1 345 216L308 216V260H408V160H364V186.2Z" fill="#ffffff" />
-  <path d="M136.6 325.8C156.8 358.1 196.4 380 244 380C318.7 380 381 321.9 386.9 248H342.7C337 297.5 294.9 336 244 336C212 336 183.8 319.9 167 296L204 296V252H104V352H148V325.8Z" fill="#38bdf8" />
-  <text x="256" y="270" font-family="system-ui, -apple-system, sans-serif" font-size="120" font-weight="bold" font-style="italic" fill="#ffffff" text-anchor="middle" dominant-baseline="middle" letter-spacing="-5">SM</text>
+  <rect width="512" height="512" rx="140" fill="url(#grad)" />
+  <svg x="128" y="128" width="256" height="256" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
+    <path d="m3.3 7 8.7 5 8.7-5"></path>
+    <path d="M12 22V12"></path>
+  </svg>
 </svg>
