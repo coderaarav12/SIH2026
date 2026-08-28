@@ -151,7 +151,7 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
   };
 
   const cycleTheme = () => {
-    const themes = ['default', 'dark', 'monochrome', 'ocean', 'nature', 'sunset', 'corporate'];
+    const themes = ['default', 'warm', 'cool', 'dark'];
     const currentIndex = themes.indexOf(theme);
     setTheme(themes[(currentIndex + 1) % themes.length]);
   };
@@ -471,23 +471,29 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
                         </h3>
                       </div>
                       <div className="flex-1 flex flex-col justify-center gap-4">
-                        {[
-                          { step: 'Raw Uploads', val: stats.total_match_candidates, w: '100%', c: 'bg-[var(--stat-purple-bg)] text-[var(--stat-purple-text)]' },
-                          { step: 'Auto-Suggested', val: stats.auto_suggestions, w: '85%', c: 'bg-[var(--stat-blue-bg)] text-[var(--stat-blue-text)]' },
-                          { step: 'Pending Review', val: stats.pending_review, w: '55%', c: 'bg-[var(--stat-amber-bg)] text-[var(--stat-amber-text)]' },
-                          { step: 'Approved Mappings', val: stats.approved, w: '35%', c: 'bg-[var(--stat-emerald-bg)] text-[var(--stat-emerald-text)]' }
-                        ].map((f, i) => (
-                          <div key={i} className="relative w-full">
-                            <div className="flex justify-between text-xs font-bold text-[var(--text-secondary)] mb-1.5 px-1">
-                               <span>{f.step}</span>
-                               <span>{f.val} items</span>
-                            </div>
-                            <div className="h-8 bg-[var(--bg-alt)] rounded-lg overflow-hidden border border-[var(--border-color)] p-0.5">
-                               <div className={`h-full rounded-md flex items-center justify-end px-3 text-xs font-black ${f.c}`} style={{ width: f.w }}>
-                               </div>
-                            </div>
-                          </div>
-                        ))}
+                        {(() => {
+                          const maxVal = Math.max(1, stats.total_match_candidates || 1);
+                          return [
+                            { step: 'Raw Uploads', val: stats.total_match_candidates, c: 'bg-[var(--stat-purple-bg)] text-[var(--stat-purple-text)]' },
+                            { step: 'Auto-Suggested', val: stats.auto_suggestions, c: 'bg-[var(--stat-blue-bg)] text-[var(--stat-blue-text)]' },
+                            { step: 'Pending Review', val: stats.pending_review, c: 'bg-[var(--stat-amber-bg)] text-[var(--stat-amber-text)]' },
+                            { step: 'Approved Mappings', val: stats.approved, c: 'bg-[var(--stat-emerald-bg)] text-[var(--stat-emerald-text)]' }
+                          ].map((f, i) => {
+                            const widthPercent = (f.val / maxVal) * 100;
+                            return (
+                              <div key={i} className="relative w-full">
+                                <div className="flex justify-between text-xs font-bold text-[var(--text-secondary)] mb-1.5 px-1">
+                                  <span>{f.step}</span>
+                                  <span>{f.val} items</span>
+                                </div>
+                                <div className="h-8 bg-[var(--bg-alt)] rounded-lg overflow-hidden border border-[var(--border-color)] p-0.5">
+                                  <div className={`h-full rounded-md flex items-center justify-end px-3 text-xs font-black transition-all duration-1000 ${f.c}`} style={{ width: `${Math.max(2, widthPercent)}%` }}>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          });
+                        })()}
                       </div>
                    </div>
 
