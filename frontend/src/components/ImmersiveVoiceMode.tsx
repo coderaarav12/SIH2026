@@ -10,6 +10,7 @@ interface ImmersiveVoiceModeProps {
 export default function ImmersiveVoiceMode({ onClose, pageContext }: ImmersiveVoiceModeProps) {
   const [isListening, setIsListening] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
+  const isThinkingRef = useRef(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [transcript, setTranscript] = useState("Initializing connection...");
   const [aiResponse, setAiResponse] = useState("");
@@ -47,13 +48,17 @@ export default function ImmersiveVoiceMode({ onClose, pageContext }: ImmersiveVo
       };
       
       recognition.onresult = async (event: any) => {
-        const result = event.results[event.resultIndex];
-        const text = result[0].transcript;
-        
-        setTranscript(text);
+        if (isThinkingRef.current) return;
 
-        if (result.isFinal) {
-            await sendToAI(text);
+        let fullText = "";
+        for (let i = 0; i < event.results.length; i++) {
+            fullText += event.results[i][0].transcript;
+        }
+        
+        setTranscript(fullText);
+
+        if (event.results[event.resultIndex].isFinal) {
+            await sendToAI(fullText);
         }
       };
 
@@ -116,7 +121,9 @@ export default function ImmersiveVoiceMode({ onClose, pageContext }: ImmersiveVo
 
   const sendToAI = async (text: string) => {
     if (!text.trim()) return;
+    if (isThinkingRef.current) return;
     setIsThinking(true);
+    isThinkingRef.current = true;
     
     if (recognitionRef.current) {
         try { recognitionRef.current.stop(); } catch(e) {}
@@ -144,6 +151,7 @@ export default function ImmersiveVoiceMode({ onClose, pageContext }: ImmersiveVo
     } catch (error) {
       setAiResponse("Connection to local AI Swarm failed. Is server.py running?");
       setIsThinking(false);
+        isThinkingRef.current = false;
       // Restart mic since we failed
       if (keepAliveRef.current && recognitionRef.current) {
           try { recognitionRef.current.start(); } catch(e) {}
@@ -152,6 +160,7 @@ export default function ImmersiveVoiceMode({ onClose, pageContext }: ImmersiveVo
   };
 
   const speak = (text: string) => {
+    window.speechSynthesis.cancel();
     const cleanText = text
       .replace(/[*_~`#]+/g, '')
       .replace(/\[(.*?)\]\(.*?\)/g, '$1')
@@ -178,6 +187,7 @@ export default function ImmersiveVoiceMode({ onClose, pageContext }: ImmersiveVo
     
     utterance.onstart = () => {
         setIsThinking(false);
+        isThinkingRef.current = false;
         setIsSpeaking(true);
         isSpeakingRef.current = true;
         
