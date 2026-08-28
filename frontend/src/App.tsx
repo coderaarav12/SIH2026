@@ -15,20 +15,11 @@ const SiteGate = ({ onAccessGranted }: { onAccessGranted: () => void }) => {
     e.preventDefault();
     setLoading(true);
     setError(false);
-    try {
-      const res = await fetch(apiUrl("/api/auth/verify-site-key"), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key: key.trim() })
-      });
-      const data = await res.json();
-      if (data.success) {
-        localStorage.setItem('site_access_granted', 'true');
-        onAccessGranted();
-      } else {
-        setError(true);
-      }
-    } catch {
+    const validKey = (import.meta.env.VITE_SITE_KEY || "").trim();
+    if (key.trim() === validKey) {
+      localStorage.setItem("site_access_granted", "true");
+      onAccessGranted();
+    } else {
       setError(true);
     }
     setLoading(false);

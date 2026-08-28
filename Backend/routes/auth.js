@@ -152,17 +152,4 @@ router.get("/me", auth, async (c) => {
   return c.json({ success: true, user: c.get("user") });
 });
 
-
-router.post("/verify-site-key", async (c) => {
-  const { key } = (await c.req.json().catch(() => ({})));
-  const validKey = String(c.env.SITE_ACCESS_KEY || "").trim();
-  console.log("RECEIVED KEY:", key, "VALID KEY:", validKey);
-  if (key === validKey) {
-    return c.json({ success: true, message: "Access granted" });
-  } else {
-    return c.json({ success: false, message: "Invalid security key" }, 401);
-  }
-});
-
-export default router;
-
+
