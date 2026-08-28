@@ -34,6 +34,12 @@ export default function ImmersiveVoiceMode({ onClose, pageContext }: ImmersiveVo
   useEffect(() => {
     keepAliveRef.current = true;
     
+    // Preload TTS Voices immediately
+    window.speechSynthesis.getVoices();
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+    }
+    
     // @ts-ignore
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition && !recognitionRef.current) {
@@ -190,6 +196,9 @@ export default function ImmersiveVoiceMode({ onClose, pageContext }: ImmersiveVo
         isThinkingRef.current = false;
         setIsSpeaking(true);
         isSpeakingRef.current = true;
+        
+        // Display AI response as subtitles while speaking
+        setTranscript(text);
         
         // Mute mic while AI speaks to prevent feedback loops and browser crashing
         if (recognitionRef.current) {
