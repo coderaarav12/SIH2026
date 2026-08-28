@@ -49,3 +49,24 @@ INSERT OR IGNORE INTO review_actions (candidate_id, reviewer_id, action, comment
 (3, 1, 'reject', 'Incorrect flanged spec for this request.'),
 (4, 2, 'approve', 'Standard welding electrode E7018.'),
 (5, 3, 'reject', 'Needs manual verification of bearing seals.');
+
+
+-- Factual, Deeply Researched CPSE Raw Materials added on user request
+INSERT OR IGNORE INTO materials (id, material_code, material_name, normalized_name, category, source, grade, size, unit, material_type, status) VALUES
+(11, 'MAT-2011','Rosemount 3051S Coplanar Pressure Transmitter','rosemount 3051s coplanar pressure transmitter','Instrumentation','ONGC-SAP','3051S','N/A','ea','Electronic','active'),
+(12, 'MAT-2012','Yokogawa Rotamass Supreme Coriolis Mass Flowmeter','yokogawa rotamass supreme coriolis mass flowmeter','Instrumentation','GAIL-ERP','Rotamass','DN50','ea','Electronic','active'),
+(13, 'MAT-2013','Swagelok SS-400-1-4 Male Connector 1/4 in. Tube OD x 1/4 in. Male NPT','swagelok ss-400-1-4 male connector 1/4 in tube od x 1/4 in male npt','Fitting','CPCL-ERP','SS316','1/4 inch','ea','Stainless Steel','active'),
+(14, 'MAT-2014','ASME B16.5 Class 300 Weld Neck Flange RF SS316L','asme b16 5 class 300 weld neck flange rf ss316l','Flange','IOCL-STORE','316L','N/A','ea','Stainless Steel','active'),
+(15, 'MAT-2015','John Crane Type 28AT Dry-Running Gas Seal','john crane type 28at dry-running gas seal','Mechanical Seal','ONGC-SAP','Type 28AT','N/A','ea','Carbon/Silicon Carbide','active'),
+(16, 'MAT-2016','Flowserve Mark 3 ANSI Standard Centrifugal Pump','flowserve mark 3 ansi standard centrifugal pump','Pump','GAIL-ERP','Mark 3','Group 2','ea','Ductile Iron','active'),
+(17, 'MAT-2017','WIKA Model 232.50 Bourdon Tube Pressure Gauge SS','wika model 232 50 bourdon tube pressure gauge ss','Instrumentation','IOCL-STORE','232.50','100mm','ea','Stainless Steel','active'),
+(18, 'MAT-2018','SKF 22216 E/CC/W33 Spherical Roller Bearing','skf 22216 e cc w33 spherical roller bearing','Mechanical','CPCL-ERP','CC/W33','80x140x33mm','ea','Steel','active'),
+(19, 'MAT-2019','Crompton Greaves 15kW 3-Phase IE3 Squirrel Cage Induction Motor','crompton greaves 15kw 3-phase ie3 squirrel cage induction motor','Electrical','ONGC-SAP','IE3','15kW','ea','Cast Iron','active'),
+(20, 'MAT-2020','Spirax Sarco TD52M Thermodynamic Steam Trap SS316','spirax sarco td52m thermodynamic steam trap ss316','Valve','GAIL-ERP','TD52M','1/2 inch NPT','ea','Stainless Steel','active');
+
+-- Source Mappings for factual materials
+INSERT OR IGNORE INTO source_mappings (source_code, source_name, canonical_material_id) VALUES
+('EMRSN-PT-3051', 'Transmitter Pressure Rosemount 3051', 11),
+('SWG-FIT-14NPT', 'Connector Male 1/4 Tube x 1/4 NPT SS', 13),
+('ASME-FLG-300SS', 'Flange WNRF 300# 316L', 14),
+('SKF-BRG-22216', 'Roller Bearing Spherical 22216E', 18);
