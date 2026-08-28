@@ -1,3 +1,7 @@
+INSERT OR IGNORE INTO users (name, email, password_hash, role, department) VALUES
+('Central Ministry Admin', 'admin@cpse.gov.in', '$2b$10$EFeHyq3eWC6BNspultDoEugTNUVev614qVPWUjJuoS2JQwzy0eL26', 'admin', 'Ministry of Petroleum & Natural Gas'),
+('CPCL Senior Reviewer', 'reviewer@cpcl.co.in', '$2b$10$EFeHyq3eWC6BNspultDoEugTNUVev614qVPWUjJuoS2JQwzy0eL26', 'reviewer', 'CPCL Chennai Refinery'),
+('IOCL Procurement Officer', 'store.officer@iocl.co.in', '$2b$10$EFeHyq3eWC6BNspultDoEugTNUVev614qVPWUjJuoS2JQwzy0eL26', 'officer', 'IOCL Northern Pipeline');
 -- Seed default users (run after schema.sql)
 -- Passwords are bcrypt hashed: 'changeme123' = the hash below (generated locally)
 -- Replace these hashes with your own or use the /api/auth/register endpoint
@@ -13,3 +17,4 @@ INSERT OR IGNORE INTO source_mappings (source_code, source_name, canonical_mater
 ('ONGC-FAST-9021','SS Hex Bolt 10x50 Gr304',1),
 ('IOCL-BOLT-4412','Bolt SS 304 M10X50 Hex',1),
 ('GAIL-PIPE-1102','CS Pipe 2 in Sch 40 Seamless',4);
+
