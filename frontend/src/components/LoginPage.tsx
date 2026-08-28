@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { apiUrl } from "../lib/env";
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, Box, KeyRound, Mail, Lock, Loader2 } from 'lucide-react';
+import { ArrowLeft, Box, KeyRound, Mail, Lock, Loader2, AlertCircle } from "lucide-react";
 
 interface LoginPageProps {
   onNavigate: () => void;
@@ -11,12 +11,14 @@ interface LoginPageProps {
 export default function LoginPage({ onNavigate, onLogin }: LoginPageProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loginStatus, setLoginStatus] = useState<'idle' | 'authenticating' | 'syncing'>('idle');
+  const [loginStatus, setLoginStatus] = useState<"idle" | "authenticating" | "syncing">("idle");
+  const [loginError, setLoginError] = useState("");
   const [loginMessage, setLoginMessage] = useState('Syncing CPSE Databases...');
 
   const handleSubmit = async (e: React.FormEvent) => { 
     e.preventDefault(); 
-    setLoginStatus('authenticating');
+    setLoginStatus("authenticating");
+    setLoginError("");
     try { 
       const response = await fetch(apiUrl("/api/auth/login"), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) }); 
       const data = await response.json(); 
@@ -32,11 +34,11 @@ export default function LoginPage({ onNavigate, onLogin }: LoginPageProps) {
         }, 3800); // Wait 3.8s to show sequence
       } else { 
         setLoginStatus('idle');
-        alert(data.message || 'Login failed'); 
+        setLoginError(data.message || "Login failed"); 
       } 
     } catch (err) { 
       setLoginStatus('idle');
-      console.error(err); alert('Login error'); 
+      console.error(err); setLoginError("Network connection error. Please try again."); 
     } 
   };
 
@@ -142,8 +144,14 @@ export default function LoginPage({ onNavigate, onLogin }: LoginPageProps) {
                 </div>
               </div>
 
-              <button 
-                type="submit" disabled={loginStatus !== 'idle'} 
+              {loginError && (
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="w-full p-3 mt-1 bg-red-50/80 border border-red-200 rounded-xl text-red-600 text-xs font-bold flex items-center justify-center gap-2">
+                  <AlertCircle className="w-4 h-4" />
+                  {loginError}
+                </motion.div>
+              )}
+
+              <button type="submit" disabled={loginStatus !== 'idle'} 
                 className="mt-4 w-full py-4 bg-[#5D675B] text-white rounded-2xl font-bold hover:scale-[1.02] shadow-lg shadow-[#5D675B]/20 hover:bg-black transition-all duration-300"
               >
                 {loginStatus === 'authenticating' ? 'Verifying...' : 'Sign In to Console'}
