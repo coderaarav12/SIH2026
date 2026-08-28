@@ -91,21 +91,23 @@ Action:"""
             return f"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:\n\n{worker_res}"
             
         elif "REPORT" in action_raw:
-            rag_info = self.agent_rag_librarian(user_input)
-            std_sample = self.agent_mdm_engineer("VLV GT CS 4IN FLG")
-            report_text = f"Report Title: AI-Generated Procurement Demand Aggregation\n\nCompliance Framework:\n{rag_info}\n\nSample Standardized Material Batch:\n{std_sample}\n\nRecommendation:\nInitiate joint tender aggregation under GFR Rule 149 to maximize cost savings."
-            from reportlab.pdfgen import canvas
-            file_path = f"{self.base_dir}/Outputs/Official_Tender_Summary.pdf"
-            c = canvas.Canvas(file_path)
-            c.setFont("Helvetica-Bold", 14)
-            c.drawString(50, 800, f"SYNCMASTERS AI REPORT")
-            c.setFont("Helvetica", 10)
-            y = 760
-            for line in report_text.split("\n"):
-                c.drawString(50, y, line[:85])
-                y -= 15
-            c.save()
-            return f"I collaborated with the RAG Librarian and MDM Engine to generate your formal document. Report generated at: {file_path}"
+            import pdf_generator
+            
+            # Determine if it's a National Compliance Report or a General Tender
+            if "compliance" in user_input.lower():
+                title = "National Compliance Report"
+                filename = "National_Compliance_Report.pdf"
+            else:
+                title = "AI-Generated Procurement Demand Aggregation"
+                filename = "Official_Tender_Summary.pdf"
+                
+            file_path = f"{self.base_dir}/Outputs/{filename}"
+            
+            # Use Platypus for a massive, multi-page, beautiful PDF
+            pdf_generator.generate_formal_report(title, user_input, file_path)
+            
+            return f"I have successfully analyzed the database and generated a comprehensive, multi-page {title}. The full PDF document has been securely saved to your system at {file_path}."
+        
             
         elif "KNOWLEDGE" in action_raw:
             rag_res = self.agent_rag_librarian(user_input)
