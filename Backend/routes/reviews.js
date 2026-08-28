@@ -22,6 +22,10 @@ router.post("/:candidateId", auth, async (c) => {
   const decision = action === "approve" ? "approved" : "rejected";
   const user = c.get("user");
 
+  if (user.role !== 'admin' && user.role !== 'reviewer') {
+    return c.json({ success: false, message: "Unauthorized: Only Admins and QA Reviewers can approve or reject mappings." }, 403);
+  }
+
   // D1 doesn't support transactions in Workers — run sequentially
   await c.env.DB.prepare("UPDATE match_candidates SET decision = ? WHERE id = ?").bind(decision, candidateId).run();
 
