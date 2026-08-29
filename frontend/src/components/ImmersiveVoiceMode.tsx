@@ -303,7 +303,7 @@ export default function ImmersiveVoiceMode({ onClose, pageContext }: ImmersiveVo
 
             <motion.div 
                 layout
-                className={`flex flex-col z-10 p-12 overflow-y-auto ${isDataDense ? 'w-2/3 h-full items-start justify-center' : 'w-full max-w-4xl h-1/3 items-center justify-start text-center mt-12'}`}
+                className={`flex flex-col z-10 p-12 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${isDataDense ? 'w-2/3 h-full items-start justify-center' : 'w-full max-w-5xl h-auto max-h-[60%] items-center justify-start text-center mt-8'}`}
             >
               <AnimatePresence mode="wait">
                   <motion.p 
