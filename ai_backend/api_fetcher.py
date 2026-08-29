@@ -7,7 +7,7 @@ def get_live_data(query_type):
     
     login_resp = requests.post(f"{base_url}/auth/login", json={
         "email": "admin@cpse.gov.in",
-        "password": "changeme123"
+        "password": os.environ.get("DEFAULT_PASS", "placeholder")
     })
     
     if login_resp.status_code != 200:

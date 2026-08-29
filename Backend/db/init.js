@@ -112,9 +112,9 @@ function initDb() {
 
 function seedUsers() {
   const usersToSeed = [
-    { name: "Central Ministry Admin", email: "admin@cpse.gov.in", pass: process.env.ADMIN_PASS || "changeme123", role: "admin", dept: "Ministry of Petroleum & Natural Gas" },
-    { name: "CPCL Senior Reviewer", email: "reviewer@cpcl.co.in", pass: process.env.REVIEWER_PASS || "changeme123", role: "reviewer", dept: "CPCL Chennai Refinery" },
-    { name: "IOCL Procurement Officer", email: "store.officer@iocl.co.in", pass: process.env.OFFICER_PASS || "changeme123", role: "officer", dept: "IOCL Northern Pipeline" }
+    { name: "Central Ministry Admin", email: "admin@cpse.gov.in", pass: process.env.ADMIN_PASS || process.env.DEFAULT_PASS, role: "admin", dept: "Ministry of Petroleum & Natural Gas" },
+    { name: "CPCL Senior Reviewer", email: "reviewer@cpcl.co.in", pass: process.env.REVIEWER_PASS || process.env.DEFAULT_PASS, role: "reviewer", dept: "CPCL Chennai Refinery" },
+    { name: "IOCL Procurement Officer", email: "store.officer@iocl.co.in", pass: process.env.OFFICER_PASS || process.env.DEFAULT_PASS, role: "officer", dept: "IOCL Northern Pipeline" }
   ];
 
   const stmt = db.prepare("SELECT id FROM users WHERE email = ?");
