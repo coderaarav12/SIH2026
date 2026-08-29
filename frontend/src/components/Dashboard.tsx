@@ -129,19 +129,31 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
   const handleRawUpload = async (e: any) => {
     if (!e || !e.target.files || e.target.files.length === 0) return;
     setIsUploading(true);
-    const formData = new FormData();
-    formData.append('file', e.target.files[0]);
-    try {
-      const res = await fetch(apiUrl('/api/materials/upload'), {
-        method: 'POST',
-        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') },
-        body: formData
-      });
-      setUploadResult(await res.json());
-    } catch (err) {
-      setUploadResult({ success: false, message: 'Upload failed' });
-    }
-    setIsUploading(false);
+    const file = e.target.files[0];
+    
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const csvText = event.target?.result;
+      try {
+        const res = await fetch(apiUrl('/api/materials/upload'), {
+          method: 'POST',
+          headers: { 
+            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ csv_text: csvText })
+        });
+        setUploadResult(await res.json());
+      } catch (err) {
+        setUploadResult({ success: false, message: 'Upload failed' });
+      }
+      setIsUploading(false);
+    };
+    reader.onerror = () => {
+      setUploadResult({ success: false, message: 'File read failed' });
+      setIsUploading(false);
+    };
+    reader.readAsText(file);
     e.target.value = '';
   };
 
