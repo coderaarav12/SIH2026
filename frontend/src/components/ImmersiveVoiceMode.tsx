@@ -197,9 +197,6 @@ export default function ImmersiveVoiceMode({ onClose, pageContext }: ImmersiveVo
         setIsSpeaking(true);
         isSpeakingRef.current = true;
         
-        // Display AI response as subtitles while speaking
-        setTranscript(text);
-        
         // Mute mic while AI speaks to prevent feedback loops and browser crashing
         if (recognitionRef.current) {
             try { recognitionRef.current.stop(); } catch(e) {}
