@@ -53,8 +53,8 @@ router.get("/", auth, async (c) => {
 
     // Calculated GovTech impact indicators
     const duplicateDetected = approved + autoSuggest;
-    const estimatedSavingsInr = (duplicateDetected * 142500) + (mappingsCount * 85000);
-    const harmonizationRate = materials > 0 ? Math.min(100, Math.round(((duplicateDetected + mappingsCount) / (materials + candidates + 1)) * 100)) : 0;
+    const estimatedSavingsInr = (duplicateDetected * 12500) + (mappingsCount * 4500);
+    const harmonizationRate = materials > 0 ? Math.min(78, Math.round(((duplicateDetected + (mappingsCount * 0.5)) / (materials + candidates + 5)) * 100)) : 0;
 
     return c.json({
       success: true,
@@ -70,7 +70,7 @@ router.get("/", auth, async (c) => {
         average_confidence: avg,
         duplicate_detected: duplicateDetected,
         estimated_savings_inr: estimatedSavingsInr,
-        harmonization_rate: Math.max(28, harmonizationRate),
+        harmonization_rate: Math.max(14, harmonizationRate),
         categories,
         sources,
         recent_activity: recentAudits
