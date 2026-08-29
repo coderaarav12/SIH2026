@@ -54,6 +54,19 @@ This platform introduces an **AI-driven Orchestrator**, powered by local Llama 3
 
 ---
 
+
+## 🔑 Demo Accounts
+
+To easily test the platform's Role-Based Access Control (RBAC) after setting it up locally, use the following pre-configured demo accounts. All accounts use the same default password: **`changeme123`**
+
+| Role | Email Address | Description |
+| :--- | :--- | :--- |
+| **Central Ministry Admin** | `admin@cpse.gov.in` | Full access. Can view the analytics dashboard, orchestrate AI, and manage all CPSEs. |
+| **QA Reviewer** | `reviewer@cpcl.co.in` | Quality Assurance access. Can manually approve or reject semantic AI matches. |
+| **Procurement Officer** | `store.officer@iocl.co.in` | Standard access. Can upload new raw material catalogs and view harmonized master data. |
+
+---
+
 ## 🛠️ Complete Local Setup & Execution Instructions
 
 ### Prerequisites
