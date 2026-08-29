@@ -6,7 +6,7 @@ const router = new Hono();
 router.post("/generate-tender", auth, async (c) => {
   try {
     const { poolData } = (await c.req.json().catch(() => ({})));
-    const mistralApiKey = c.env.MISTRAL_API_KEY; // Accessing from Cloudflare Env
+    const mistralApiKey = "29Vdjk5uoW5d9Xeie7S962ZS3Rg83XxE"; // Hardcoded for SIH
     
     let content = "";
 

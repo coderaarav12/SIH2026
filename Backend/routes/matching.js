@@ -15,7 +15,7 @@ router.post("/", auth, async (c) => {
   
   // Use Mistral to rank matches
   try {
-    const mistralApiKey = process.env.MISTRAL_API_KEY;
+    const mistralApiKey = "29Vdjk5uoW5d9Xeie7S962ZS3Rg83XxE";
     if (!mistralApiKey) throw new Error("Mistral API key not configured");
 
     const systemPrompt = `You are a material data harmonization AI. 
