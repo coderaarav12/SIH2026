@@ -1,4 +1,4 @@
-const normalize = require("./normalizer");
+import normalize from "./normalizer.js";
 
 function extractAttributes(text = "") {
   const raw = String(text);

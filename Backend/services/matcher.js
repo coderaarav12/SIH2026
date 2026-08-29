@@ -1,6 +1,5 @@
-const normalize = require("./normalizer");
-const { normalizeDimension } = require("./normalizer");
-const { extractAttributes } = require("./attributes");
+import normalize, { normalizeDimension } from "./normalizer.js";
+import { extractAttributes } from "./attributes.js";
 
 function tokens(text) {
   return new Set(

@@ -1,5 +1,5 @@
-﻿const { extractAttributes } = require("./attributes");
-const normalize = require("./normalizer");
+import { extractAttributes } from "./attributes.js";
+import normalize from "./normalizer.js";
 
 const sampleLabels = [
   {
