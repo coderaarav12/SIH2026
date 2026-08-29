@@ -225,15 +225,3 @@ router.post("/ocr-extract", auth, async (c) => {
 
 export default router;
 
-
-const router = new Hono();
-
-const uploadDir = path.join(__dirname, "..", "uploads");
-fs.mkdirSync(uploadDir, { recursive: true });
-
-const upload = multer({
-  dest: uploadDir,
-  limits: { fileSize: 10 * 1024 * 1024 }
-});
-
-

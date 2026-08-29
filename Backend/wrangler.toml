@@ -9,5 +9,5 @@ ALLOWED_EMAILS = "admin@cpse.gov.in,reviewer@cpcl.co.in,your.email@gmail.com"
 [[d1_databases]]
 binding = "DB"
 database_name = "material_intelligence_db"
-database_id = "YOUR-D1-DATABASE-ID"
+database_id = "a9200eb8-183f-4a3c-9d18-2bd1e2b3d10f"
 
