@@ -53,4 +53,4 @@ function simulateOcr(filename = "", hintText = "") {
   };
 }
 
-module.exports = { simulateOcr, sampleLabels };
+export { simulateOcr, sampleLabels };

@@ -80,5 +80,5 @@ function normalizeDimension(dim = "") {
   return d;
 }
 
-module.exports = normalize;
-module.exports.normalizeDimension = normalizeDimension;
+export default normalize;
+export { normalizeDimension };

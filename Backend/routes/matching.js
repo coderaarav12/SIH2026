@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import auth from "../middleware/auth.js";
 
 const router = new Hono();
-require('dotenv').config();
+
 
 router.post("/", auth, async (c) => {
   const input = String((await c.req.json().catch(() => ({})))?.material_name || (await c.req.json().catch(() => ({})))?.query || (await c.req.json().catch(() => ({})))?.text || "").trim();
@@ -71,7 +71,7 @@ Return a JSON array of up to 3 objects, sorted by highest confidence first, with
     const insert = (await c.env.DB.prepare(`
       INSERT INTO match_candidates (input_text, material_id, score, decision, reasons, created_by)
       VALUES (?, ?, ?, ?, ?, ?)
-    `);
+    `));
 
     const candidates = parsedMatches.map(r => {
       const mat = materials.find(m => m.id === r.material_id);
@@ -114,7 +114,7 @@ router.get("/history", auth, async (c) => {
     LEFT JOIN materials m ON m.id = mc.material_id
     LEFT JOIN users u ON u.id = mc.created_by
     ORDER BY mc.id DESC LIMIT 100
-  `).all()).results).results;
+  `).all()).results;
 
   return c.json({ 
     success: true, 

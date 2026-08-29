@@ -41,7 +41,7 @@ router.get("/", auth, async (c) => {
     const avg = (await c.env.DB.prepare(`
       SELECT ROUND(COALESCE(AVG(score), 0), 2) AS avg_score
       FROM match_candidates
-    `).first().avg_score;
+    `).first()).avg_score;
 
     const recentAudits = (await c.env.DB.prepare(`
       SELECT a.*, u.name as user_name
@@ -49,7 +49,7 @@ router.get("/", auth, async (c) => {
       LEFT JOIN users u ON u.id = a.user_id
       ORDER BY a.id DESC
       LIMIT 6
-    `).all()).results).results;
+    `).all()).results;
 
     // Calculated GovTech impact indicators
     const duplicateDetected = approved + autoSuggest;

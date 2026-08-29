@@ -65,4 +65,4 @@ function extractAttributes(text = "") {
   };
 }
 
-module.exports = { extractAttributes };
+export { extractAttributes };
