@@ -891,6 +891,34 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
                        {uploadResult.success && <div className="mt-2 text-xs font-bold opacity-80">Total Parsed: {uploadResult.total_rows} | Inserted: {uploadResult.inserted} | Skipped: {uploadResult.skipped}</div>}
                     </div>
                   )}
+
+                  {uploadResult?.success && uploadResult?.preview && uploadResult.preview.length > 0 && (
+                    <div className="mt-8 border border-[var(--border-color)] rounded-xl overflow-hidden bg-[var(--bg-main)]">
+                      <div className="px-6 py-4 bg-[var(--bg-alt)] border-b border-[var(--border-color)]">
+                        <h4 className="font-bold text-[var(--text-primary)]">Ingested Materials Preview</h4>
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-sm">
+                          <thead className="bg-[var(--bg-main)]">
+                            <tr>
+                              {Object.keys(uploadResult.preview[0]).slice(0, 5).map(key => (
+                                <th key={key} className="px-6 py-3 font-semibold text-[var(--text-secondary)] border-b border-[var(--border-color)]">{key}</th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {uploadResult.preview.map((row: any, idx: number) => (
+                              <tr key={idx} className="border-b border-[var(--border-color)] last:border-0 hover:bg-[var(--bg-alt)]">
+                                {Object.keys(uploadResult.preview[0]).slice(0, 5).map(key => (
+                                  <td key={key} className="px-6 py-3 text-[var(--text-primary)]">{row[key]}</td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 

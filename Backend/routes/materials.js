@@ -203,6 +203,7 @@ router.post("/upload", auth, async (c) => {
       total_rows: parsedRows.length,
       inserted,
       skipped,
+      preview: parsedRows.slice(0, 10),
       errors: errors.slice(0, 20)
     });
   } catch (e) {
