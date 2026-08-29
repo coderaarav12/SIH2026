@@ -10,6 +10,7 @@ interface ImmersiveVoiceModeProps {
 export default function ImmersiveVoiceMode({ onClose, pageContext }: ImmersiveVoiceModeProps) {
   const [isListening, setIsListening] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const isThinkingRef = useRef(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [transcript, setTranscript] = useState("Initializing connection...");
@@ -76,11 +77,10 @@ export default function ImmersiveVoiceMode({ onClose, pageContext }: ImmersiveVo
       
       recognition.onend = () => {
         setIsListening(false);
-        // If we are NOT speaking, and we WANT to be alive, restart mic
-        // (This handles the mic timing out after silence natively)
-        if (keepAliveRef.current && !isSpeakingRef.current) {
+        // If we are NOT speaking, NOT thinking, and we WANT to be alive, restart mic
+        if (keepAliveRef.current && !isSpeakingRef.current && !isThinkingRef.current) {
             setTimeout(() => {
-                if (keepAliveRef.current && !isSpeakingRef.current && recognitionRef.current) {
+                if (keepAliveRef.current && !isSpeakingRef.current && !isThinkingRef.current && recognitionRef.current) {
                     try { recognitionRef.current.start(); } catch(e) {}
                 }
             }, 300);
@@ -111,15 +111,19 @@ export default function ImmersiveVoiceMode({ onClose, pageContext }: ImmersiveVo
         isSpeakingRef.current = false;
         setIsSpeaking(false);
         keepAliveRef.current = true;
+        setTranscript("Starting mic...");
         setTimeout(() => { try { recognition.start(); } catch(e) {} }, 50);
-    } else if (isListening) {
+    } else if (keepAliveRef.current) {
         // USER MANUALLY MUTING
         keepAliveRef.current = false;
-        recognition.stop();
+        setIsMuted(true);
+        try { recognition.stop(); } catch(e) {}
         setTranscript("Standby (Mic Muted)");
+        setIsListening(false);
     } else {
         // USER MANUALLY UNMUTING
         keepAliveRef.current = true;
+        setIsMuted(false);
         setTranscript("Starting mic...");
         setTimeout(() => { try { recognition.start(); } catch(e) {} }, 50);
     }
