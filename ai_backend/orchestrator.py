@@ -64,8 +64,8 @@ class CPSEMultiAgentSystem:
         router_prompt = f"""You are the Master Orchestrator for SyncMasters CPSE platform.
 Decide which action best handles the user request. Respond with EXACTLY ONE tag:
 - [ACTION:ANALYTICS] (If user asks about revenue, subdivisions of cost, approval rates, rejection rates, statistics, quantities, metrics, or costs)
-- [ACTION:STANDARDIZE] (STRICTLY ONLY if the user provides a raw garbled material code to decode, like 'VLV GT CS 4IN')
-- [ACTION:MATERIALS] (If user asks about matchmaker results or inventory lists)
+- [ACTION:STANDARDIZE] (STRICTLY ONLY if the user provides a garbled, abbreviated part number or SKU to decode, like 'VLV GT CS 4IN'. DO NOT use this if they simply ask general questions containing the phrase "raw material".)
+- [ACTION:MATERIALS] (If user asks about matchmaker results, inventory lists, or asks for your thoughts/opinions on the raw materials data on the site)
 - [ACTION:KNOWLEDGE] (If user asks about rules, SIH project, GFR rules, team info, or who built you)
 - [ACTION:REPORT] (If user asks to generate a tender, PDF, or formal report)
 - [ACTION:CHAT] (General conversation, greetings, how are you)
