@@ -200,7 +200,7 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
     } catch (err) {
       console.error(err);
       setOcrStatus('idle');
-      alert('Error analyzing document. Ensure the Mistral API key is valid.');
+      alert('Error analyzing document. Ensure the Python AI Server is running.');
     }
     
     // Clear input so same file can be uploaded again
@@ -1055,7 +1055,7 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
                     {tenderReport === 'generating' ? (
                        <div className="flex flex-col items-center justify-center h-full space-y-4 min-h-[300px]">
                          <div className="w-12 h-12 border-4 border-[var(--stat-blue-text)] border-t-transparent rounded-full animate-spin"></div>
-                         <p className="font-bold text-[var(--text-secondary)] animate-pulse">Mistral AI is drafting the Government RFP...</p>
+                         <p className="font-bold text-[var(--text-secondary)] animate-pulse">Python Swarm is drafting the Government RFP...</p>
                        </div>
                     ) : (
                        <div className="tender-report text-[var(--text-primary)]" dangerouslySetInnerHTML={{__html: tenderReport}}></div>
