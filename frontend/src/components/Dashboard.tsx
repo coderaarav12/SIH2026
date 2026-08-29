@@ -183,7 +183,7 @@ export default function Dashboard({ onLogout, theme, setTheme }: DashboardProps)
       const formData = new FormData();
       formData.append('file', file);
 
-      const res = await fetch(apiUrl('/api/ocr/analyze'), { 
+      const res = await fetch("https://stadium-hydrant-snowstorm.ngrok-free.dev/api/vision/ocr", { 
         method: 'POST', 
         headers: { 
           'Authorization': 'Bearer ' + token
