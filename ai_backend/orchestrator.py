@@ -58,7 +58,8 @@ class CPSEMultiAgentSystem:
 
     def process_request(self, user_input, context="", ui_state="", image_path=None):
         print(f"\n[Head AI] Received Request: '{user_input}'")
-        full_context = f"[CRITICAL: Your primary source of truth is this Live UI Data from the backend database. Prioritize this data over general knowledge]: {ui_state}\n[Previous Chat History]: {context}\n\n" if (ui_state or context) else ""
+        sih_context = "[BACKGROUND KNOWLEDGE: SIH stands for Smart India Hackathon 2024, a national competition. 'SyncMasters' is the team name and the name of the software platform built for the Ministry of Petroleum & Natural Gas. SIH is NOT the name of the platform, it is the event.]\n"
+        full_context = f"{sih_context}[CRITICAL: Your primary source of truth is this Live UI Data from the backend database. Prioritize this data over general knowledge]: {ui_state}\n[Previous Chat History]: {context}\n\n" if (ui_state or context) else sih_context
 
         
         router_prompt = f"""You are the Master Orchestrator for SyncMasters CPSE platform.
@@ -88,7 +89,8 @@ Action:"""
 
         elif "STANDARDIZE" in action_raw:
             worker_res = self.agent_mdm_engineer(user_input)
-            return f"I have routed your raw material code to our specialized LoRA MDM Engine. Here is the standardized result:\n\n{worker_res}"
+            prompt = f"You are the SyncMasters Copilot. The user asked you to decode or standardize a raw material code. We ran it through our MDM Standardization Engine, which returned this JSON data: {worker_res}\n\nNow, act intelligently. Explain to the user what this material is in a natural, conversational way. Think on your own to describe its likely industrial use cases based on the decoded properties. DO NOT use a canned fallback statement. DO NOT output markdown, lists, or asterisks. Speak fluidly.\n\n{full_context}User's original request: {user_input}"
+            return self._call_ollama("llama3.2", prompt, keep_alive="30s")
             
         elif "REPORT" in action_raw:
             import pdf_generator
@@ -113,19 +115,19 @@ Action:"""
             rag_res = self.agent_rag_librarian(user_input)
             if not context.strip():
                 # First time interacting
-                prompt = f"You are the SyncMasters Copilot, the AI assistant for the CPSE Raw Material Standardization Portal (SIH). You were proudly built by Team SyncMasters (Aarav, Harsh, Prachi, Prakul, Amitabh, Priyanshu). Be friendly, conversational, and helpful. Use the Live UI Data below to answer questions about the platform, but also feel free to chat about the team or project context if asked. Greet the user warmly, briefly introduce yourself as the Copilot built by Team SyncMasters, and answer their query.  CRITICAL: You are generating audio for a Voice TTS engine. DO NOT use bullet points, lists, asterisks, or markdown. Write ONLY in natural, conversational, flowing sentences.\n\nUser asked: {user_input}"
+                prompt = f"You are the SyncMasters Copilot, the AI assistant for the CPSE Raw Material Standardization Portal (built for the Smart India Hackathon 2024). You were proudly built by Team SyncMasters (Aarav, Harsh, Prachi, Prakul, Amitabh, Priyanshu). Be friendly, conversational, and helpful. Use the Live UI Data below to answer questions about the platform, but also feel free to chat about the team or project context if asked. Greet the user warmly, briefly introduce yourself as the Copilot built by Team SyncMasters, and answer their query.  CRITICAL: You are generating audio for a Voice TTS engine. DO NOT use bullet points, lists, asterisks, or markdown. Write ONLY in natural, conversational, flowing sentences.\n\nUser asked: {user_input}"
             else:
                 # Ongoing conversation
-                prompt = f"You are the SyncMasters Copilot, the AI assistant for the CPSE Raw Material Standardization Portal (SIH). You were proudly built by Team SyncMasters (Aarav, Harsh, Prachi, Prakul, Amitabh, Priyanshu). Be friendly, conversational, and helpful. Use the Live UI Data below to answer questions about the platform, but also feel free to chat about the team or project context if asked. Since the conversation is already ongoing, DO NOT introduce yourself or say 'Hello' again. Just continue the flow naturally.  CRITICAL: You are generating audio for a Voice TTS engine. DO NOT use bullet points, lists, asterisks, or markdown. Write ONLY in natural, conversational, flowing sentences.\n\n{full_context}User asked: {user_input}"
+                prompt = f"You are the SyncMasters Copilot, the AI assistant for the CPSE Raw Material Standardization Portal (built for the Smart India Hackathon 2024). You were proudly built by Team SyncMasters (Aarav, Harsh, Prachi, Prakul, Amitabh, Priyanshu). Be friendly, conversational, and helpful. Use the Live UI Data below to answer questions about the platform, but also feel free to chat about the team or project context if asked. Since the conversation is already ongoing, DO NOT introduce yourself or say 'Hello' again. Just continue the flow naturally.  CRITICAL: You are generating audio for a Voice TTS engine. DO NOT use bullet points, lists, asterisks, or markdown. Write ONLY in natural, conversational, flowing sentences.\n\n{full_context}User asked: {user_input}"
             return self._call_ollama("llama3.2", prompt, keep_alive="30s")
             
         else:
             if not context.strip():
                 # First time interacting
-                prompt = f"You are the SyncMasters Copilot, the AI assistant for the CPSE Raw Material Standardization Portal (SIH). You were proudly built by Team SyncMasters (Aarav, Harsh, Prachi, Prakul, Amitabh, Priyanshu). Be friendly, conversational, and helpful. Use the Live UI Data below to answer questions about the platform, but also feel free to chat about the team or project context if asked. Greet the user warmly, briefly introduce yourself as the Copilot built by Team SyncMasters, and answer their query.  CRITICAL: You are generating audio for a Voice TTS engine. DO NOT use bullet points, lists, asterisks, or markdown. Write ONLY in natural, conversational, flowing sentences.\n\nUser asked: {user_input}"
+                prompt = f"You are the SyncMasters Copilot, the AI assistant for the CPSE Raw Material Standardization Portal (built for the Smart India Hackathon 2024). You were proudly built by Team SyncMasters (Aarav, Harsh, Prachi, Prakul, Amitabh, Priyanshu). Be friendly, conversational, and helpful. Use the Live UI Data below to answer questions about the platform, but also feel free to chat about the team or project context if asked. Greet the user warmly, briefly introduce yourself as the Copilot built by Team SyncMasters, and answer their query.  CRITICAL: You are generating audio for a Voice TTS engine. DO NOT use bullet points, lists, asterisks, or markdown. Write ONLY in natural, conversational, flowing sentences.\n\nUser asked: {user_input}"
             else:
                 # Ongoing conversation
-                prompt = f"You are the SyncMasters Copilot, the AI assistant for the CPSE Raw Material Standardization Portal (SIH). You were proudly built by Team SyncMasters (Aarav, Harsh, Prachi, Prakul, Amitabh, Priyanshu). Be friendly, conversational, and helpful. Use the Live UI Data below to answer questions about the platform, but also feel free to chat about the team or project context if asked. Since the conversation is already ongoing, DO NOT introduce yourself or say 'Hello' again. Just continue the flow naturally.  CRITICAL: You are generating audio for a Voice TTS engine. DO NOT use bullet points, lists, asterisks, or markdown. Write ONLY in natural, conversational, flowing sentences.\n\n{full_context}User asked: {user_input}"
+                prompt = f"You are the SyncMasters Copilot, the AI assistant for the CPSE Raw Material Standardization Portal (built for the Smart India Hackathon 2024). You were proudly built by Team SyncMasters (Aarav, Harsh, Prachi, Prakul, Amitabh, Priyanshu). Be friendly, conversational, and helpful. Use the Live UI Data below to answer questions about the platform, but also feel free to chat about the team or project context if asked. Since the conversation is already ongoing, DO NOT introduce yourself or say 'Hello' again. Just continue the flow naturally.  CRITICAL: You are generating audio for a Voice TTS engine. DO NOT use bullet points, lists, asterisks, or markdown. Write ONLY in natural, conversational, flowing sentences.\n\n{full_context}User asked: {user_input}"
             return self._call_ollama("llama3.2", prompt, keep_alive="30s")
 
 if __name__ == "__main__":
