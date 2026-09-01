@@ -134,6 +134,7 @@ cd SIH2026
 
 This platform was built by the **SyncMasters** team:
 
+*   [**Aarav Goel**](https://github.com/coderaarav12) - Collaborator
 *   [**Amitabh Ghosh**](https://github.com/amitabhghosh1527) - Collaborator
 *   [**Priyanshu Mishra**](https://github.com/pm5120-alt) - Collaborator
 *   [**Kumar Harshvardhan Jaytri**](https://github.com/sussy-snake) - Collaborator
